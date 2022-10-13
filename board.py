@@ -4,7 +4,9 @@ import player as ply
 
 class Board:
     def __init__(self):
+        self.robberLocation = None
         #Places a settlement can be built
+
         self.settleSpots = [[None for x in range(3)],
                       [None for x in range(4)],
                       [None for x in range(4)],
@@ -76,8 +78,7 @@ class Board:
 
 
         #Populating tileSpots randomly with available material types and a number
-        
-        
+
         xTile = 0
         for row in self.tileSpots:
             yTile = 0
@@ -87,6 +88,7 @@ class Board:
                  
                  if chosenTile == 'robberTile':
                     chosenNum = 7
+                    self.robberLocation = (xTile, yTile)
                  else:
                     chosenNum = random.choice([numLeft for numLeft in self.numbersAvailable.keys() if self.numbersAvailable[numLeft] > 0 and numLeft != 7])
 
@@ -141,16 +143,20 @@ class Board:
         materialAndPoints = {}
         for material in self.materialNumberTile[num]:
             for key in self.settleOnTile:
-                if material == key:
+                if material == key and f"({self.robberLocation[0]},{self.robberLocation[1]})" not in str(material):
                     materialAndPoints[material] = self.settleOnTile[material]
         return materialAndPoints
 
-    def postAccess():
+    def postAccess(self):
         return 1
+    
+    def moveRobber(self, newLocation):
+        self.robberLocation = newLocation
 
 Hunter = ply.Player("Hunter", 1)
 board = Board()
-board.setSettlement(Hunter, (0,0), 2)
-print(board.getSettlement((0,0)))
+board.moveRobber((0,0))
 
-print(board.getMaterial(5))
+
+print(board.materialNumberTile)
+print(board.robberLocation)
