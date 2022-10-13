@@ -1,6 +1,8 @@
-class Chamin:
-    def __init__(self, name):
+class Player:
+    def __init__(self, name, id):
         self.name = name
+        self.id = id
+
 
         self.victoryPoints          = 0
         self.settlementQuantity     = 5
@@ -81,7 +83,7 @@ class Chamin:
             raise ValueError("cannot modify used development cards")
 
 
-player1 = Chamin("Chamin")
+player1 = Player("Chamin", 2)
 #player1.modCurrResource("Brick", 1)
 #player1.modSettQuantity(-1)
 #player1.modRoadQuantity(-1)
