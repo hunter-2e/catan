@@ -23,7 +23,7 @@ class Game:
         """Handled the activation of a development card."""
         ...
 
-    def has_one() -> None:
+    def has_won() -> None:
         """Checks if a given player has won"""
         # not sure if we want to keep a running total that we just add to after each action a player makes or if we want to have this method here to check all relevent stuffs to see if a player has won
 
