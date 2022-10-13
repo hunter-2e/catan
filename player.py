@@ -82,6 +82,18 @@ class Player:
         else:
             raise ValueError("cannot modify used development cards")
 
+    def hasResource(self, resource: str, quantity: int) -> bool:
+        """Checks if the player has the given resource and quantity.
+        
+        Returns:
+            True if they have the resource, false if they do not.
+        """
+
+        if self.currentResources[resource] >= quantity:
+            return True
+
+        return False
+
 
 player1 = Player("Chamin", 2)
 #player1.modCurrResource("Brick", 1)
