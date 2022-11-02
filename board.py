@@ -191,5 +191,4 @@ class Board:
 Hunter = ply.Player("Hunter")
 board = Board()
 
-print(board.materialNumberTile)
 
