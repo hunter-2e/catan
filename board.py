@@ -178,17 +178,14 @@ class Board:
 
     #postType one of ["Wheat", "Rock", "Brick", "3for1", "Wood"]
     def postAccess(self, spot, postType):
-        for key in board.portsSettleSpots:
+        for key in self.portsSettleSpots:
             if postType == key:
-                for value in board.portsSettleSpots[key]:
+                for value in self.portsSettleSpots[key]:
                     if value == spot:
                         return True
                 return False
 
     def moveRobber(self, newLocation):
         self.robberLocation = newLocation
-
-Hunter = ply.Player("Hunter")
-board = Board()
 
 

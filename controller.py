@@ -1,17 +1,21 @@
 import board, player as ply
+import draw
 
+board = board.Board()
 
-def setup():
-    """Handles all game setup."""
-    board = board.Board()
+Hunter = ply.Player("Hunter", "red")
+Chamin = ply.Player("Chamin", "blue")
+Kobi = ply.Player("Kobi", "orange")
+Emanuel = ply.Player("Emanuel", "white")
 
-    Hunter = ply.Player("Hunter")
-    Chamin = ply.Player("Chamin")
-    Kobi = ply.Player("Kobi")
-    Emanuel = ply.Player("Emanuel")
+draw.drawBoard(board, draw.img)
+
+draw.drawSettle(draw.img, Kobi, (0,0))
+draw.drawSettle(draw.img, Hunter, (0,2))
+draw.drawRoad(draw.img, Hunter, (0,2), (1,3))
 
     
-    ...
+ 
     # players are given a color, and their starting pieces
     # via some method, board is setup
     # players are randomly given a starting order (or with dice rolls)

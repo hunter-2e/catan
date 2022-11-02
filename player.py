@@ -1,6 +1,7 @@
 class Player:
-    def __init__(self, name):
+    def __init__(self, name, color):
         self.name = name
+        self.color = color
 
 
         self.victoryPoints          = 0
@@ -97,7 +98,7 @@ class Player:
         return False
 
 
-player1 = Player("Chamin")
+player1 = Player("Hunter", "blue")
 #player1.modCurrResource("Brick", 1)
 #player1.modSettQuantity(-1)
 #player1.modRoadQuantity(-1)
