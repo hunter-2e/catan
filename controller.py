@@ -1,5 +1,16 @@
+import board, player as ply
+
+
 def setup():
     """Handles all game setup."""
+    board = board.Board()
+
+    Hunter = ply.Player("Hunter")
+    Chamin = ply.Player("Chamin")
+    Kobi = ply.Player("Kobi")
+    Emanuel = ply.Player("Emanuel")
+
+    
     ...
     # players are given a color, and their starting pieces
     # via some method, board is setup
