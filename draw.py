@@ -76,34 +76,34 @@ def getSpot(spot):
     if spot[0] == 1:
         firstSpot[1] += 50
         firstSpot[0] -= 85
-    if spot[0] == 2:
+    elif spot[0] == 2:
         firstSpot[1] += 140
         firstSpot[0] -= 85
-    if spot[0] == 3:
+    elif spot[0] == 3:
         firstSpot[1] += 190
         firstSpot[0] -= 175
-    if spot[0] == 4:
+    elif spot[0] == 4:
         firstSpot[1] += 280
         firstSpot[0] -= 175
-    if spot[0] == 5:
+    elif spot[0] == 5:
         firstSpot[1] += 330
         firstSpot[0] -= 260
-    if spot[0] == 6:
+    elif spot[0] == 6:
         firstSpot[1] += 420
         firstSpot[0] -= 260
-    if spot[0] == 7:
+    elif spot[0] == 7:
         firstSpot[1] += 470
         firstSpot[0] -= 175
-    if spot[0] == 8:
+    elif spot[0] == 8:
         firstSpot[1] += 560
         firstSpot[0] -= 175
-    if spot[0] == 9:
+    elif spot[0] == 9:
         firstSpot[1] += 610
         firstSpot[0] -= 85
-    if spot[0] == 10:
+    elif spot[0] == 10:
         firstSpot[1] += 700
         firstSpot[0] -= 85
-    if spot[0] == 11:
+    elif spot[0] == 11: 
         firstSpot[1] += 750
         
     firstSpot[0] += spotAdj[0] * 175
@@ -130,10 +130,16 @@ def drawSettle(image, player, spot):
     boardLocation = getSpot(spot)
     settleColor = determineColor(player)
     
-    cv2.rectangle(image,(boardLocation[0] - 10,boardLocation[1]-10),(boardLocation[0] + 10,boardLocation[1] + 10),settleColor,-1)
+    cv2.rectangle(image,(boardLocation[0] - 15,boardLocation[1]-15),(boardLocation[0] + 15,boardLocation[1] + 15),settleColor,-1)
     cv2.imwrite('test.png', image)
 
+def drawCity(image, player, spot):
 
+    boardLocation = getSpot(spot)
+    settleColor = (255,255,255)
+    
+    cv2.rectangle(image,(boardLocation[0] - 5,boardLocation[1]-5),(boardLocation[0] + 5,boardLocation[1] + 5),settleColor,-1)
+    cv2.imwrite('test.png', image)
 
 def drawRoad(image, player, spot1, spot2):
     

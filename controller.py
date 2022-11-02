@@ -10,9 +10,13 @@ Emanuel = ply.Player("Emanuel", "white")
 
 draw.drawBoard(board, draw.img)
 
+
+draw.drawSettle(draw.img, Hunter, (4,3))
+draw.drawSettle(draw.img, Hunter, (4,4))
 draw.drawSettle(draw.img, Kobi, (0,0))
-draw.drawSettle(draw.img, Hunter, (0,2))
-draw.drawRoad(draw.img, Hunter, (0,2), (1,3))
+draw.drawCity(draw.img, Hunter, (4,3))
+draw.drawRoad(draw.img, Hunter, (4,3), (5,3))
+
 
     
  
