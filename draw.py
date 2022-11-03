@@ -21,16 +21,25 @@ thickness = 2
 
 
 def drawBoard(board, image):
+    startingTile = [0,0]
+    tileNumbers = board.materialNumberTile
     tileColors = list(itertools.chain.from_iterable(board.tileSpots))
 
+    print(tileNumbers)
     for tile in range(19):
-        if tile not in [3,7,12,16]:
-            pts = np.array([topLeft, botLeft,
-                        bot, botRight,
-                            topRight, top],
-                        np.int32)
-            color = (0,255,0)
+        for number in tileNumbers:
+            for material in tileNumbers[number]:
+                if '('+ str(startingTile[0]) + ',' + str(startingTile[1]) + ')' in material:
+                    numToDraw = number
+                    break
+                   
+        if tile not in [2,6,11,15]:
+            startingTile[1] += 1
         else:
+            startingTile[1] = 0
+            startingTile[0] += 1
+
+        if tile in [3,7,12,16]:
             for vertex in allVertex:
                 vertex[1] += 140
                 if tile == 3:
@@ -41,7 +50,12 @@ def drawBoard(board, image):
                     vertex[0] -= 787.5
                 else:
                     vertex[0] -= 612.5
-            color = (0,0,255)
+            
+
+        
+        print(startingTile)
+        print(numToDraw)
+
         pts = np.array([topLeft, botLeft,
                         bot, botRight,
                             topRight, top],
@@ -62,6 +76,7 @@ def drawBoard(board, image):
             color = (44, 7,166)
 
         cv2.fillPoly(image, [pts], color)
+        image = cv2.putText(image, str(numToDraw), (int(top[0] - 10), top[1] + 95), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 1)
         image = cv2.polylines(image, [pts], isClosed, (0,0,0), thickness)
         
 

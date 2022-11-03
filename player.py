@@ -10,6 +10,7 @@ class Player:
         self.roadQuantity           = 15
         self.settlementSpots = []
         self.citySpots = []
+        self.roadsPlaced = []
         
         self.currentResources       = {
             "Brick":  0,
@@ -97,18 +98,3 @@ class Player:
 
         return False
 
-
-player1 = Player("Hunter", "blue")
-#player1.modCurrResource("Brick", 1)
-#player1.modSettQuantity(-1)
-#player1.modRoadQuantity(-1)
-print()
-print("name:               " + player1.name)
-print("victory points:     " + str(player1.victoryPoints))
-print("settlemet quantity: " + str(player1.settlementQuantity))
-print("city quantity:      " + str(player1.cityQuantity))
-print("road quantity:      " + str(player1.roadQuantity))
-print("current Resources:  " + str(player1.currentResources))
-print("unused dev cards    " + str(player1.unusedDevelopmentCards))
-print("used dev cards      " + str(player1.usedDevelopmentCards))
-print()
