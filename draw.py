@@ -1,17 +1,17 @@
 import cv2
 import numpy as np
-import itertools
+import itertools, string
 
-photo  = "C:\\Users\\hunter\\Documents\\Python Scripts\\catan\\gui\\build\\background.png"
+photo  = "background.png"
 
 path = cv2.imread(photo)
 
-topLeft = [225,70]
-botLeft = [225, 160]
-bot = [310, 210]
-botRight = [400, 160]
-topRight = [400, 70]
-top = [310, 20]
+topLeft = [225,90]
+botLeft = [225, 180]
+bot = [310, 230]
+botRight = [400, 180]
+topRight = [400, 90]
+top = [310, 40]
 
 allVertex = [topLeft, botLeft, bot, botRight, topRight, top]
 
@@ -21,16 +21,25 @@ thickness = 2
 
 
 def drawBoard(board, image):
+    startingTile = [0,0]
+    tileNumbers = board.materialNumberTile
     tileColors = list(itertools.chain.from_iterable(board.tileSpots))
 
+    print(tileNumbers)
     for tile in range(19):
-        if tile not in [3,7,12,16]:
-            pts = np.array([topLeft, botLeft,
-                        bot, botRight,
-                            topRight, top],
-                        np.int32)
-            color = (0,255,0)
+        for number in tileNumbers:
+            for material in tileNumbers[number]:
+                if '('+ str(startingTile[0]) + ',' + str(startingTile[1]) + ')' in material:
+                    numToDraw = number
+                    break
+                   
+        if tile not in [2,6,11,15]:
+            startingTile[1] += 1
         else:
+            startingTile[1] = 0
+            startingTile[0] += 1
+
+        if tile in [3,7,12,16]:
             for vertex in allVertex:
                 vertex[1] += 140
                 if tile == 3:
@@ -41,7 +50,7 @@ def drawBoard(board, image):
                     vertex[0] -= 787.5
                 else:
                     vertex[0] -= 612.5
-            color = (0,0,255)
+
         pts = np.array([topLeft, botLeft,
                         bot, botRight,
                             topRight, top],
@@ -62,17 +71,39 @@ def drawBoard(board, image):
             color = (44, 7,166)
 
         cv2.fillPoly(image, [pts], color)
+        image = cv2.circle(image, (int(top[0]), top[1] + 95), 30, (0,0,0), -1)
+        if(numToDraw > 9):
+            image = cv2.putText(image, str(numToDraw), (int(top[0] - 20), top[1] + 105), cv2.FONT_HERSHEY_DUPLEX, 1, (255,255,255), 2)
+        else: image = cv2.putText(image, str(numToDraw), (int(top[0] - 10), top[1] + 100), cv2.FONT_HERSHEY_DUPLEX, 1, (255,255,255), 2)
         image = cv2.polylines(image, [pts], isClosed, (0,0,0), thickness)
         
 
         for vertex in allVertex:
                 vertex[0] += 175
+        drawGrid(image)
     cv2.imwrite('test.png', image)
+
+def drawGrid(image):
+    capitalLetters = list(string.ascii_uppercase)
+    letterIndex = 0
+    xCoord = 50
+    yCoord = 50
+
+    for num in range(11):
+        image = cv2.putText(image, capitalLetters[letterIndex], (xCoord, 23), cv2.FONT_HERSHEY_DUPLEX, 1, (0,0,0), 1)
+        letterIndex += 1
+        xCoord += 85
+    
+    for num in range(12):
+        image = cv2.putText(image, str(num), (0, yCoord), cv2.FONT_HERSHEY_DUPLEX, 1, (0,0,0), 1)
+        if(num % 2 == 0):
+            yCoord += 50
+        else: yCoord += 90
 
 def getSpot(spot):
     spotAdj = [spot[1],spot[0]]
 
-    firstSpot = [310, 20]
+    firstSpot = [310, 40]
     if spot[0] == 1:
         firstSpot[1] += 50
         firstSpot[0] -= 85
