@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-import itertools
+import itertools, string
 
 photo  = "background.png"
 
@@ -50,11 +50,6 @@ def drawBoard(board, image):
                     vertex[0] -= 787.5
                 else:
                     vertex[0] -= 612.5
-            
-
-        
-        print(startingTile)
-        print(numToDraw)
 
         pts = np.array([topLeft, botLeft,
                         bot, botRight,
@@ -85,7 +80,25 @@ def drawBoard(board, image):
 
         for vertex in allVertex:
                 vertex[0] += 175
+        drawGrid(image)
     cv2.imwrite('test.png', image)
+
+def drawGrid(image):
+    capitalLetters = list(string.ascii_uppercase)
+    letterIndex = 0
+    xCoord = 50
+    yCoord = 50
+
+    for num in range(11):
+        image = cv2.putText(image, capitalLetters[letterIndex], (xCoord, 23), cv2.FONT_HERSHEY_DUPLEX, 1, (0,0,0), 1)
+        letterIndex += 1
+        xCoord += 85
+    
+    for num in range(12):
+        image = cv2.putText(image, str(num), (0, yCoord), cv2.FONT_HERSHEY_DUPLEX, 1, (0,0,0), 1)
+        if(num % 2 == 0):
+            yCoord += 50
+        else: yCoord += 90
 
 def getSpot(spot):
     spotAdj = [spot[1],spot[0]]
