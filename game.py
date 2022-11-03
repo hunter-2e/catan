@@ -13,10 +13,10 @@ class Game:
 
         self.resource_bank = {
             "Brick":  19,
-            "Lumber": 19,
-            "Ore":    19,
-            "Grain":  19,
-            "Wool":   19
+            "Wood": 19,
+            "Rock":    19,
+            "Wheat":  19,
+            "Sheep":   19
         }
 
     def build(self) -> None:

@@ -1,11 +1,19 @@
 import random
-import this
 import player as ply
 
 class Board:
     def __init__(self):
         self.robberLocation = None
         #Places a settlement can be built
+
+        self.portsSettleSpots = {
+            "3for1": [(0,0), (1,0),(2,3),(3,4),(5,5),(6,5),(10,0),(11,0)],
+            "Sheep": [(0,1),(1,2)],
+            "Brick": [(8,4),(9,3)],
+            "Rock": [(3,0),(4,0)],
+            "Wheat": [(7,0),(8,0)],
+            "Wood": [(10,2),(11,1)]
+        }
 
         self.settleSpots = [[None for x in range(3)],
                       [None for x in range(4)],
@@ -45,6 +53,8 @@ class Board:
           [(9,3),(10,2),(10,3),(11,2),(11,3),(12,2)]]
 
         self.roadsPlaced = []
+
+        self.playersRoads = {}
 
         #Places material tiles can be placed
         self.tileSpots = [[None for x in range(3)],
@@ -111,8 +121,10 @@ class Board:
             xTile += 1
 
 
-    def setRoad(self, spot1, spot2):
-        self.roadsPlaced.append([spot1,spot2])
+    def setRoad(self, player, spot1, spot2):
+        if([spot1, spot2] in self.roadsPlaced):
+            return None
+        else: self.playersRoads[player.name].append
 
 
 
@@ -127,17 +139,36 @@ class Board:
         if(self.settleSpots[spot[0]][spot[1]] != None):
             return "This space already has a settlement."
         else:
-            player.settlementQuantity -= 1
             if(settType == 1):
-                self.settleSpots[spot[0]][spot[1]] = player.name + "'s " + 'Settlement '
-            else: self.settleSpots[spot[0]][spot[1]] = player.name + "'s " + 'City'
-
+                player.settlementQuantity -= 1
+                self.settleSpots[spot[0]][spot[1]] = player.name + "'s " + 'Settlement'
+                
+                for key in self.settleOnTile:
+                    addingSett = []
+                    if spot in self.settleOnTile[key]:
+                        for values in self.settleOnTile[key]:
+                            if(spot != values):
+                                addingSett.append(values)
+                            else:
+                                addingSett.append(player.name + "'s " + 'Settlement')
+                        self.settleOnTile.update({key: addingSett})
+                    
+            else:
+                player.cityQuantity -= 1 
+                self.settleSpots[spot[0]][spot[1]] = player.name + "'s " + 'City'
+                for key in self.settleOnTile:
+                    addingSett = []
+                    if spot in self.settleOnTile[key]:
+                        for values in self.settleOnTile[key]:
+                            if(spot != values):
+                                addingSett.append(values)
+                            else:
+                                addingSett.append(player.name + "'s " + 'City')
+                        self.settleOnTile.update({key: addingSett})
 
 
     def getSettlement(self, spot):
         return self.settleSpots[spot[0]][spot[1]]
-
-
 
     def getMaterial(self, num):
         materialAndPoints = {}
@@ -147,16 +178,16 @@ class Board:
                     materialAndPoints[material] = self.settleOnTile[material]
         return materialAndPoints
 
-    def postAccess(self):
-        return 1
-    
+    #postType one of ["Wheat", "Rock", "Brick", "3for1", "Wood"]
+    def postAccess(self, spot, postType):
+        for key in self.portsSettleSpots:
+            if postType == key:
+                for value in self.portsSettleSpots[key]:
+                    if value == spot:
+                        return True
+                return False
+
     def moveRobber(self, newLocation):
         self.robberLocation = newLocation
 
-Hunter = ply.Player("Hunter", 1)
-board = Board()
-board.moveRobber((0,0))
 
-
-print(board.materialNumberTile)
-print(board.robberLocation)

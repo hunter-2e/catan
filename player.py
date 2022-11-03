@@ -1,13 +1,15 @@
 class Player:
-    def __init__(self, name, id):
+    def __init__(self, name, color):
         self.name = name
-        self.id = id
+        self.color = color
 
 
         self.victoryPoints          = 0
         self.settlementQuantity     = 5
         self.cityQuantity           = 4
         self.roadQuantity           = 15
+        self.settlementSpots = []
+        self.citySpots = []
         
         self.currentResources       = {
             "Brick":  0,
@@ -29,6 +31,7 @@ class Player:
             "YearOfPlenty":     0,
             "Monopoly":         0,
             "VictoryPointCard": 0,    }
+
 
     # quantity should be an integer
     def modvictQuantity(self, quantity):
@@ -95,7 +98,7 @@ class Player:
         return False
 
 
-player1 = Player("Chamin", 2)
+player1 = Player("Hunter", "blue")
 #player1.modCurrResource("Brick", 1)
 #player1.modSettQuantity(-1)
 #player1.modRoadQuantity(-1)
