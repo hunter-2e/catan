@@ -3,7 +3,6 @@ class Player:
         self.name = name
         self.color = color
 
-
         self.victoryPoints          = 0
         self.settlementQuantity     = 5
         self.cityQuantity           = 4
@@ -12,11 +11,11 @@ class Player:
         self.citySpots = []
         
         self.currentResources       = {
-            "Brick":  0,
-            "Lumber": 0,
-            "Ore":    0,
-            "Grain":  0,
-            "Wool":   0,              }
+            "brick":  0,
+            "lumber": 0,
+            "ore":    0,
+            "grain":  0,
+            "wool":   0,              }
 
         self.unusedDevelopmentCards = {
             "KnightCard":       0,

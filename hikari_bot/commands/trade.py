@@ -1,31 +1,51 @@
 import lightbulb
 import hikari
 
+import controller
+
 # Plugins are structures that allow the grouping of multiple commands and listeners together.
 plugin = lightbulb.Plugin("Trade", description="Offer a trade.")
 
 # Creates a command in the plugin
 @plugin.command
-@lightbulb.option("brick_out", description="# Brick to give.")
-@lightbulb.option("lumber_out", description="# Lumber to give.")
-@lightbulb.option("ore_out", description="# Ore to give.")
-@lightbulb.option("grain_out", description="# Grain to give.")
-@lightbulb.option("wool_out", description="# Wool to give.")
-@lightbulb.option("brick_in", description="# Brick to get.")
-@lightbulb.option("lumber_in", description="# Lumber to get.")
-@lightbulb.option("ore_in", description="# Ore to get.")
-@lightbulb.option("grain_in", description="# Grain to get.")
-@lightbulb.option("wool_in", description="# Wool to get.")
-@lightbulb.command("trade", description="Offer a trade.", ephemeral=True)
+@lightbulb.option("brick_out", description="# Brick to give.", type=int, default=0, min_value=0)
+@lightbulb.option("lumber_out", description="# Lumber to give.", type=int, default=0, min_value=0)
+@lightbulb.option("ore_out", description="# Ore to give.", type=int, default=0, min_value=0)
+@lightbulb.option("grain_out", description="# Grain to give.", type=int, default=0, min_value=0)
+@lightbulb.option("wool_out", description="# Wool to give.", type=int, default=0, min_value=0)
+@lightbulb.option("brick_in", description="# Brick to get.", type=int, default=0, min_value=0)
+@lightbulb.option("lumber_in", description="# Lumber to get.", type=int, default=0, min_value=0)
+@lightbulb.option("ore_in", description="# Ore to get.", type=int, default=0, min_value=0)
+@lightbulb.option("grain_in", description="# Grain to get.", type=int, default=0, min_value=0)
+@lightbulb.option("wool_in", description="# Wool to get.", type=int, default=0, min_value=0)
+@lightbulb.command("trade", description="Offer a trade.")
 @lightbulb.implements(lightbulb.SlashCommand)
 async def trade(ctx: lightbulb.Context) -> None:
     """Offer a trade.
 
-    Called via the discord command '/trade <building> <location>'.
+    Called via the discord command '/trade <type of material number for both giving and recieving...>'.
     Anyone can offer a trade regardless of whether or not it is their turn.
     """
 
-    print("CRN: " + ctx.options)
+    name = str(ctx.author).split("#")[0]
+
+    player1_resources = {}
+    player2_resources = {}
+
+    for key, value in ctx.options._options.items():
+        if "out" in key:
+            player1_resources[key.split("_")[0]] = value 
+        if "in" in key:
+            player2_resources[key.split("_")[0]] = value 
+
+    controller.game.active_trades.append((name, ctx.options._options, player1_resources, player2_resources))
+
+    print(controller.game.active_trades)
+
+    await ctx.respond(content=hikari.Embed(
+                title=f"Trade #{len(controller.game.active_trades)}!",
+                description=f"{name} wants to give: {player1_resources} for {player2_resources}",
+                color=hikari.Color(0xFFFF00)))
 
     
 
