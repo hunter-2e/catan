@@ -2,16 +2,16 @@ import cv2
 import numpy as np
 import itertools
 
-photo  = "C:\\Users\\hunter\\Documents\\Python Scripts\\catan\\gui\\build\\background.png"
+photo  = "background.png"
 
 path = cv2.imread(photo)
 
-topLeft = [225,70]
-botLeft = [225, 160]
-bot = [310, 210]
-botRight = [400, 160]
-topRight = [400, 70]
-top = [310, 20]
+topLeft = [225,90]
+botLeft = [225, 180]
+bot = [310, 230]
+botRight = [400, 180]
+topRight = [400, 90]
+top = [310, 40]
 
 allVertex = [topLeft, botLeft, bot, botRight, topRight, top]
 
@@ -76,7 +76,10 @@ def drawBoard(board, image):
             color = (44, 7,166)
 
         cv2.fillPoly(image, [pts], color)
-        image = cv2.putText(image, str(numToDraw), (int(top[0] - 10), top[1] + 95), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,0), 1)
+        image = cv2.circle(image, (int(top[0]), top[1] + 95), 30, (0,0,0), -1)
+        if(numToDraw > 9):
+            image = cv2.putText(image, str(numToDraw), (int(top[0] - 20), top[1] + 105), cv2.FONT_HERSHEY_DUPLEX, 1, (255,255,255), 2)
+        else: image = cv2.putText(image, str(numToDraw), (int(top[0] - 10), top[1] + 100), cv2.FONT_HERSHEY_DUPLEX, 1, (255,255,255), 2)
         image = cv2.polylines(image, [pts], isClosed, (0,0,0), thickness)
         
 
@@ -87,7 +90,7 @@ def drawBoard(board, image):
 def getSpot(spot):
     spotAdj = [spot[1],spot[0]]
 
-    firstSpot = [310, 20]
+    firstSpot = [310, 40]
     if spot[0] == 1:
         firstSpot[1] += 50
         firstSpot[0] -= 85
