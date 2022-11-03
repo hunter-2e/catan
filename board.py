@@ -54,6 +54,8 @@ class Board:
 
         self.roadsPlaced = []
 
+        self.playersRoads = {}
+
         #Places material tiles can be placed
         self.tileSpots = [[None for x in range(3)],
                         [None for x in range(4)],
@@ -119,10 +121,10 @@ class Board:
             xTile += 1
 
 
-    def setRoad(self, spot1, spot2):
+    def setRoad(self, player, spot1, spot2):
         if([spot1, spot2] in self.roadsPlaced):
             return None
-        else: self.roadsPlaced.append([spot1,spot2])
+        else: self.playersRoads[player.name].append
 
 
 

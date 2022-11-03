@@ -138,7 +138,7 @@ def drawCity(image, player, spot):
     boardLocation = getSpot(spot)
     settleColor = (255,255,255)
     
-    cv2.rectangle(image,(boardLocation[0] - 5,boardLocation[1]-5),(boardLocation[0] + 5,boardLocation[1] + 5),settleColor,-1)
+    cv2.rectangle(image,(boardLocation[0] - 10,boardLocation[1]-10),(boardLocation[0] + 10,boardLocation[1] + 10),settleColor,-1)
     cv2.imwrite('test.png', image)
 
 def drawRoad(image, player, spot1, spot2):
@@ -148,7 +148,7 @@ def drawRoad(image, player, spot1, spot2):
 
     roadColor = determineColor(player)
 
-    cv2.line(image, boardLocation1, boardLocation2, roadColor, 3) 
+    cv2.line(image, boardLocation1, boardLocation2, roadColor, 4) 
     cv2.imwrite('test.png', image)
 
 
