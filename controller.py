@@ -26,7 +26,7 @@ draw.drawRoad(draw.img, Emanuel, (4,2), (5,2))
 
 def run():
     """Controls the main game loop."""
-    ...
+    pass
     # loop through each player until someone wins
     # player is forced to roll at the start of their turn, resource cards are automatically distributed
     # if a 7 is rolled handle robber stuff
