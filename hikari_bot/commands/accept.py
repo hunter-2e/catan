@@ -28,12 +28,14 @@ async def accept(ctx: lightbulb.Context) -> None:
 
         return
 
-    name = str(ctx.author).split("#")[0]
-
     active_trades = bot.game.active_trades
+    player1_name = bot.game.get_player(active_trades[ctx.options.trade_num - 1]["name"])
+    player2_name = str(ctx.author).split("#")[0]
 
     try:
-        controller.trade(bot.game, bot.game.get_player(active_trades[ctx.options.trade_num - 1]["name"]), bot.game.get_player(name), active_trades[ctx.options.trade_num - 1]["p1_out"], active_trades[ctx.options.trade_num - 1]["p2_in"])
+        controller.trade(bot.game, player1_name, bot.game.get_player(player2_name), active_trades[ctx.options.trade_num - 1]["p1_out"], active_trades[ctx.options.trade_num - 1]["p2_in"])
+
+        await bot.bot.rest.create_message(ctx.channel_id, content=f"Trade # {ctx.options.trade_num} from {player1_name} accepted by {player2_name}.")
     except controller.Resource:
         await ctx.respond(content=hikari.Embed(
                 title="Error!",

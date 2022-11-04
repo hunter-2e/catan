@@ -66,8 +66,10 @@ def setup() -> Game:
 
     test1 = player.Player("KobiTheKing", "blue")
     game.players.append(test1)
+    test1.modCurrResource("brick", 1)
     test2 = player.Player("Hunter2e", "orange")
     game.players.append(test2)
+    test2.modCurrResource("lumber", 2)
 
     return game
 
