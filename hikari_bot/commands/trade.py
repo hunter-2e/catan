@@ -45,8 +45,6 @@ async def trade(ctx: lightbulb.Context) -> None:
         "p2_in": player2_resources
     })
 
-    print(bot.game.active_trades)
-
     await bot.bot.rest.create_message(ctx.channel_id, content=hikari.Embed(
                 title=f"Trade #{len(bot.game.active_trades)}!",
                 description=f"{name} wants to give: {player1_resources} for {player2_resources}",

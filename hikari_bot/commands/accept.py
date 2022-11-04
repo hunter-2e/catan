@@ -29,8 +29,6 @@ async def accept(ctx: lightbulb.Context) -> None:
         return
 
     name = str(ctx.author).split("#")[0]
-    print(bot.game.players)
-    print(bot.game.active_trades)
 
     active_trades = bot.game.active_trades
 
