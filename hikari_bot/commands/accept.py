@@ -2,6 +2,7 @@ import lightbulb
 import hikari
 
 import controller
+from hikari_bot import bot
 
 # Plugins are structures that allow the grouping of multiple commands and listeners together.
 plugin = lightbulb.Plugin("Accept", description="Accept a trade.")
@@ -18,13 +19,41 @@ async def accept(ctx: lightbulb.Context) -> None:
     The player whose turn it is can accept any trade OR any player can accept a trade from the player whose turn it is.
     """
 
-    name = str(ctx.author).split("#")[0]
+    ctrl = bot.ctrl
+
+    active_trades = ctrl.active_trades
+    player1_name = ctrl.get_player(active_trades[ctx.options.trade_num - 1]["name"])
+    player2_name = str(ctx.author).split("#")[0]
+
+    # Cannot accept your own trade
+    if player1_name == player2_name:
+        await ctx.respond(content=hikari.Embed(
+                title="Error!",
+                description=f"You cannot accept your own trade.",
+                color=hikari.Color(0xFF0000)))
+
+        return
+
+    # Invalid trade offer to accept
+    if ctx.options.trade_num > len(ctrl.active_trades):
+        await ctx.respond(content=hikari.Embed(
+                title="Error!",
+                description=f"Trade Offer #: {ctx.options.trade_num} is invalid.",
+                color=hikari.Color(0xFF0000)))
+
+        return
 
     try:
-        controller.trade(controller.game.get_player(controller.game.active_trades[ctx.options.trade_num - 1][0]), controller.game.get_player(name), controller.game.active_trades[ctx.options.trade_num - 1][1], controller.game.active_trades[ctx.options.trade_num - 1][2])
+        ctrl.trade(ctx.options.trade_num, player2_name)
+
+        await bot.bot.rest.create_message(ctx.channel_id, content=f"Trade # {ctx.options.trade_num} from {player1_name} accepted by {player2_name}.")
+    except controller.Resource:
+        await ctx.respond(content=hikari.Embed(
+                title="Error!",
+                description=f"A player does not have the necessary resources to complete the trade.",
+                color=hikari.Color(0xFF0000)))
     except:
         raise Exception("Failed to do the trade.")
-
     
 
 # Extensions are hot-reloadable (can be loaded/unloaded while the bot is live)

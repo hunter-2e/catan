@@ -1,5 +1,4 @@
-# do some gui initialization
+import hikari_bot.bot as bot
 
-# run game controller setup
-
-#
+if __name__ == "__main__":
+    bot.setup()
