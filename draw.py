@@ -6,27 +6,30 @@ photo  = "background.png"
 
 path = cv2.imread(photo)
 
-topLeft = [225,90]
-botLeft = [225, 180]
-bot = [310, 230]
-botRight = [400, 180]
-topRight = [400, 90]
-top = [310, 40]
-
-allVertex = [topLeft, botLeft, bot, botRight, topRight, top]
-
-isClosed = True
-color = (255, 0, 0)
-thickness = 2
-
-
 def drawBoard(board, image):
+    topLeft = [225,90]
+    botLeft = [225, 180]
+    bot = [310, 230]
+    botRight = [400, 180]
+    topRight = [400, 90]
+    top = [310, 40]
+
+    allVertex = [topLeft, botLeft, bot, botRight, topRight, top]
+
+    isClosed = True
+    color = (255, 0, 0)
+    thickness = 2
+
+
     startingTile = [0,0]
     tileNumbers = board.materialNumberTile
     tileColors = list(itertools.chain.from_iterable(board.tileSpots))
 
     print(tileNumbers)
     for tile in range(19):
+        if(str(board.robberLocation) == '('+ str(startingTile[0]) + ', ' + str(startingTile[1]) + ')'):
+            circleColor = (0,0,255)
+
         for number in tileNumbers:
             for material in tileNumbers[number]:
                 if '('+ str(startingTile[0]) + ',' + str(startingTile[1]) + ')' in material:
@@ -71,7 +74,15 @@ def drawBoard(board, image):
             color = (44, 7,166)
 
         cv2.fillPoly(image, [pts], color)
-        image = cv2.circle(image, (int(top[0]), top[1] + 95), 30, (0,0,0), -1)
+        
+        try:
+            if(circleColor == (0,0,255)):
+                image = cv2.circle(image, (int(top[0]), top[1] + 95), 30, circleColor, -1)
+                circleColor = None
+            else: image = cv2.circle(image, (int(top[0]), top[1] + 95), 30, (0,0,0), -1)
+
+        except: image = cv2.circle(image, (int(top[0]), top[1] + 95), 30, (0,0,0), -1)
+
         if(numToDraw > 9):
             image = cv2.putText(image, str(numToDraw), (int(top[0] - 20), top[1] + 105), cv2.FONT_HERSHEY_DUPLEX, 1, (255,255,255), 2)
         else: image = cv2.putText(image, str(numToDraw), (int(top[0] - 10), top[1] + 100), cv2.FONT_HERSHEY_DUPLEX, 1, (255,255,255), 2)
@@ -81,6 +92,74 @@ def drawBoard(board, image):
         for vertex in allVertex:
                 vertex[0] += 175
         drawGrid(image)
+    cv2.imwrite('test.png', image)
+
+def drawRobber(board, image):
+    topLeft = [225,90]
+    botLeft = [225, 180]
+    bot = [310, 230]
+    botRight = [400, 180]
+    topRight = [400, 90]
+    top = [310, 40]
+
+    allVertex = [topLeft, botLeft, bot, botRight, topRight, top]
+
+    isClosed = True
+    thickness = 2
+
+
+    startingTile = [0,0]
+    tileNumbers = board.materialNumberTile
+
+    for tile in range(19):
+        if(str(board.robberLocation) == '('+ str(startingTile[0]) + ', ' + str(startingTile[1]) + ')'):
+            circleColor = (0,0,255)
+
+        for number in tileNumbers:
+            for material in tileNumbers[number]:
+                if '('+ str(startingTile[0]) + ',' + str(startingTile[1]) + ')' in material:
+                    numToDraw = number
+                    break
+                   
+        if tile not in [2,6,11,15]:
+            startingTile[1] += 1
+        else:
+            startingTile[1] = 0
+            startingTile[0] += 1
+
+        if tile in [3,7,12,16]:
+            for vertex in allVertex:
+                vertex[1] += 140
+                if tile == 3:
+                    vertex[0] -= 612.5
+                elif tile == 7:
+                    vertex[0] -= 787.5
+                elif tile == 12:
+                    vertex[0] -= 787.5
+                else:
+                    vertex[0] -= 612.5
+
+        pts = np.array([topLeft, botLeft,
+                        bot, botRight,
+                            topRight, top],
+                        np.int32)   
+        pts = pts.reshape((-1, 1, 2))
+
+        try:
+            if(circleColor == (0,0,255)):
+                image = cv2.circle(image, (int(top[0]), top[1] + 95), 30, circleColor, -1)
+                circleColor = None
+            else: image = cv2.circle(image, (int(top[0]), top[1] + 95), 30, (0,0,0), -1)
+
+        except: image = cv2.circle(image, (int(top[0]), top[1] + 95), 30, (0,0,0), -1)
+
+        if(numToDraw > 9):
+            image = cv2.putText(image, str(numToDraw), (int(top[0] - 20), top[1] + 105), cv2.FONT_HERSHEY_DUPLEX, 1, (255,255,255), 2)
+        else: image = cv2.putText(image, str(numToDraw), (int(top[0] - 10), top[1] + 100), cv2.FONT_HERSHEY_DUPLEX, 1, (255,255,255), 2)
+        
+
+        for vertex in allVertex:
+                vertex[0] += 175
     cv2.imwrite('test.png', image)
 
 def drawGrid(image):
@@ -181,6 +260,7 @@ def drawRoad(image, player, spot1, spot2):
 
     cv2.line(image, boardLocation1, boardLocation2, roadColor, 4) 
     cv2.imwrite('test.png', image)
+
 
 
 

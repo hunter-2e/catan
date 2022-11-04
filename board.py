@@ -1,5 +1,5 @@
 import random
-import player as ply
+import hikari_bot.commands.player as ply
 
 class Board:
     def __init__(self):
@@ -186,5 +186,3 @@ class Board:
 
     def moveRobber(self, newLocation):
         self.robberLocation = newLocation
-
-

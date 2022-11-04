@@ -1,24 +1,30 @@
-#import board, player as ply
-#import draw
-import hikari_bot.bot as bot
+import board, player as ply
+import draw
+#import hikari_bot.bot as bot
 import player
 from typing import Union
 import game as gm
+import development
 
-#board = board.Board()
-#Emanuel = ply.Player("Emanuel", "white")
-#board.setRoad(Emanuel, (4,2),(5,2))
-#print(board.roadsPlaced)
-#Hunter = ply.Player("Hunter", "red")
-#Chamin = ply.Player("Chamin", "blue")
-#Kobi = ply.Player("Kobi", "orange")
+board = board.Board()
+devDeck = development.devCard()
+
+Emanuel = ply.Player("Emanuel", "white")
+Hunter = ply.Player("Hunter", "red")
+Chamin = ply.Player("Chamin", "blue")
+Kobi = ply.Player("Kobi", "orange")
+
+devDeck.buyDevCard(Hunter)
+
+draw.drawBoard(board, draw.img)
+
+board.moveRobber((0,0))
+draw.drawRoad(draw.img, Hunter, (0,0),(1,1))
+
+draw.drawRobber(board, draw.img)
+board.moveRobber((0,1))
 
 
-#draw.drawBoard(board, draw.img)
-
-
-#draw.drawSettle(draw.img, Emanuel, (4,2), (5,2))
-#draw.drawRoad(draw.img, Emanuel, (4,2), (5,2))
 
 game = gm.Game()
 
@@ -36,7 +42,7 @@ def setup():
     test2 = player.Player("Hunter2e", "orange")
     game.players.append(test2)
 
-    bot.setup()
+    #bot.setup()
 
 def run():
     """Controls the main game loop."""
@@ -97,5 +103,5 @@ def trade(player1: player.Player, player2: Union[player.Player, str], player1_re
         player2.modCurrResource(resource, num * -1)
         player1.modCurrResource(resource, num)
 
-if __name__ == "__main__":
-    setup()
+#if __name__ == "__main__":
+#    setup()
