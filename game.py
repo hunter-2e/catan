@@ -42,15 +42,3 @@ class Game:
         """
 
         return (random.randint(1, 6), random.randint(1, 6))
-
-    def get_player(self, name: str) -> player.Player:
-        """Returns the player object given a name OR raises an error if none found."""
-
-        print(name)
-        print(self.players)
-        for p in self.players:
-            print(p.name)
-            if p.name == name:
-                return p
-
-        raise Exception("Player not found!")
