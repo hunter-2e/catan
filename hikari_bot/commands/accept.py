@@ -19,21 +19,32 @@ async def accept(ctx: lightbulb.Context) -> None:
     The player whose turn it is can accept any trade OR any player can accept a trade from the player whose turn it is.
     """
 
-    # Invalid trade offer to accept
-    if ctx.options.trade_num > len(bot.game.active_trades):
+    ctrl = bot.ctrl
+
+    active_trades = ctrl.active_trades
+    player1_name = ctrl.get_player(active_trades[ctx.options.trade_num - 1]["name"])
+    player2_name = str(ctx.author).split("#")[0]
+
+    # Cannot accept your own trade
+    if player1_name == player2_name:
         await ctx.respond(content=hikari.Embed(
                 title="Error!",
-                description=f"Trade Offer #: {ctx.options.trade_num} is invalid!",
+                description=f"You cannot accept your own trade.",
                 color=hikari.Color(0xFF0000)))
 
         return
 
-    active_trades = bot.game.active_trades
-    player1_name = bot.game.get_player(active_trades[ctx.options.trade_num - 1]["name"])
-    player2_name = str(ctx.author).split("#")[0]
+    # Invalid trade offer to accept
+    if ctx.options.trade_num > len(ctrl.active_trades):
+        await ctx.respond(content=hikari.Embed(
+                title="Error!",
+                description=f"Trade Offer #: {ctx.options.trade_num} is invalid.",
+                color=hikari.Color(0xFF0000)))
+
+        return
 
     try:
-        controller.trade(bot.game, player1_name, bot.game.get_player(player2_name), active_trades[ctx.options.trade_num - 1]["p1_out"], active_trades[ctx.options.trade_num - 1]["p2_in"])
+        ctrl.trade(ctx.options.trade_num, player2_name)
 
         await bot.bot.rest.create_message(ctx.channel_id, content=f"Trade # {ctx.options.trade_num} from {player1_name} accepted by {player2_name}.")
     except controller.Resource:

@@ -39,10 +39,10 @@ async def bot_connected(event: hikari.StartedEvent) -> None:
     """
 
     print("The bot has connected to Discord!")
-    
-    global game
-    game = controller.setup()
-    controller.run()
+
+    global ctrl
+    ctrl = controller.setup()
+    asyncio.create_task(controller.run(ctrl))
 
 @bot.listen()
 async def bot_disconnected(event: hikari.StoppedEvent) -> None:
