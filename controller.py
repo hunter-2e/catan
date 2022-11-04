@@ -37,6 +37,7 @@ class Controller:
 
         self.active_trades = []
         self.players = []
+        self.current_player = 0     # Index in self.players of the player whose turn it is
 
     def trade(self, trade_num: int, player2: Union[player.Player, str]) -> None:
         """Handles a trade.
@@ -145,6 +146,15 @@ async def run(ctrl: Controller) -> None:
     # upon every relevent action, checking if the player has won needs to happen: building city/settlement/development card or recieving largest army/longest road
 
     while not ctrl.hasWon():
+        
+        # Empty active trades list at end of each turn
+        ctrl.active_trades = []
+
+        if ctrl.current_player == len(ctrl.players - 1):
+            ctrl.current_player = 0
+        else:
+            ctrl.current_player += 1
+
         await asyncio.sleep(20)
 
 def game_over():
