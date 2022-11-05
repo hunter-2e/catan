@@ -1,5 +1,6 @@
 import random
-import hikari_bot.commands.player as ply
+import player as ply
+import draw
 
 class Board:
     def __init__(self):
@@ -117,14 +118,17 @@ class Board:
                  yTile += 1
                  zPoints += 1
             xTile += 1
+    
+        draw.drawBoard(self, draw.img)
 
 
     def setRoad(self, player, spot1, spot2):
         if([spot1, spot2] in self.roadsPlaced):
-            return None
+            return False
         else:
             player.roadsPlaced.append((spot1,spot2))
             player.roadQuantity -= 1
+            draw.drawRoad(draw.img, player, spot1,spot2)
 
     def getRoad(self, spot1, spot2):
         if([spot1, spot2] in self.roadsPlaced):
@@ -149,7 +153,7 @@ class Board:
                             else:
                                 addingSett.append(player.name + "'s " + 'Settlement')
                         self.settleOnTile.update({key: addingSett})
-                    
+                draw.drawSettle(draw.img, player, spot)
             else:
                 player.cityQuantity -= 1 
                 self.settleSpots[spot[0]][spot[1]] = player.name + "'s " + 'City'
@@ -162,7 +166,7 @@ class Board:
                             else:
                                 addingSett.append(player.name + "'s " + 'City')
                         self.settleOnTile.update({key: addingSett})
-
+                draw.drawCity(draw.img, player, spot)
 
     def getSettlement(self, spot):
         return self.settleSpots[spot[0]][spot[1]]
@@ -186,3 +190,4 @@ class Board:
 
     def moveRobber(self, newLocation):
         self.robberLocation = newLocation
+        draw.drawRobber(self, draw.img)

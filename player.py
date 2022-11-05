@@ -13,10 +13,10 @@ class Player:
         
         self.currentResources       = {
             "brick":  0,
-            "lumber": 0,
-            "ore":    0,
-            "grain":  0,
-            "wool":   0,              }
+            "wood": 0,
+            "rock":    0,
+            "wheat":  0,
+            "sheep":   0,              }
 
         self.unusedDevelopmentCards = {
             "KnightCard":       0,
