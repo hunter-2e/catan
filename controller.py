@@ -15,15 +15,8 @@ import random
 #Chamin = ply.Player("Chamin", "blue")
 #Kobi = ply.Player("Kobi", "orange")
 
+print(board.getMaterial(3))
 
-#board.setSettlement(Emanuel, (0,0), 1)
-
-#Emanuel.currentResources['brick'] += 1
-#Emanuel.currentResources['sheep'] += 1
-
-#Hunter.unusedDevelopmentCards['KnightCard'] += 1
-
-#devDeck.playKnightCard(board, Hunter, (0,0), Emanuel)
 
 class Controller:
     """Handles all tasks related to the core functionality of the game."""
