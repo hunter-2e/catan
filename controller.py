@@ -7,16 +7,19 @@ import development
 import asyncio
 import random
 
-#board = board.Board()
-#devDeck = development.devCard()
+board = board.Board()
+devDeck = development.devCard()
 
-#Emanuel = ply.Player("Emanuel", "white")
-#Hunter = ply.Player("Hunter", "red")
-#Chamin = ply.Player("Chamin", "blue")
-#Kobi = ply.Player("Kobi", "orange")
+Emanuel = ply.Player("Emanuel", "white")
+Hunter = ply.Player("Hunter", "red")
+Chamin = ply.Player("Chamin", "blue")
+Kobi = ply.Player("Kobi", "orange")
 
-print(board.getMaterial(3))
-
+players = [Emanuel, Kobi, Hunter, Chamin]
+board.setSettlement(Hunter, (0,0), 1)
+print(board.settleOnTile)
+board.getMaterial(players, 6)
+print(Hunter.currentResources)
 
 class Controller:
     """Handles all tasks related to the core functionality of the game."""

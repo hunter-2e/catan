@@ -54,7 +54,7 @@ class devCard:
         board.setRoad(player, firstRoad[0], firstRoad[1])
         board.setRoad(player, secondRoad[0], secondRoad[1])
     
-    
+
     def playYearOfPlenty(self, controller, player, materialOne, materialTwo):
         if player.unusedDevelopmentCards["YearOfPlenty"] < 1:
             return False
@@ -69,3 +69,5 @@ class devCard:
 
         controller.resource_bank[materialTwo] -= 1
         player.currentResources[materialTwo] += 1
+
+    
