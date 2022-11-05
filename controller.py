@@ -86,7 +86,7 @@ class Controller:
             player1.modCurrResource(resource, num)
 
     def build(self) -> None:
-        """Maybe split this into seprate methods for each building?"""
+        """Maybe split this into seperate methods for each building?"""
         ...
 
     def moveRobber(self) -> None:
