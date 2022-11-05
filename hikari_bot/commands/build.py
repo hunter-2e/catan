@@ -1,5 +1,6 @@
 import lightbulb
 import hikari
+import string
 
 import controller
 from hikari_bot import bot
@@ -22,6 +23,10 @@ async def build(ctx: lightbulb.Context) -> None:
 
     ctrl = bot.ctrl
 
+    location_1 = (list(string.ascii_uppercase).index(ctx.options.location[0]), int(ctx.options.location[1:]))
+    location_2 = None
+    print(location_1)
+
     # Must input 2 locations if building a road
     if ctx.options.building == "Road" and ctx.options.location_2_road == None:
         await ctx.respond(content=hikari.Embed(
@@ -30,14 +35,17 @@ async def build(ctx: lightbulb.Context) -> None:
                 color=hikari.Color(0xFF0000)))
 
         return
+    else:
+        location_2 = (list(string.ascii_uppercase).index(ctx.options.location_2_road[0]), int(ctx.options.location_2_road[1:]))
+        print(location_2)
 
     try:
-        ctrl.build(str(ctx.author).split("#")[0], ctx.options.building, ctx.options.location_1, ctx.options.location_2_road)
+        ctrl.build(str(ctx.author).split("#")[0], ctx.options.building, location_1, location_2)
         await bot.bot.rest.create_message(ctx.channel_id, content=f"ADDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD")
     except controller.Resource:
         await ctx.respond(content=hikari.Embed(
                 title="Error!",
-                description=f"You do not have the necessary resources to build {ctx.options.building}.",
+                description=f"You do not have the necessary resources to build a {ctx.options.building}.",
                 color=hikari.Color(0xFF0000)))
     except:
         raise Exception(f"Failed to build {ctx.options.building}.")

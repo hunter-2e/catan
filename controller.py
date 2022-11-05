@@ -28,7 +28,7 @@ import random
 class Controller:
     """Handles all tasks related to the core functionality of the game."""
 
-    def __init__(self) -> None:
+    def __init__(self, board) -> None:
         # store deck of dev card here?
 
         self.resource_bank = {
@@ -39,6 +39,7 @@ class Controller:
             "sheep": 19
         }
 
+        self.board = board
         self.active_trades = []
         self.players = []
         self.current_player = 0     # Index in self.players of the player whose turn it is
@@ -99,6 +100,11 @@ class Controller:
         if building == "Road":
             if not player_obj.hasResource("wood", 1) or not player_obj.hasResource("brick", 1):
                 raise Resource(f"Player: {player_obj.name} does not have the necessary resources.")
+
+            self.board.setRoad(player_obj, location_1, location_2)
+
+            player_obj.modCurrResource("wood", -1)
+            player_obj.modCurrResource("brick", -1)
         elif building == "Settlement":
             ...
         elif building == "City":
@@ -145,14 +151,16 @@ def setup() -> Controller:
     # shuffle deck of development cards?
     # put the first 2 settling turns in here or main loop?
 
-    ctrl = Controller()
+    b = board.Board()
+    ctrl = Controller(b)
 
     test1 = player.Player("KobiTheKing", "blue")
     ctrl.players.append(test1)
     test1.modCurrResource("brick", 1)
+    test1.modCurrResource("wood", 2)
     test2 = player.Player("Hunter2e", "orange")
     ctrl.players.append(test2)
-    test2.modCurrResource("lumber", 2)
+    test2.modCurrResource("wood", 2)
 
     return ctrl
 
