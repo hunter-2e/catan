@@ -89,9 +89,9 @@ class Board:
         #Populating tileSpots randomly with available material types and a number
 
         xTile = 0
+        zPoints = 0
         for row in self.tileSpots:
             yTile = 0
-            zPoints = 0
             for tile in range(len(row)):
                  chosenTile = random.choice([tilesLeft for tilesLeft in self.tilesAvailable.keys() if self.tilesAvailable[tilesLeft] > 0])
                  
@@ -137,6 +137,16 @@ class Board:
 
 
     def setSettlement(self, player, spot, settType):
+        spotValid = False
+
+        for row in self.associatedPoints:
+            if spot in row:
+                spotValid = True
+                break
+        if(spotValid is False):
+            return False
+
+    
         if(self.settleSpots[spot[0]][spot[1]] != None):
             return "This space already has a settlement."
         else:
@@ -145,40 +155,60 @@ class Board:
                 self.settleSpots[spot[0]][spot[1]] = player.name + "'s " + 'Settlement'
                 
                 for key in self.settleOnTile:
-                    addingSett = []
                     if spot in self.settleOnTile[key]:
-                        for values in self.settleOnTile[key]:
-                            if(spot != values):
-                                addingSett.append(values)
-                            else:
-                                addingSett.append(player.name + "'s " + 'Settlement')
-                        self.settleOnTile.update({key: addingSett})
+                        insertSpot = self.settleOnTile[key].index(spot)
+                        self.settleOnTile[key].insert(insertSpot, player.name + "'s " + 'Settlement')
                 draw.drawSettle(draw.img, player, spot)
             else:
                 player.cityQuantity -= 1 
                 self.settleSpots[spot[0]][spot[1]] = player.name + "'s " + 'City'
+                
                 for key in self.settleOnTile:
-                    addingSett = []
                     if spot in self.settleOnTile[key]:
-                        for values in self.settleOnTile[key]:
-                            if(spot != values):
-                                addingSett.append(values)
-                            else:
-                                addingSett.append(player.name + "'s " + 'City')
-                        self.settleOnTile.update({key: addingSett})
+                        insertSpot = self.settleOnTile[key].index(spot)
+                        self.settleOnTile[key].insert(insertSpot, player.name + "'s " + 'City')
                 draw.drawCity(draw.img, player, spot)
+            return "WORKED"
 
     def getSettlement(self, spot):
         return self.settleSpots[spot[0]][spot[1]]
 
-    def getMaterial(self, num):
+    def getMaterial(self, controller, num):
         materialAndPoints = {}
         for material in self.materialNumberTile[num]:
             for key in self.settleOnTile:
                 if material == key and f"({self.robberLocation[0]},{self.robberLocation[1]})" not in str(material):
                     materialAndPoints[material] = self.settleOnTile[material]
-        return materialAndPoints
 
+        print(materialAndPoints)
+        for material in materialAndPoints:
+            for player in controller:
+                if player.name + "'s Settlement" in materialAndPoints[material]:
+                    toBeGiven = materialAndPoints[material].count(player.name + "'s Settlement")
+
+                    if('rock' in material):
+                        player.currentResources['rock'] += toBeGiven
+                    elif('brick' in material):
+                        player.currentResources['brick'] += toBeGiven
+                    elif('wheat' in material):
+                        player.currentResources['wheat'] += toBeGiven
+                    elif('tree' in material):
+                        player.currentResources['wood'] += toBeGiven
+                    else: player.currentResources['sheep'] += toBeGiven
+
+                if player.name + "'s City" in materialAndPoints[material]:
+                    toBeGiven = materialAndPoints[material].count(player.name + "'s City") * 2
+
+                    if('rock' in material):
+                        player.currentResources['rock'] += toBeGiven
+                    elif('brick' in material):
+                        player.currentResources['brick'] += toBeGiven
+                    elif('wheat' in material):
+                        player.currentResources['wheat'] += toBeGiven
+                    elif('tree' in material):
+                        player.currentResources['wood'] += toBeGiven
+                    else: player.currentResources['sheep'] += toBeGiven
+               
     #postType one of ["Wheat", "Rock", "Brick", "3for1", "Wood"]
     def postAccess(self, spot, postType):
         for key in self.portsSettleSpots:

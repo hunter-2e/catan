@@ -7,15 +7,16 @@ import development
 import asyncio
 import random
 
-#board = board.Board()
-#devDeck = development.devCard()
+board = board.Board()
+devDeck = development.devCard()
 
-#Emanuel = ply.Player("Emanuel", "white")
-#Hunter = ply.Player("Hunter", "red")
-#Chamin = ply.Player("Chamin", "blue")
-#Kobi = ply.Player("Kobi", "orange")
+Emanuel = ply.Player("Emanuel", "white")
+Hunter = ply.Player("Hunter", "red")
+Chamin = ply.Player("Chamin", "blue")
+Kobi = ply.Player("Kobi", "orange")
 
-#print(board.getMaterial(3))
+players = [Emanuel, Kobi, Hunter, Chamin]
+
 
 
 class Controller:
