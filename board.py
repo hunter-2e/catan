@@ -137,6 +137,16 @@ class Board:
 
 
     def setSettlement(self, player, spot, settType):
+        spotValid = False
+
+        for row in self.associatedPoints:
+            if spot in row:
+                spotValid = True
+                break
+        if(spotValid is False):
+            return False
+
+    
         if(self.settleSpots[spot[0]][spot[1]] != None):
             return "This space already has a settlement."
         else:
@@ -158,6 +168,7 @@ class Board:
                         insertSpot = self.settleOnTile[key].index(spot)
                         self.settleOnTile[key].insert(insertSpot, player.name + "'s " + 'City')
                 draw.drawCity(draw.img, player, spot)
+            return "WORKED"
 
     def getSettlement(self, spot):
         return self.settleSpots[spot[0]][spot[1]]

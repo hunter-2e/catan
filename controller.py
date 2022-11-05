@@ -16,10 +16,8 @@ Chamin = ply.Player("Chamin", "blue")
 Kobi = ply.Player("Kobi", "orange")
 
 players = [Emanuel, Kobi, Hunter, Chamin]
-board.setSettlement(Hunter, (0,0), 1)
-print(board.settleOnTile)
-board.getMaterial(players, 6)
-print(Hunter.currentResources)
+
+
 
 class Controller:
     """Handles all tasks related to the core functionality of the game."""

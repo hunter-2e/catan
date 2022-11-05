@@ -27,6 +27,8 @@ class devCard:
             return False
 
         player.unusedDevelopmentCards["KnightCard"] -= 1
+        player.usedDevelopmentCards["KnightCard"] += 1
+
         board.moveRobber(newLocation)
 
         for tile in board.settleOnTile:
@@ -45,6 +47,8 @@ class devCard:
                     playerToRob.currentResources[stolenCard] -= 1
                     player.currentResources[stolenCard] += 1
     
+
+
     def playRoadBuilding(self, board, player, firstRoad, secondRoad):
         if player.unusedDevelopmentCards["RoadBuilding"] < 1:
             return False
@@ -54,6 +58,7 @@ class devCard:
         board.setRoad(player, firstRoad[0], firstRoad[1])
         board.setRoad(player, secondRoad[0], secondRoad[1])
     
+
 
     def playYearOfPlenty(self, controller, player, materialOne, materialTwo):
         if player.unusedDevelopmentCards["YearOfPlenty"] < 1:
@@ -70,4 +75,20 @@ class devCard:
         controller.resource_bank[materialTwo] -= 1
         player.currentResources[materialTwo] += 1
 
-    
+    def playMonopoly(self, controller, player, chosenMaterial):
+        if player.unusedDevelopmentCards["Monopoly"] < 1:
+            return False
+
+        player.unusedDevelopmentCards["Monopoly"] -= 1
+
+        stolenItemAmount = 0
+        #Change controller for controller.players
+        for otherPlayers in controller:
+            if otherPlayers.name != player.name:
+                stolenItemAmount += otherPlayers.currentResources[chosenMaterial]
+
+                otherPlayers.currentResources[chosenMaterial] = 0
+        player.currentResources[chosenMaterial] += stolenItemAmount
+
+    def playVictoryPointCard(self, player):
+        player.victoryPoints += 1
