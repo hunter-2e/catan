@@ -4,14 +4,16 @@ import draw
 import player
 from typing import Union
 import development
+import asyncio
+import random
 
-board = board.Board()
-devDeck = development.devCard()
+#board = board.Board()
+#devDeck = development.devCard()
 
-Emanuel = ply.Player("Emanuel", "white")
-Hunter = ply.Player("Hunter", "red")
-Chamin = ply.Player("Chamin", "blue")
-Kobi = ply.Player("Kobi", "orange")
+#Emanuel = ply.Player("Emanuel", "white")
+#Hunter = ply.Player("Hunter", "red")
+#Chamin = ply.Player("Chamin", "blue")
+#Kobi = ply.Player("Kobi", "orange")
 
 print(board.getMaterial(3))
 
@@ -78,9 +80,24 @@ class Controller:
             player2.modCurrResource(resource, num * -1)
             player1.modCurrResource(resource, num)
 
-    def build(self) -> None:
-        """Maybe split this into seperate methods for each building?"""
-        ...
+    def build(self, player: str, building: str, location_1: str, location_2: Union[str, None]) -> None:
+        """Maybe split this into seperate methods for each building?
+
+        Raises:
+            Resource Exception: If a player does not have a resource necessary to complete the trade.
+        """
+        
+        player_obj = self.get_player(player)
+
+        if building == "Road":
+            if not player_obj.hasResource("wood", 1) or not player_obj.hasResource("brick", 1):
+                raise Resource(f"Player: {player_obj.name} does not have the necessary resources.")
+        elif building == "Settlement":
+            ...
+        elif building == "City":
+            ...
+        elif building == "Development Card":
+            ...
 
     def moveRobber(self) -> None:
         """Moves the robber."""
@@ -145,7 +162,7 @@ async def run(ctrl: Controller) -> None:
         # Empty active trades list at end of each turn
         ctrl.active_trades = []
 
-        if ctrl.current_player == len(ctrl.players - 1):
+        if ctrl.current_player == len(ctrl.players) - 1:
             ctrl.current_player = 0
         else:
             ctrl.current_player += 1
