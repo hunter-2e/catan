@@ -23,7 +23,7 @@ bot = lightbulb.BotApp(
 def setup() -> None:
     """Startup the bot."""
 
-    bot.load_extensions("hikari_bot.commands.build", "hikari_bot.commands.trade", "hikari_bot.commands.accept")
+    bot.load_extensions("hikari_bot.commands.build", "hikari_bot.commands.trade", "hikari_bot.commands.accept", "hikari_bot.commands.hand")
     bot.run(activity=hikari.Activity(name="Catan", type=hikari.ActivityType.PLAYING))
 
 async def shutdown() -> None:
