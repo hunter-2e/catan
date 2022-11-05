@@ -34,6 +34,15 @@ async def accept(ctx: lightbulb.Context) -> None:
 
         return
 
+    # Player whose turn it is must be one of the player's involved in the trade
+    if player1_name != ctrl.current_player and player2_name != ctrl.current_player:
+        await ctx.respond(content=hikari.Embed(
+                title="Error!",
+                description=f"Player {ctrl.current_player} must be involved in the trade.",
+                color=hikari.Color(0xFF0000)))
+
+        return
+
     # Invalid trade offer to accept
     if ctx.options.trade_num > len(ctrl.active_trades):
         await ctx.respond(content=hikari.Embed(
