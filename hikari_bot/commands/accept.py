@@ -9,7 +9,7 @@ plugin = lightbulb.Plugin("Accept", description="Accept a trade.")
 
 # Creates a command in the plugin
 @plugin.command
-@lightbulb.option("trade_num", description="# of the trade to accept.", type=int)
+@lightbulb.option("trade_num", description="# of the trade to accept.", type=int, required=True)
 @lightbulb.command("accept", description="Accept a trade.", ephemeral=True)
 @lightbulb.implements(lightbulb.SlashCommand)
 async def accept(ctx: lightbulb.Context) -> None:
@@ -22,7 +22,7 @@ async def accept(ctx: lightbulb.Context) -> None:
     ctrl = bot.ctrl
 
     active_trades = ctrl.active_trades
-    player1_name = ctrl.get_player(active_trades[ctx.options.trade_num - 1]["name"])
+    player1_name = active_trades[ctx.options.trade_num - 1]["name"]
     player2_name = str(ctx.author).split("#")[0]
 
     # Cannot accept your own trade
@@ -35,7 +35,7 @@ async def accept(ctx: lightbulb.Context) -> None:
         return
 
     # Player whose turn it is must be one of the player's involved in the trade
-    if player1_name != ctrl.current_player and player2_name != ctrl.current_player:
+    if player1_name != ctrl.players[ctrl.current_player].name and player2_name != ctrl.players[ctrl.current_player].name:
         await ctx.respond(content=hikari.Embed(
                 title="Error!",
                 description=f"Player {ctrl.current_player} must be involved in the trade.",
