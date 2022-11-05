@@ -25,7 +25,6 @@ def drawBoard(board, image):
     tileNumbers = board.materialNumberTile
     tileColors = list(itertools.chain.from_iterable(board.tileSpots))
 
-    print(tileNumbers)
     for tile in range(19):
         if(str(board.robberLocation) == '('+ str(startingTile[0]) + ', ' + str(startingTile[1]) + ')'):
             circleColor = (0,0,255)

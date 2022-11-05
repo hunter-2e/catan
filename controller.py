@@ -13,15 +13,8 @@ Hunter = ply.Player("Hunter", "red")
 Chamin = ply.Player("Chamin", "blue")
 Kobi = ply.Player("Kobi", "orange")
 
+print(board.getMaterial(3))
 
-board.setSettlement(Emanuel, (0,0), 1)
-
-Emanuel.currentResources['brick'] += 1
-Emanuel.currentResources['sheep'] += 1
-
-Hunter.unusedDevelopmentCards['KnightCard'] += 1
-
-devDeck.playKnightCard(board, Hunter, (0,0), Emanuel)
 
 class Controller:
     """Handles all tasks related to the core functionality of the game."""
@@ -30,11 +23,11 @@ class Controller:
         # store deck of dev card here?
 
         self.resource_bank = {
-            "Brick": 19,
-            "Wood": 19,
-            "Rock": 19,
-            "Wheat": 19,
-            "Sheep": 19
+            "brick": 19,
+            "wood": 19,
+            "rock": 19,
+            "wheat": 19,
+            "sheep": 19
         }
 
         self.active_trades = []

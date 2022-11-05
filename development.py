@@ -46,4 +46,26 @@ class devCard:
                     player.currentResources[stolenCard] += 1
     
     def playRoadBuilding(self, board, player, firstRoad, secondRoad):
+        if player.unusedDevelopmentCards["RoadBuilding"] < 1:
+            return False
+
+        player.unusedDevelopmentCards["RoadBuilding"] -= 1
+
+        board.setRoad(player, firstRoad[0], firstRoad[1])
+        board.setRoad(player, secondRoad[0], secondRoad[1])
+    
+    
+    def playYearOfPlenty(self, controller, player, materialOne, materialTwo):
+        if player.unusedDevelopmentCards["YearOfPlenty"] < 1:
+            return False
+
+        player.unusedDevelopmentCards["YearOfPlenty"] -= 1
+
+        if controller.resource_bank[materialOne] < 1 or controller.resource_bank[materialTwo] < 1:
+            return False
         
+        controller.resource_bank[materialOne] -= 1
+        player.currentResources[materialOne] += 1
+
+        controller.resource_bank[materialTwo] -= 1
+        player.currentResources[materialTwo] += 1
