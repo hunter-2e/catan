@@ -33,12 +33,7 @@ async def shutdown() -> None:
 
 @bot.listen()
 async def bot_connected(event: hikari.StartedEvent) -> None:
-    """Called once the bot has started.
-    
-    Starts the course tracker as a background task.
-    """
-
-    print("The bot has connected to Discord!")
+    """Called once the bot has started."""
 
     global ctrl
     ctrl = controller.setup()
@@ -49,3 +44,19 @@ async def bot_disconnected(event: hikari.StoppedEvent) -> None:
     """Called once the bot has disconnected from Discord."""
 
     print("The bot has disconnected from Discord!")
+
+async def send_image(image: str):
+    """Sends the most updated version of the game board to a discord channel."""
+
+    chnl = None
+
+    async for i, guild in bot.rest.fetch_my_guilds().enumerate():
+        for j, channel in bot.cache.get_guild(guild.id).get_channels().items():
+            if channel.name == "bot-commands":
+                chnl = channel
+
+    if chnl is None:
+        print("Failed to send image!")
+        return
+
+    await bot.rest.create_message(channel=chnl, content=hikari.File(image))
