@@ -1,21 +1,27 @@
-from typing import Union
-import random
-import asyncio
-
+import board, player as ply
+import draw
+#import hikari_bot.bot as bot
 import player
-#import board, player as ply
-#import draw
+from typing import Union
+import development
 
-#board = board.Board()
-#Emanuel = ply.Player("Emanuel", "white")
-#board.setRoad(Emanuel, (4,2),(5,2))
-#print(board.roadsPlaced)
-#Hunter = ply.Player("Hunter", "red")
-#Chamin = ply.Player("Chamin", "blue")
-#Kobi = ply.Player("Kobi", "orange")
+board = board.Board()
+devDeck = development.devCard()
 
+Emanuel = ply.Player("Emanuel", "white")
+Hunter = ply.Player("Hunter", "red")
+Chamin = ply.Player("Chamin", "blue")
+Kobi = ply.Player("Kobi", "orange")
 
-#draw.drawBoard(board, draw.img)
+devDeck.buyDevCard(Hunter)
+
+draw.drawBoard(board, draw.img)
+
+board.moveRobber((0,0))
+draw.drawRoad(draw.img, Hunter, (0,0),(1,1))
+
+draw.drawRobber(board, draw.img)
+board.moveRobber((0,1))
 
 
 #draw.drawSettle(draw.img, Emanuel, (4,2), (5,2))
