@@ -46,4 +46,4 @@ class devCard:
                     player.currentResources[stolenCard] += 1
     
     def playRoadBuilding(self, board, player, firstRoad, secondRoad):
-        
+        ...
