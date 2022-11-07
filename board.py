@@ -85,6 +85,11 @@ class Board:
             7: 1
         }
 
+        #Create array of all valid road combinations
+
+        self.validRoads = []
+
+        
 
         #Populating tileSpots randomly with available material types and a number
 
@@ -120,7 +125,32 @@ class Board:
             xTile += 1
     
         draw.drawBoard(self, draw.img)
+        
+    def validRoad(point):
+        # being passed in ((),())
+        relevantSpot    = []
 
+        settlementSpots = [(1,1)]
+        citySpots       = [(2,2)]
+        roadsPlaced     = [((3,3),(4,4))]
+        
+        for i in settlementSpots:
+            relevantSpot.append(i)
+
+        for i in citySpots:
+            relevantSpot.append(i)
+
+        for i in roadsPlaced:
+            for j in i:
+                relevantSpot.append(j) 
+
+        for i in relevantSpot:
+            if i == 
+
+        print(relevantSpot)                 
+        
+
+    validRoad((1,0))
 
     def setRoad(self, player, spot1, spot2):
         if([spot1, spot2] in self.roadsPlaced):
@@ -136,7 +166,7 @@ class Board:
         else: return False
 
 
-    def setSettlement(self, player, spot, settType):
+    def setSettlement(self, controller, player, spot, settType):
         spotValid = False
 
         for row in self.associatedPoints:
@@ -146,29 +176,36 @@ class Board:
         if(spotValid is False):
             return False
 
-    
-        if(self.settleSpots[spot[0]][spot[1]] != None):
-            return "This space already has a settlement."
+        if(settType == 1):
+            #Check if player already has settlement there and return False if they do
+            for players in controller:
+                if spot in players.settlementSpots or players.citySpots:
+                    return False
+
+            player.settlementQuantity -= 1
+            self.settleSpots[spot[0]][spot[1]] = player.name + "'s " + 'Settlement'
+            player.settlementSpots.append(spot)
+
+            for key in self.settleOnTile:
+                if spot in self.settleOnTile[key]:
+                    insertSpot = self.settleOnTile[key].index(spot)
+                    self.settleOnTile[key].insert(insertSpot, player.name + "'s " + 'Settlement')
+            draw.drawSettle(draw.img, player, spot)
         else:
-            if(settType == 1):
-                player.settlementQuantity -= 1
-                self.settleSpots[spot[0]][spot[1]] = player.name + "'s " + 'Settlement'
-                
-                for key in self.settleOnTile:
-                    if spot in self.settleOnTile[key]:
-                        insertSpot = self.settleOnTile[key].index(spot)
-                        self.settleOnTile[key].insert(insertSpot, player.name + "'s " + 'Settlement')
-                draw.drawSettle(draw.img, player, spot)
-            else:
-                player.cityQuantity -= 1 
-                self.settleSpots[spot[0]][spot[1]] = player.name + "'s " + 'City'
-                
-                for key in self.settleOnTile:
-                    if spot in self.settleOnTile[key]:
-                        insertSpot = self.settleOnTile[key].index(spot)
-                        self.settleOnTile[key].insert(insertSpot, player.name + "'s " + 'City')
-                draw.drawCity(draw.img, player, spot)
-            return "WORKED"
+            #Check if player has there own settlement there return False if they don't and can't upgrade to city or return False if anyone already has a city there
+            for players in controller:
+                if spot in players.citySpots or spot not in player.settlementSpots:
+                    return False
+
+            player.cityQuantity -= 1 
+            self.settleSpots[spot[0]][spot[1]] = player.name + "'s " + 'City'
+            player.citySpots.append(spot)
+
+            for key in self.settleOnTile:
+                if spot in self.settleOnTile[key]:
+                    insertSpot = self.settleOnTile[key].index(spot)
+                    self.settleOnTile[key].insert(insertSpot, player.name + "'s " + 'City')
+            draw.drawCity(draw.img, player, spot)
 
     def getSettlement(self, spot):
         return self.settleSpots[spot[0]][spot[1]]
