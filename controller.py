@@ -1,6 +1,6 @@
 import board, player as ply
 import draw
-#import hikari_bot.bot as bot
+import hikari_bot.bot as bot
 import player
 from typing import Union
 import development
@@ -93,6 +93,8 @@ class Controller:
         player_obj = self.get_player(player)
 
         if building == "Road":
+            # TODO: STILL NEED TO ADD CHECKER FOR IF THE ROAD LOCATIONS ARE VALID OR NOT
+
             if not player_obj.hasResource("wood", 1) or not player_obj.hasResource("brick", 1):
                 raise Resource(f"Player: {player_obj.name} does not have the necessary resources.")
 
@@ -166,6 +168,9 @@ async def run(ctrl: Controller) -> None:
     # if a 7 is rolled handle robber stuff
     # player is then allowed to trade, play up to 1 development card, and build as much as they want in any order until they end their turn
     # upon every relevent action, checking if the player has won needs to happen: building city/settlement/development card or recieving largest army/longest road
+
+    #TMP TEST SENDING IMAGE
+    await bot.send_image("test.png")
 
     while not ctrl.hasWon():
         
