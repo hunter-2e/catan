@@ -17,9 +17,6 @@ Kobi = ply.Player("Kobi", "orange")
 
 players = [Emanuel, Kobi, Hunter, Chamin]
 
-
-
-
 class Controller:
     """Handles all tasks related to the core functionality of the game."""
 

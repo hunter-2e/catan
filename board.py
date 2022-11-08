@@ -126,31 +126,28 @@ class Board:
     
         draw.drawBoard(self, draw.img)
         
-    def validRoad(point):
+    def populateValidRoads():
+        
+
+    def validRoad(spot, player):
         # being passed in ((),())
         relevantSpot    = []
-
-        settlementSpots = [(1,1)]
-        citySpots       = [(2,2)]
-        roadsPlaced     = [((3,3),(4,4))]
         
-        for i in settlementSpots:
+        for i in player.settlementSpots:
             relevantSpot.append(i)
 
-        for i in citySpots:
+        for i in player.citySpots:
             relevantSpot.append(i)
 
-        for i in roadsPlaced:
+        for i in player.roadsPlaced:
             for j in i:
                 relevantSpot.append(j) 
 
         for i in relevantSpot:
-            if i == 
+            if i == spot[0]:
+               print("HELLO")
 
-        print(relevantSpot)                 
-        
-
-    validRoad((1,0))
+    
 
     def setRoad(self, player, spot1, spot2):
         if([spot1, spot2] in self.roadsPlaced):
