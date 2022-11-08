@@ -125,13 +125,16 @@ class Board:
             xTile += 1
     
         draw.drawBoard(self, draw.img)
-        
-    def populateValidRoads():
-        
 
+
+
+  
     def validRoad(spot, player):
+        if spot[0] == spot[1]:
+            return False
+
         # being passed in ((),())
-        relevantSpot    = []
+        relevantSpot = []
         
         for i in player.settlementSpots:
             relevantSpot.append(i)
@@ -145,7 +148,18 @@ class Board:
 
         for i in relevantSpot:
             if i == spot[0]:
-               print("HELLO")
+                if spot[0][0] == spot[1][0]:
+                    return False
+                
+                if spot[0][0] % 2 == 0:
+                    if (spot[0][0] == spot[1][0] + 1 and spot[0][1] == spot[1][1]) or (spot[0][0] == spot[1][0] + 1 and spot[0][1] == spot[1][1] + 1):
+                        pass
+            elif i == spot[1]:
+                if spot[0][0] == spot[1][0]:
+                    return False
+
+            else: return False
+            
 
     
 
