@@ -125,35 +125,48 @@ class Board:
             xTile += 1
     
         draw.drawBoard(self, draw.img)
-        
-    def validRoad(point):
+
+
+
+  
+    def validRoad(spot, player):
+        if spot[0] == spot[1]:
+            return False
+
         # being passed in ((),())
-        relevantSpot    = []
-
-        settlementSpots = [(1,1)]
-        citySpots       = [(2,2)]
-        roadsPlaced     = [((3,3),(4,4))]
+        relevantSpot = []
         
-        for i in settlementSpots:
+        for i in player.settlementSpots:
             relevantSpot.append(i)
 
-        for i in citySpots:
+        for i in player.citySpots:
             relevantSpot.append(i)
 
-        for i in roadsPlaced:
+        for i in player.roadsPlaced:
             for j in i:
                 relevantSpot.append(j) 
 
         for i in relevantSpot:
-            if i == 
+            if i == spot[0]:
+                if spot[0][0] == spot[1][0]:
+                    return False
+                
+                if spot[0][0] % 2 == 0:
+                    if (spot[0][0] == spot[1][0] + 1 and spot[0][1] == spot[1][1]) or (spot[0][0] == spot[1][0] + 1 and spot[0][1] == spot[1][1] + 1):
+                        return True
+                else:
+                    if (spot[0][0] == spot[1][0] + 1 and spot[0][1] == spot[1][1]):
+                        return True
 
-        print(relevantSpot)                 
-        
+            elif i == spot[1]:
+                if spot[0][0] == spot[1][0]:
+                    return False
 
-    validRoad((1,0))
+            else: return False
+            
 
     def setRoad(self, player, spot1, spot2):
-        if([spot1, spot2] in self.roadsPlaced):
+        if([spot1, spot2] or [spot2, spot1] in self.roadsPlaced):
             return False
         else:
             player.roadsPlaced.append((spot1,spot2))
