@@ -223,13 +223,13 @@ def determineColor(player):
 
     color = player.color
 
-    if(color == "blue"):
+    if(color == "Blue"):
         color = (255,0,0)
-    elif(color == "red"):
+    elif(color == "Red"):
         color = (0,0,255)
-    elif(color == "orange"):
+    elif(color == "Orange"):
         color = (27, 133, 241)
-    elif(color == "white"):
+    elif(color == "White"):
         color = (255,255,255)
 
     return color
