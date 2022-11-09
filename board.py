@@ -158,7 +158,8 @@ class Board:
                 if spot[0][0] == spot[1][0]:
                     return False
 
-            else: return False
+            else: 
+                return False
             
 
     
