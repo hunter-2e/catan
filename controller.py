@@ -1,21 +1,22 @@
 import board, player as ply
 import draw
-import hikari_bot.bot as bot
+#import hikari_bot.bot as bot
 import player
 from typing import Union
 import development
 import asyncio
 import random
 
-#board = board.Board()
+board = board.Board()
 #devDeck = development.devCard()
 
 #Emanuel = ply.Player("Emanuel", "white")
-#Hunter = ply.Player("Hunter", "red")
+Hunter = ply.Player("Hunter", "red")
 #Chamin = ply.Player("Chamin", "blue")
 #Kobi = ply.Player("Kobi", "orange")
+players = [Hunter]
 
-#players = [Emanuel, Kobi, Hunter, Chamin]
+board.setSettlement(players, Hunter, (3,0), 1)
 
 class Controller:
     """Handles all tasks related to the core functionality of the game."""

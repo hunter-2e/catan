@@ -180,6 +180,22 @@ class Board:
 
 
     def setSettlement(self, controller, player, spot, settType):
+        
+        
+        if spot[0] in [0,11]:
+            spot[1] = ((spot[1] - 1)/2) - 1
+        elif spot[0] in [1,2,9,10]:
+            spot[1] = (spot[1]/2) - 1
+        elif spot[0] in [3,4,7,8]:
+            spot[1] = ((spot[1] - 1)/2)
+        elif spot[0] in [5,6]:
+            spot[1] = spot[1]/2
+        
+
+
+
+
+
         spotValid = False
 
         for row in self.associatedPoints:
@@ -187,6 +203,7 @@ class Board:
                 spotValid = True
                 break
         if(spotValid is False):
+
             return False
 
         if(settType == 1):
