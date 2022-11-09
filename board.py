@@ -180,38 +180,30 @@ class Board:
 
 
     def setSettlement(self, controller, player, spot, settType):
-        
-        
+        print("K")
         if spot[0] in [0,11]:
-            spot[1] = ((spot[1] - 1)/2) - 1
+            spot = (spot[0], int(((spot[1] - 1)/2) - 1))
         elif spot[0] in [1,2,9,10]:
-            spot[1] = (spot[1]/2) - 1
+            spot = (spot[0], int((spot[1]/2) - 1))
         elif spot[0] in [3,4,7,8]:
-            spot[1] = ((spot[1] - 1)/2)
-        elif spot[0] in [5,6]:
-            spot[1] = spot[1]/2
-        
-
-
-
-
+            spot = (spot[0], int((spot[1] - 1)/2))
+        else:
+            spot = (spot[0], int(spot[1]/2))
 
         spotValid = False
 
-        print("HELLO: " + str(spot))
         for row in self.associatedPoints:
             if spot in row:
                 spotValid = True
                 break
+            
         if(spotValid is False):
-
             return False
 
         if(settType == 1):
             #Check if player already has settlement there and return False if they do
             for players in controller:
                 if spot in players.settlementSpots or players.citySpots:
-                    print("K")
                     return False
 
             player.settlementQuantity -= 1
@@ -222,9 +214,8 @@ class Board:
                 if spot in self.settleOnTile[key]:
                     insertSpot = self.settleOnTile[key].index(spot)
                     self.settleOnTile[key].insert(insertSpot, player.name + "'s " + 'Settlement')
-
-            print("HUNTER")
             draw.drawSettle(draw.img, player, spot)
+
         else:
             #Check if player has there own settlement there return False if they don't and can't upgrade to city or return False if anyone already has a city there
             for players in controller:
@@ -251,7 +242,6 @@ class Board:
                 if material == key and f"({self.robberLocation[0]},{self.robberLocation[1]})" not in str(material):
                     materialAndPoints[material] = self.settleOnTile[material]
 
-        print(materialAndPoints)
         for material in materialAndPoints:
             for player in controller:
                 if player.name + "'s Settlement" in materialAndPoints[material]:

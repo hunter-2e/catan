@@ -1,6 +1,6 @@
 import board, player as ply
 import draw
-#import hikari_bot.bot as bot
+import hikari_bot.bot as bot
 import player
 from typing import Union
 import development
@@ -8,16 +8,16 @@ import asyncio
 import random
 import hikari
 
-board = board.Board()
+#board = board.Board()
 #devDeck = development.devCard()
 
 #Emanuel = ply.Player("Emanuel", "white")
-Hunter = ply.Player("Hunter", "red")
+#Hunter = ply.Player("Hunter", "red")
 #Chamin = ply.Player("Chamin", "blue")
 #Kobi = ply.Player("Kobi", "orange")
-players = [Hunter]
+#players = [Hunter]
 
-board.setSettlement(players, Hunter, (3,0), 1)
+#board.setSettlement(players, Hunter, (3,0), 1)
 
 class Controller:
     """Handles all tasks related to the core functionality of the game."""
@@ -107,9 +107,6 @@ class Controller:
             if not player_obj.hasResource("wood", 1) or not player_obj.hasResource("brick", 1) or not player_obj.hasResource("wheat", 1) or not player_obj.hasResource("sheep", 1):
                 raise Resource(f"Player: {player_obj.name} does not have the necessary resources.")
 
-            print("TEST" + str(location_1))
-            print(type(location_1))
-            print(self.board.setSettlement(self.players, player_obj, location_1, 1))
 
             player_obj.modCurrResource("wood", -1)
             player_obj.modCurrResource("brick", -1)
