@@ -106,8 +106,9 @@ class Controller:
             if not player_obj.hasResource("wood", 1) or not player_obj.hasResource("brick", 1) or not player_obj.hasResource("wheat", 1) or not player_obj.hasResource("sheep", 1):
                 raise Resource(f"Player: {player_obj.name} does not have the necessary resources.")
 
-            print(location_1)
-            self.board.setSettlement(self, player_obj, location_1, 1)
+            print("TEST" + str(location_1))
+            print(type(location_1))
+            print(self.board.setSettlement(self.players, player_obj, location_1, 1))
 
             player_obj.modCurrResource("wood", -1)
             player_obj.modCurrResource("brick", -1)
@@ -117,7 +118,7 @@ class Controller:
             if not player_obj.hasResource("wheat", 2) or not player_obj.hasResource("rock", 3):
                 raise Resource(f"Player: {player_obj.name} does not have the necessary resources.")
 
-            self.board.setSettlement(self, player_obj, location_1, 2)
+            self.board.setSettlement(self.players, player_obj, location_1, 2)
 
             player_obj.modCurrResource("wheat", -2)
             player_obj.modCurrResource("rock", -3)
@@ -231,7 +232,7 @@ async def run(ctrl: Controller, flag: asyncio.Event) -> None:
         if dice == 7:
             ctrl.move_robber()
         else:
-            ctrl.board.getMaterial(ctrl, dice)  # give all players their materials based on the roll of the dice
+            ctrl.board.getMaterial(ctrl.players, dice)  # give all players their materials based on the roll of the dice
 
         await ctrl.flag.wait()  # flag is set when play calls the /endturn command
 
