@@ -2,7 +2,6 @@
 
 import os
 import dotenv
-import asyncio
 
 import hikari
 import lightbulb
@@ -37,7 +36,9 @@ async def bot_connected(event: hikari.StartedEvent) -> None:
 
     global ctrl
     ctrl = controller.setup()
-    asyncio.create_task(controller.run(ctrl))
+    global started
+    started = False
+    #asyncio.create_task(controller.run(ctrl))
 
 @bot.listen()
 async def bot_disconnected(event: hikari.StoppedEvent) -> None:

@@ -7,20 +7,20 @@ import development
 import asyncio
 import random
 
-board = board.Board()
-devDeck = development.devCard()
+#board = board.Board()
+#devDeck = development.devCard()
 
-Emanuel = ply.Player("Emanuel", "white")
-Hunter = ply.Player("Hunter", "red")
-Chamin = ply.Player("Chamin", "blue")
-Kobi = ply.Player("Kobi", "orange")
+#Emanuel = ply.Player("Emanuel", "white")
+#Hunter = ply.Player("Hunter", "red")
+#Chamin = ply.Player("Chamin", "blue")
+#Kobi = ply.Player("Kobi", "orange")
 
-players = [Emanuel, Kobi, Hunter, Chamin]
+#players = [Emanuel, Kobi, Hunter, Chamin]
 
 class Controller:
     """Handles all tasks related to the core functionality of the game."""
 
-    def __init__(self, board) -> None:
+    def __init__(self, board, dev_deck) -> None:
         # store deck of dev card here?
 
         self.resource_bank = {
@@ -35,6 +35,7 @@ class Controller:
         self.active_trades = []
         self.players = []
         self.current_player = 0     # Index in self.players of the player whose turn it is
+        self.dev_deck = dev_deck
 
     def trade(self, trade_num: int, player2: Union[player.Player, str]) -> None:
         """Handles a trade.
@@ -106,19 +107,19 @@ class Controller:
         elif building == "Development Card":
             ...
 
-    def moveRobber(self) -> None:
+    def move_robber(self) -> None:
         """Moves the robber."""
         ...
 
-    def activateDevCard(self, card) -> None:
+    def activate_dev_card(self, card) -> None:
         """Handled the activation of a development card."""
         ...
 
-    def hasWon(self) -> None:
+    def has_won(self) -> None:
         """Checks if a given player has won"""
         # not sure if we want to keep a running total that we just add to after each action a player makes or if we want to have this method here to check all relevent stuffs to see if a player has won
 
-    def rollDice(self) -> tuple:
+    def roll_dice(self) -> tuple:
         """Rolls 2 dice randomly.
         
         Returns:
@@ -136,6 +137,12 @@ class Controller:
 
         raise Exception("Player not found!")
 
+    def add_player(self, name: str, color: str) -> None:
+        """Adds a new player to the game."""
+
+        p = player.Player(name, color)
+        self.players.append(p)
+
 def setup() -> Controller:
     """Handles all game setup."""
  
@@ -146,15 +153,8 @@ def setup() -> Controller:
     # put the first 2 settling turns in here or main loop?
 
     b = board.Board()
-    ctrl = Controller(b)
-
-    test1 = player.Player("KobiTheKing", "blue")
-    ctrl.players.append(test1)
-    test1.modCurrResource("brick", 1)
-    test1.modCurrResource("wood", 2)
-    test2 = player.Player("Hunter2e", "orange")
-    ctrl.players.append(test2)
-    test2.modCurrResource("wood", 2)
+    dev_deck = development.devCard()
+    ctrl = Controller(b, dev_deck)
 
     return ctrl
 

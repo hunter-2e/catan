@@ -22,6 +22,7 @@ async def build(ctx: lightbulb.Context) -> None:
     """
 
     ctrl = bot.ctrl
+    name = str(ctx.author).split("#")[0]
 
     location_1 = (list(string.ascii_uppercase).index(ctx.options.location[0]), int(ctx.options.location[1:]))
     location_2 = None
@@ -41,7 +42,7 @@ async def build(ctx: lightbulb.Context) -> None:
 
     try:
         ctrl.build(str(ctx.author).split("#")[0], ctx.options.building, location_1, location_2)
-        await bot.bot.rest.create_message(ctx.channel_id, content=f"ADDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD")
+        await bot.bot.rest.create_message(ctx.channel_id, content=f"{name} built a {ctx.options.building}.")
     except controller.Resource:
         await ctx.respond(content=hikari.Embed(
                 title="Error!",
