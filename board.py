@@ -166,9 +166,6 @@ class Board:
             
 
     def setRoad(self, player, spot1, spot2):
-        spot1 = (spot1[1], spot1[0])
-        spot2 = (spot2[1], spot2[0])
-
         if([spot1, spot2] or [spot2, spot1] in self.roadsPlaced):
             return False
         else:
@@ -177,9 +174,6 @@ class Board:
             draw.drawRoad(draw.img, player, spot1,spot2)
 
     def getRoad(self, spot1, spot2):
-        spot1 = (spot1[1], spot1[0])
-        spot2 = (spot2[1], spot2[0])
-
         if([spot1, spot2] in self.roadsPlaced):
             return True
         else: return False
@@ -188,7 +182,7 @@ class Board:
     def setSettlement(self, controller, player, spot, settType):
         #settType: 1 = settlement, 2 = city
         spotValid = False
-        spot = (spot[1], spot[0])
+
         print("HELLO: " + str(spot))
         for row in self.associatedPoints:
             if spot in row:
@@ -232,8 +226,6 @@ class Board:
             draw.drawCity(draw.img, player, spot)
 
     def getSettlement(self, spot):
-        spot = (spot[1], spot[0])
-
         return self.settleSpots[spot[0]][spot[1]]
 
     def getMaterial(self, controller, num):
