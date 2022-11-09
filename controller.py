@@ -6,6 +6,7 @@ from typing import Union
 import development
 import asyncio
 import random
+import hikari
 
 #board = board.Board()
 #devDeck = development.devCard()
@@ -39,6 +40,7 @@ class Controller:
         self.players = []
         self.current_player = 0     # Index in self.players of the player whose turn it is
         self.dev_deck = dev_deck
+        self.flag
 
     def trade(self, trade_num: int, player2: Union[player.Player, str]) -> None:
         """Handles a trade.
@@ -84,7 +86,7 @@ class Controller:
             player2.modCurrResource(resource, num * -1)
             player1.modCurrResource(resource, num)
 
-    def build(self, player: str, building: str, location_1: str, location_2: Union[str, None]) -> None:
+    def build(self, player: str, building: str, location_1: tuple, location_2: Union[tuple, None]) -> None:
         """Maybe split this into seperate methods for each building?
 
         Raises:
@@ -104,15 +106,55 @@ class Controller:
             player_obj.modCurrResource("wood", -1)
             player_obj.modCurrResource("brick", -1)
         elif building == "Settlement":
-            ...
-        elif building == "City":
-            ...
-        elif building == "Development Card":
-            ...
+            if not player_obj.hasResource("wood", 1) or not player_obj.hasResource("brick", 1) or not player_obj.hasResource("wheat", 1) or not player_obj.hasResource("sheep", 1):
+                raise Resource(f"Player: {player_obj.name} does not have the necessary resources.")
 
-    def move_robber(self) -> None:
+            self.board.setSettlement(self, player_obj, location_1, 1)
+
+            player_obj.modCurrResource("wood", -1)
+            player_obj.modCurrResource("brick", -1)
+            player_obj.modCurrResource("wheat", -1)
+            player_obj.modCurrResource("sheep", -1)
+        elif building == "City":
+            if not player_obj.hasResource("wheat", 2) or not player_obj.hasResource("rock", 3):
+                raise Resource(f"Player: {player_obj.name} does not have the necessary resources.")
+
+            self.board.setSettlement(self, player_obj, location_1, 2)
+
+            player_obj.modCurrResource("wheat", -2)
+            player_obj.modCurrResource("rock", -3)
+        elif building == "Development Card":
+            if not player_obj.hasResource("wheat", 1) or not player_obj.hasResource("rock", 1) or not player_obj.hasResource("sheep", 1):
+                raise Resource(f"Player: {player_obj.name} does not have the necessary resources.")
+
+            #TODO: dev card stuff here
+
+            player_obj.modCurrResource("wheat", -1)
+            player_obj.modCurrResource("rock", -1)
+            player_obj.modCurrResource("sheep", -1)
+
+        bot.send_image_or_message("test.png", None)
+
+    def move_robber(self, new_location, player_to_rob) -> None:
         """Moves the robber."""
-        ...
+        
+        self.board.moveRobber(new_location)
+
+        for tile in board.settleOnTile:
+            if '(' + str(board.robberLocation[0]) + ',' + str(board.robberLocation[1]) + ')' in tile:
+                if player_to_rob.name + "'s Settlement" or player_to_rob.name + "'s City" in board.settleOnTile[tile]:
+                    possibleStolenCards = []
+                    for card in player_to_rob.currentResources:
+                        if player_to_rob.currentResources[card] > 0:
+                            possibleStolenCards.append(card)
+                    
+                    if(len(possibleStolenCards) == 0):
+                        return False
+
+                    stolenCard = random.choice(possibleStolenCards)
+
+                    player_to_rob.currentResources[stolenCard] -= 1
+                    player.currentResources[stolenCard] += 1
 
     def activate_dev_card(self, card) -> None:
         """Handled the activation of a development card."""
@@ -129,7 +171,8 @@ class Controller:
             The 2 dice rolls.
         """
 
-        return (random.randint(1, 6), random.randint(1, 6))
+        #return (random.randint(1, 6), random.randint(1, 6))
+        return random.randint(1, 6) + random.randint(1, 6)
 
     def get_player(self, name: str) -> player.Player:
         """Returns the player object given a name OR raises an error if none found."""
@@ -161,7 +204,7 @@ def setup() -> Controller:
 
     return ctrl
 
-async def run(ctrl: Controller) -> None:
+async def run(ctrl: Controller, flag: asyncio.Event) -> None:
     """Controls the main game loop."""
     # loop through each player until someone wins
     # player is forced to roll at the start of their turn, resource cards are automatically distributed
@@ -170,19 +213,34 @@ async def run(ctrl: Controller) -> None:
     # upon every relevent action, checking if the player has won needs to happen: building city/settlement/development card or recieving largest army/longest road
 
     #TMP TEST SENDING IMAGE
-    await bot.send_image("test.png")
+    #await bot.send_image("test.png")
+
+    ctrl.flag = flag
 
     while not ctrl.hasWon():
+        ctrl.flag.clear()
+        ctrl.active_trades = []     # emptied at start of each turn
+
+        dice = ctrl.roll_dice()
+        message = hikari.Embed(title=f"{ctrl.current_player}'s turn",
+                description=f"Dice roll: {dice}",
+                color=hikari.Color(0x00FF00)
+        )
+        await bot.send_image_or_message(None, message)
         
-        # Empty active trades list at end of each turn
-        ctrl.active_trades = []
+        if dice == 7:
+            ctrl.move_robber()
+        else:
+            ctrl.board.getMaterial(ctrl, dice)  # give all players their materials based on the roll of the dice
+
+        await ctrl.flag.wait()  # flag is set when play calls the /endturn command
 
         if ctrl.current_player == len(ctrl.players) - 1:
             ctrl.current_player = 0
         else:
             ctrl.current_player += 1
 
-        await asyncio.sleep(20)
+
 
 def game_over():
     """Handles any cleanup that needs to occur when a player wins the game."""

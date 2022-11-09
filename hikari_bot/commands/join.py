@@ -33,7 +33,7 @@ async def join(ctx: lightbulb.Context) -> None:
     if len(ctrl.players) == 4 and not bot.started:
         #await bot.bot.rest.create_message(ctx.channel_id, content=f"Game starting.")
         await ctx.respond(content=f"Game starting.")
-        asyncio.create_task(controller.run(ctrl))
+        asyncio.create_task(controller.run(ctrl), asyncio.Event())
 
 
 

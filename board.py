@@ -167,6 +167,7 @@ class Board:
 
 
     def setSettlement(self, controller, player, spot, settType):
+        #settType: 1 = settlement, 2 = city
         spotValid = False
 
         for row in self.associatedPoints:
@@ -178,7 +179,7 @@ class Board:
 
         if(settType == 1):
             #Check if player already has settlement there and return False if they do
-            for players in controller:
+            for players in controller.players:
                 if spot in players.settlementSpots or players.citySpots:
                     return False
 
@@ -193,7 +194,7 @@ class Board:
             draw.drawSettle(draw.img, player, spot)
         else:
             #Check if player has there own settlement there return False if they don't and can't upgrade to city or return False if anyone already has a city there
-            for players in controller:
+            for players in controller.players:
                 if spot in players.citySpots or spot not in player.settlementSpots:
                     return False
 
@@ -219,7 +220,7 @@ class Board:
 
         print(materialAndPoints)
         for material in materialAndPoints:
-            for player in controller:
+            for player in controller.players:
                 if player.name + "'s Settlement" in materialAndPoints[material]:
                     toBeGiven = materialAndPoints[material].count(player.name + "'s Settlement")
 
