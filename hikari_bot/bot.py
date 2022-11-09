@@ -2,6 +2,7 @@
 
 import os
 import dotenv
+from typing import Union
 
 import hikari
 import lightbulb
@@ -22,7 +23,7 @@ bot = lightbulb.BotApp(
 def setup() -> None:
     """Startup the bot."""
 
-    bot.load_extensions("hikari_bot.commands.build", "hikari_bot.commands.trade", "hikari_bot.commands.accept", "hikari_bot.commands.hand")
+    bot.load_extensions("hikari_bot.commands.build", "hikari_bot.commands.trade", "hikari_bot.commands.accept", "hikari_bot.commands.hand", "hikari_bot.commands.join", "hikari_bot.commands.endturn")
     bot.run(activity=hikari.Activity(name="Catan", type=hikari.ActivityType.PLAYING))
 
 async def shutdown() -> None:
@@ -46,8 +47,8 @@ async def bot_disconnected(event: hikari.StoppedEvent) -> None:
 
     print("The bot has disconnected from Discord!")
 
-async def send_image(image: str):
-    """Sends the most updated version of the game board to a discord channel."""
+async def send_image_or_message(image: Union[str, None], message: Union[str, hikari.Embed, None]):
+    """Sends the most updated version of the game board to a discord channel OR a message."""
 
     chnl = None
 
@@ -60,4 +61,9 @@ async def send_image(image: str):
         print("Failed to send image!")
         return
 
-    await bot.rest.create_message(channel=chnl, content=hikari.File(image))
+    if image is None and message is not None:
+        await bot.rest.create_message(channel=chnl, content=message)
+    elif image is not None and message is None:
+        await bot.rest.create_message(channel=chnl, content=hikari.File(image))
+    else:
+        print("bot.send_image_or_message(): invalid parameters!")

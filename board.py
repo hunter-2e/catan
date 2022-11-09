@@ -198,6 +198,7 @@ class Board:
 
         spotValid = False
 
+        print("HELLO: " + str(spot))
         for row in self.associatedPoints:
             if spot in row:
                 spotValid = True
@@ -210,6 +211,7 @@ class Board:
             #Check if player already has settlement there and return False if they do
             for players in controller:
                 if spot in players.settlementSpots or players.citySpots:
+                    print("K")
                     return False
 
             player.settlementQuantity -= 1
@@ -220,6 +222,8 @@ class Board:
                 if spot in self.settleOnTile[key]:
                     insertSpot = self.settleOnTile[key].index(spot)
                     self.settleOnTile[key].insert(insertSpot, player.name + "'s " + 'Settlement')
+
+            print("HUNTER")
             draw.drawSettle(draw.img, player, spot)
         else:
             #Check if player has there own settlement there return False if they don't and can't upgrade to city or return False if anyone already has a city there

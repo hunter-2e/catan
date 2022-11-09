@@ -24,9 +24,19 @@ async def build(ctx: lightbulb.Context) -> None:
     ctrl = bot.ctrl
     name = str(ctx.author).split("#")[0]
 
-    location_1 = (list(string.ascii_uppercase).index(ctx.options.location[0]), int(ctx.options.location[1:]))
+    location_1 = (list(string.ascii_uppercase).index(ctx.options.location[0].upper()), int(ctx.options.location[1:]))
     location_2 = None
     print(location_1)
+
+    try:
+        ctrl.get_player(name)
+    except Exception:
+        await ctx.respond(content=hikari.Embed(
+                title="Error!",
+                description=f"You are not in the game.",
+                color=hikari.Color(0xFF0000)))
+
+        return
 
     # Must input 2 locations if building a road
     if ctx.options.building == "Road" and ctx.options.location_2_road == None:
@@ -36,20 +46,26 @@ async def build(ctx: lightbulb.Context) -> None:
                 color=hikari.Color(0xFF0000)))
 
         return
-    else:
+    elif ctx.options.building == "Road":
         location_2 = (list(string.ascii_uppercase).index(ctx.options.location_2_road[0]), int(ctx.options.location_2_road[1:]))
         print(location_2)
 
     try:
         ctrl.build(str(ctx.author).split("#")[0], ctx.options.building, location_1, location_2)
         await bot.bot.rest.create_message(ctx.channel_id, content=f"{name} built a {ctx.options.building}.")
+
+        await ctx.respond(content="Success")
     except controller.Resource:
         await ctx.respond(content=hikari.Embed(
                 title="Error!",
                 description=f"You do not have the necessary resources to build a {ctx.options.building}.",
                 color=hikari.Color(0xFF0000)))
-    except:
-        raise Exception(f"Failed to build {ctx.options.building}.")
+    except Exception as e:
+        print(e)
+        #await ctx.respond(content=hikari.Embed(
+        #        title="Error!",
+        #        description=f"Failed to build {ctx.options.building}.",
+        #        color=hikari.Color(0xFF0000)))
     
 
 # Extensions are hot-reloadable (can be loaded/unloaded while the bot is live)

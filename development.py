@@ -83,7 +83,7 @@ class devCard:
 
         stolenItemAmount = 0
         #Change controller for controller.players
-        for otherPlayers in controller:
+        for otherPlayers in controller.players:
             if otherPlayers.name != player.name:
                 stolenItemAmount += otherPlayers.currentResources[chosenMaterial]
 
