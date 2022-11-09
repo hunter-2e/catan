@@ -1,5 +1,6 @@
 import lightbulb
 import asyncio
+import hikari
 
 from hikari_bot import bot
 import controller
@@ -18,9 +19,18 @@ async def endturn(ctx: lightbulb.Context) -> None:
     """
 
     name = str(ctx.author).split("#")[0]
+    ctrl = bot.ctrl
+
+    if ctrl.players[ctrl.current_player].name != name:
+        await ctx.respond(content=hikari.Embed(
+                title="Error!",
+                description=f"You cannot end someone elses turn.",
+                color=hikari.Color(0xFF0000)))
+
+        return
 
     await ctx.respond(content=f"{name} has ended their turn.")
-    
+
     bot.ctrl.flag.set()
 
 

@@ -37,7 +37,7 @@ class Controller:
         self.players = []
         self.current_player = 0     # Index in self.players of the player whose turn it is
         self.dev_deck = dev_deck
-        self.flag
+        self.flag = None
 
     def trade(self, trade_num: int, player2: Union[player.Player, str]) -> None:
         """Handles a trade.
@@ -106,6 +106,7 @@ class Controller:
             if not player_obj.hasResource("wood", 1) or not player_obj.hasResource("brick", 1) or not player_obj.hasResource("wheat", 1) or not player_obj.hasResource("sheep", 1):
                 raise Resource(f"Player: {player_obj.name} does not have the necessary resources.")
 
+            print(location_1)
             self.board.setSettlement(self, player_obj, location_1, 1)
 
             player_obj.modCurrResource("wood", -1)
@@ -130,7 +131,7 @@ class Controller:
             player_obj.modCurrResource("rock", -1)
             player_obj.modCurrResource("sheep", -1)
 
-        bot.send_image_or_message("test.png", None)
+        #bot.send_image_or_message("test.png", None)
 
     def move_robber(self, new_location, player_to_rob) -> None:
         """Moves the robber."""
@@ -214,16 +215,18 @@ async def run(ctrl: Controller, flag: asyncio.Event) -> None:
 
     ctrl.flag = flag
 
-    while not ctrl.hasWon():
+    while not ctrl.has_won():
         ctrl.flag.clear()
         ctrl.active_trades = []     # emptied at start of each turn
 
         dice = ctrl.roll_dice()
-        message = hikari.Embed(title=f"{ctrl.current_player}'s turn",
+        message = hikari.Embed(title=f"{ctrl.players[ctrl.current_player].name}'s turn",
                 description=f"Dice roll: {dice}",
                 color=hikari.Color(0x00FF00)
         )
         await bot.send_image_or_message(None, message)
+
+        await bot.send_image_or_message("test.png", None)
         
         if dice == 7:
             ctrl.move_robber()
