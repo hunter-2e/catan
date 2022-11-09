@@ -153,19 +153,20 @@ class Board:
                 
                 if spot[0][0] % 2 == 0:
                     if (spot[0][0] == spot[1][0] + 1 and spot[0][1] == spot[1][1]) or (spot[0][0] == spot[1][0] + 1 and spot[0][1] == spot[1][1] + 1):
-                        pass
+                        return True
+                else:
+                    if (spot[0][0] == spot[1][0] + 1 and spot[0][1] == spot[1][1]):
+                        return True
+
             elif i == spot[1]:
                 if spot[0][0] == spot[1][0]:
                     return False
 
-            else: 
-                return False
+            else: return False
             
 
-    
-
     def setRoad(self, player, spot1, spot2):
-        if([spot1, spot2] in self.roadsPlaced):
+        if([spot1, spot2] or [spot2, spot1] in self.roadsPlaced):
             return False
         else:
             player.roadsPlaced.append((spot1,spot2))
