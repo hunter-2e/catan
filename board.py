@@ -209,7 +209,6 @@ class Board:
         else:
             spot = (spot[0], int(spot[1]/2))
 
-        print(spot)
         spotValid = False
 
         for row in self.associatedPoints:
@@ -227,6 +226,8 @@ class Board:
                     return False
 
             player.settlementQuantity -= 1
+            player.victoryPoints += 1
+
             self.settleSpots[spot[0]][spot[1]] = player.name + "'s " + 'Settlement'
             player.settlementSpots.append(spot)
 
@@ -243,6 +244,8 @@ class Board:
                     return False
 
             player.cityQuantity -= 1 
+            player.victoryPoints += 1
+
             self.settleSpots[spot[0]][spot[1]] = player.name + "'s " + 'City'
             player.citySpots.append(spot)
 
@@ -300,5 +303,20 @@ class Board:
                 return False
 
     def moveRobber(self, newLocation):
+        newLocation = (newLocation[1], newLocation[0])
+
+        if newLocation[0] in [1.5, 9.5]:
+            if newLocation == 1.5:
+                newLocation = (0, int(((newLocation[1] - 1)/2) - 1))
+            else: newLocation = (4, int(((newLocation[1] - 1)/2) - 1))
+
+        elif newLocation[0] in [3.5, 7.5]:
+            if newLocation == 3.5:
+                newLocation = (1, int((newLocation[1]/2) - 1))
+            else: newLocation = (3, int((newLocation[1]/2) - 1))
+
+        else:
+            newLocation = (2, int((newLocation[1] - 1)/2))
+
         self.robberLocation = newLocation
         draw.drawRobber(self, draw.img)
