@@ -166,12 +166,30 @@ class Board:
             
 
     def setRoad(self, player, spot1, spot2):
-        if([spot1, spot2] or [spot2, spot1] in self.roadsPlaced):
-            return False
+        spot1 = [spot1[1], spot1[0]]
+        spot2 = [spot2[1], spot2[0]]
+
+        if spot1[0] in [0,11]:
+            spot1 = (spot1[0], int(((spot1[1] - 1)/2) - 1))
+        elif spot1[0] in [1,2,9,10]:
+            spot1 = (spot1[0], int((spot1[1]/2) - 1))
+        elif spot1[0] in [3,4,7,8]:
+            spot1 = (spot1[0], int((spot1[1] - 1)/2))
         else:
-            player.roadsPlaced.append((spot1,spot2))
-            player.roadQuantity -= 1
-            draw.drawRoad(draw.img, player, spot1,spot2)
+            spot1 = (spot1[0], int(spot1[1]/2))
+
+        if spot2[0] in [0,11]:
+            spot2 = (spot2[0], int(((spot2[1] - 1)/2) - 1))
+        elif spot2[0] in [1,2,9,10]:
+            spot2 = (spot2[0], int((spot2[1]/2) - 1))
+        elif spot2[0] in [3,4,7,8]:
+            spot2 = (spot2[0], int((spot2[1] - 1)/2))
+        else:
+            spot2 = (spot2[0], int(spot2[1]/2))
+
+        player.roadsPlaced.append((spot1,spot2))
+        player.roadQuantity -= 1
+        draw.drawRoad(draw.img, player, spot1,spot2)
 
     def getRoad(self, spot1, spot2):
         if([spot1, spot2] in self.roadsPlaced):
@@ -180,7 +198,8 @@ class Board:
 
 
     def setSettlement(self, controller, player, spot, settType):
-        print("K")
+        spot = (spot[1], spot[0])
+
         if spot[0] in [0,11]:
             spot = (spot[0], int(((spot[1] - 1)/2) - 1))
         elif spot[0] in [1,2,9,10]:
@@ -190,6 +209,7 @@ class Board:
         else:
             spot = (spot[0], int(spot[1]/2))
 
+        print(spot)
         spotValid = False
 
         for row in self.associatedPoints:

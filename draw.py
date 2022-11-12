@@ -103,10 +103,6 @@ def drawRobber(board, image):
 
     allVertex = [topLeft, botLeft, bot, botRight, topRight, top]
 
-    isClosed = True
-    thickness = 2
-
-
     startingTile = [0,0]
     tileNumbers = board.materialNumberTile
 
@@ -223,13 +219,13 @@ def determineColor(player):
 
     color = player.color
 
-    if(color == "blue"):
+    if(color == "Blue"):
         color = (255,0,0)
-    elif(color == "red"):
+    elif(color == "Red"):
         color = (0,0,255)
-    elif(color == "orange"):
+    elif(color == "Orange"):
         color = (27, 133, 241)
-    elif(color == "white"):
+    elif(color == "White"):
         color = (255,255,255)
 
     return color
@@ -257,7 +253,7 @@ def drawRoad(image, player, spot1, spot2):
 
     roadColor = determineColor(player)
 
-    cv2.line(image, boardLocation1, boardLocation2, roadColor, 4) 
+    cv2.line(image, boardLocation1, boardLocation2, roadColor, 15) 
     cv2.imwrite('test.png', image)
 
 
