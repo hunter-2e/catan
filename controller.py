@@ -39,6 +39,8 @@ class Controller:
         self.current_player = 0     # Index in self.players of the player whose turn it is
         self.dev_deck = dev_deck
         self.flag = None
+        self.cur_dice = None
+        self.has_robber_moved = False
 
     def trade(self, trade_num: int, player2: Union[player.Player, str]) -> None:
         """Handles a trade.
@@ -133,10 +135,11 @@ class Controller:
 
         #bot.send_image_or_message("test.png", None)
 
-    def move_robber(self, new_location, player_to_rob) -> None:
+    def move_robber(self, new_location: tuple, player_to_rob: str) -> str:
         """Moves the robber."""
         
         self.board.moveRobber(new_location)
+        stolenCard = None
 
         for tile in board.settleOnTile:
             if '(' + str(board.robberLocation[0]) + ',' + str(board.robberLocation[1]) + ')' in tile:
@@ -147,12 +150,14 @@ class Controller:
                             possibleStolenCards.append(card)
                     
                     if(len(possibleStolenCards) == 0):
-                        return False
+                        raise Exception(f"{player_to_rob} does not have any cards to steal.")
 
                     stolenCard = random.choice(possibleStolenCards)
 
                     player_to_rob.currentResources[stolenCard] -= 1
                     player.currentResources[stolenCard] += 1
+
+        return stolenCard
 
     def activate_dev_card(self, card) -> None:
         """Handled the activation of a development card."""
@@ -163,7 +168,7 @@ class Controller:
             if player.victoryPoints == 10:
                 return True
 
-    def roll_dice(self) -> tuple:
+    def roll_dice(self) -> int:
         """Rolls 2 dice randomly.
         
         Returns:
@@ -217,22 +222,29 @@ async def run(ctrl: Controller, flag: asyncio.Event) -> None:
     ctrl.flag = flag
 
     while not ctrl.has_won():
+        ctrl.has_robber_moved = False
         ctrl.flag.clear()
         ctrl.active_trades = []     # emptied at start of each turn
 
-        dice = ctrl.roll_dice()
+        ctrl.cur_dice = ctrl.roll_dice()
         message = hikari.Embed(title=f"{ctrl.players[ctrl.current_player].name}'s turn",
-                description=f"Dice roll: {dice}",
+                description=f"Dice roll: {ctrl.cur_dice}",
                 color=hikari.Color(0x00FF00)
         )
         await bot.send_image_or_message(None, message)
 
         await bot.send_image_or_message("test.png", None)
         
-        if dice == 7:
-            ctrl.move_robber()
+        if ctrl.cur_dice == 7:
+            # Prompt user user for new robber location, wait for response
+            await bot.send_image_or_message(None, "Use /rob <location> <player> to move the robber and steal from someone.")
+
+            await ctrl.flag.wait()
+
+            ctrl.flag.clear()
+            ctrl.has_robber_moved = True
         else:
-            ctrl.board.getMaterial(ctrl.players, dice)  # give all players their materials based on the roll of the dice
+            ctrl.board.getMaterial(ctrl.players, ctrl.cur_dice)  # give all players their materials based on the roll of the dice
 
         await ctrl.flag.wait()  # flag is set when play calls the /endturn command
 

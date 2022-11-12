@@ -47,8 +47,33 @@ async def bot_disconnected(event: hikari.StoppedEvent) -> None:
 
     print("The bot has disconnected from Discord!")
 
-async def send_image_or_message(image: Union[str, None], message: Union[str, hikari.Embed, None]):
+async def send_image_or_message(image: Union[str, None], message: Union[str, hikari.Embed, None]) -> None:
     """Sends the most updated version of the game board to a discord channel OR a message."""
+
+    chnl = None
+    try:
+        chnl = get_channel()
+    except Exception as e:
+        print(e)
+
+    if image is None and message is not None:
+        await bot.rest.create_message(channel=chnl, content=message)
+    elif image is not None and message is None:
+        await bot.rest.create_message(channel=chnl, content=hikari.File(image))
+    else:
+        print("bot.send_image_or_message(): invalid parameters!")
+
+async def prompt_robber(player: str):
+    """Prompts the current player to choose a new location for the robber and to steal from someone."""
+
+    chnl = None
+    try:
+        chnl = get_channel()
+    except Exception as e:
+        print(e)
+
+async def get_channel() -> hikari.GuildChannel:
+    """Returns the channel to send messages to."""
 
     chnl = None
 
@@ -58,12 +83,6 @@ async def send_image_or_message(image: Union[str, None], message: Union[str, hik
                 chnl = channel
 
     if chnl is None:
-        print("Failed to send image!")
-        return
-
-    if image is None and message is not None:
-        await bot.rest.create_message(channel=chnl, content=message)
-    elif image is not None and message is None:
-        await bot.rest.create_message(channel=chnl, content=hikari.File(image))
-    else:
-        print("bot.send_image_or_message(): invalid parameters!")
+        raise Exception("Failed to find channel.")
+    
+    return chnl
