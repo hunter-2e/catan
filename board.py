@@ -166,12 +166,30 @@ class Board:
             
 
     def setRoad(self, player, spot1, spot2):
-        if([spot1, spot2] or [spot2, spot1] in self.roadsPlaced):
-            return False
+        spot1 = [spot1[1], spot1[0]]
+        spot2 = [spot2[1], spot2[0]]
+
+        if spot1[0] in [0,11]:
+            spot1 = (spot1[0], int(((spot1[1] - 1)/2) - 1))
+        elif spot1[0] in [1,2,9,10]:
+            spot1 = (spot1[0], int((spot1[1]/2) - 1))
+        elif spot1[0] in [3,4,7,8]:
+            spot1 = (spot1[0], int((spot1[1] - 1)/2))
         else:
-            player.roadsPlaced.append((spot1,spot2))
-            player.roadQuantity -= 1
-            draw.drawRoad(draw.img, player, spot1,spot2)
+            spot1 = (spot1[0], int(spot1[1]/2))
+
+        if spot2[0] in [0,11]:
+            spot2 = (spot2[0], int(((spot2[1] - 1)/2) - 1))
+        elif spot2[0] in [1,2,9,10]:
+            spot2 = (spot2[0], int((spot2[1]/2) - 1))
+        elif spot2[0] in [3,4,7,8]:
+            spot2 = (spot2[0], int((spot2[1] - 1)/2))
+        else:
+            spot2 = (spot2[0], int(spot2[1]/2))
+
+        player.roadsPlaced.append((spot1,spot2))
+        player.roadQuantity -= 1
+        draw.drawRoad(draw.img, player, spot1,spot2)
 
     def getRoad(self, spot1, spot2):
         if([spot1, spot2] in self.roadsPlaced):
@@ -180,14 +198,25 @@ class Board:
 
 
     def setSettlement(self, controller, player, spot, settType):
-        #settType: 1 = settlement, 2 = city
+        spot = (spot[1], spot[0])
+
+        if spot[0] in [0,11]:
+            spot = (spot[0], int(((spot[1] - 1)/2) - 1))
+        elif spot[0] in [1,2,9,10]:
+            spot = (spot[0], int((spot[1]/2) - 1))
+        elif spot[0] in [3,4,7,8]:
+            spot = (spot[0], int((spot[1] - 1)/2))
+        else:
+            spot = (spot[0], int(spot[1]/2))
+
+        print(spot)
         spotValid = False
 
-        print("HELLO: " + str(spot))
         for row in self.associatedPoints:
             if spot in row:
                 spotValid = True
                 break
+            
         if(spotValid is False):
             return False
 
@@ -195,7 +224,6 @@ class Board:
             #Check if player already has settlement there and return False if they do
             for players in controller:
                 if spot in players.settlementSpots or players.citySpots:
-                    print("K")
                     return False
 
             player.settlementQuantity -= 1
@@ -206,9 +234,8 @@ class Board:
                 if spot in self.settleOnTile[key]:
                     insertSpot = self.settleOnTile[key].index(spot)
                     self.settleOnTile[key].insert(insertSpot, player.name + "'s " + 'Settlement')
-
-            print("HUNTER")
             draw.drawSettle(draw.img, player, spot)
+
         else:
             #Check if player has there own settlement there return False if they don't and can't upgrade to city or return False if anyone already has a city there
             for players in controller:
@@ -235,7 +262,6 @@ class Board:
                 if material == key and f"({self.robberLocation[0]},{self.robberLocation[1]})" not in str(material):
                     materialAndPoints[material] = self.settleOnTile[material]
 
-        print(materialAndPoints)
         for material in materialAndPoints:
             for player in controller:
                 if player.name + "'s Settlement" in materialAndPoints[material]:

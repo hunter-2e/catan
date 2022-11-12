@@ -15,8 +15,9 @@ import hikari
 #Hunter = ply.Player("Hunter", "red")
 #Chamin = ply.Player("Chamin", "blue")
 #Kobi = ply.Player("Kobi", "orange")
+#players = [Hunter]
 
-#players = [Emanuel, Kobi, Hunter, Chamin]
+#board.setSettlement(players, Hunter, (3,0), 1)
 
 class Controller:
     """Handles all tasks related to the core functionality of the game."""
@@ -106,9 +107,7 @@ class Controller:
             if not player_obj.hasResource("wood", 1) or not player_obj.hasResource("brick", 1) or not player_obj.hasResource("wheat", 1) or not player_obj.hasResource("sheep", 1):
                 raise Resource(f"Player: {player_obj.name} does not have the necessary resources.")
 
-            print("TEST" + str(location_1))
-            print(type(location_1))
-            print(self.board.setSettlement(self.players, player_obj, location_1, 1))
+            self.board.setSettlement(self.players, player_obj, location_1, 1)
 
             player_obj.modCurrResource("wood", -1)
             player_obj.modCurrResource("brick", -1)
@@ -126,7 +125,7 @@ class Controller:
             if not player_obj.hasResource("wheat", 1) or not player_obj.hasResource("rock", 1) or not player_obj.hasResource("sheep", 1):
                 raise Resource(f"Player: {player_obj.name} does not have the necessary resources.")
 
-            #TODO: dev card stuff here
+            self.dev_deck.buyDevCard(player_obj)
 
             player_obj.modCurrResource("wheat", -1)
             player_obj.modCurrResource("rock", -1)
@@ -160,8 +159,9 @@ class Controller:
         ...
 
     def has_won(self) -> None:
-        """Checks if a given player has won"""
-        # not sure if we want to keep a running total that we just add to after each action a player makes or if we want to have this method here to check all relevent stuffs to see if a player has won
+        for player in self.players:
+            if player.victoryPoints == 10:
+                return True
 
     def roll_dice(self) -> tuple:
         """Rolls 2 dice randomly.

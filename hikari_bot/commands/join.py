@@ -38,6 +38,7 @@ async def join(ctx: lightbulb.Context) -> None:
             p.modCurrResource("brick", 1)
             p.modCurrResource("wheat", 1)
             p.modCurrResource("sheep", 1)
+            p.modCurrResource("rock", 1)
 
         await ctx.respond(content=f"Game starting.")
         asyncio.create_task(controller.run(ctrl, asyncio.Event()))
