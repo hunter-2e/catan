@@ -197,7 +197,7 @@ def setup() -> Controller:
     # shuffle deck of development cards?
     # put the first 2 settling turns in here or main loop?
 
-    b = board.Board()
+    b = board.Board('minecraft')
     dev_deck = development.devCard()
     ctrl = Controller(b, dev_deck)
 
