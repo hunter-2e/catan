@@ -210,7 +210,7 @@ async def run(ctrl: Controller, flag: asyncio.Event, drawing_mode: str) -> None:
     #TMP TEST SENDING IMAGE
     #await bot.send_image("test.png")
 
-    ctrl.board = board.Board()
+    ctrl.board = board.Board(drawing_mode)
 
     ctrl.flag = flag
 
