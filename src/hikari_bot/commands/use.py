@@ -21,7 +21,10 @@ async def use(ctx: lightbulb.Context) -> None:
 
     if ctx.options.development_card == "Knight":
         if ctrl.get_player(name).unusedDevelopmentCards["KnightCard"] == 0:
-            await ctx.respond("Error: You do not have any knight cards to play.")
+            await ctx.respond(content="Error: You do not have any knight cards to play.")
+            return
+
+        
     elif ctx.options.development_card == "Year of Plenty":
             print("YEP used")
     elif ctx.options.development_card == "Monopoly":
@@ -31,13 +34,13 @@ async def use(ctx: lightbulb.Context) -> None:
 
     modal = KnightModal(title="Example Title")
 
-    await modal.send(ctx.interaction )
+    await modal.send(ctx.interaction)
 
-    await bot.bot.rest.create_message(ctx.channel_id, content=hikari.Embed(
-                title=f"{name} has used the {ctx.options.development_card} Card!",
-                color=hikari.Color(0xFFFF00)))
+    #await bot.bot.rest.create_message(ctx.channel_id, content=hikari.Embed(
+    #            title=f"{name} has used the {ctx.options.development_card} Card!",
+    #            color=hikari.Color(0xFFFF00)))
     
-    await ctx.respond(content="Use successful")
+    #await ctx.respond(content="Use successful")
 
 # Extensions are hot-reloadable (can be loaded/unloaded while the bot is live)
 
@@ -48,10 +51,10 @@ def unload(bot):
     bot.remove_plugin(plugin)
 
 class KnightModal(miru.Modal):
-    location = miru.TextInput(label="Name", placeholder="Type your name!", required=True)
-    bio = miru.TextInput(label="Biography", value="Pre-filled content!", style=hikari.TextInputStyle.PARAGRAPH)
+    location = miru.TextInput(label="Location", placeholder="Type your name!", required=True, custom_id="location")
+    player = miru.TextInput(label="Player to rob", required=True, custom_id="player")
 
     # The callback function is called after the user hits 'Submit'
     async def callback(self, ctx: miru.ModalContext) -> None:
         # You can also access the values using ctx.values, Modal.values, or use ctx.get_value_by_id()
-        await ctx.respond(f"Your name: `{self.name.value}`\nYour bio: ```{self.bio.value}```")
+        await ctx.respond(f"{str(ctx.author).split('#')[0]} moved the robber to {ctx.get_value_by_id('location')} and stole from {ctx.get_value_by_id('player')}")

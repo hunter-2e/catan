@@ -34,6 +34,7 @@ async def start(ctx: lightbulb.Context) -> None:
             p.modCurrResource("wheat", 1)
             p.modCurrResource("sheep", 1)
             p.modCurrResource("rock", 1)
+            p.unusedDevelopmentCards["KnightCard"] += 1
 
     await ctx.respond(content=f"Game starting.")
     bot.started = True
