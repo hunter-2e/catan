@@ -5,23 +5,19 @@ from typing import Union
 import src.development as development
 import asyncio
 import random
+
 import hikari
 
-#board = board.Board()
-#devDeck = development.devCard()
-
-#Emanuel = ply.Player("Emanuel", "white")
-#Hunter = ply.Player("Hunter", "red")
-#Chamin = ply.Player("Chamin", "blue")
-#Kobi = ply.Player("Kobi", "orange")
-#players = [Hunter]
-
-#board.setSettlement(players, Hunter, (3,0), 1)
+import development
+import board
+import draw
+import hikari_bot.bot as bot
+import player
 
 class Controller:
     """Handles all tasks related to the core functionality of the game."""
 
-    def __init__(self, board, dev_deck) -> None:
+    def __init__(self, dev_deck) -> None:
         # store deck of dev card here?
 
         self.resource_bank = {
@@ -32,7 +28,7 @@ class Controller:
             "sheep": 19
         }
 
-        self.board = board
+        self.board = None
         self.active_trades = []
         self.players = []
         self.current_player = 0     # Index in self.players of the player whose turn it is
@@ -202,13 +198,12 @@ def setup() -> Controller:
     # shuffle deck of development cards?
     # put the first 2 settling turns in here or main loop?
 
-    b = board.Board('minecraft')
     dev_deck = development.devCard()
-    ctrl = Controller(b, dev_deck)
+    ctrl = Controller(dev_deck)
 
     return ctrl
 
-async def run(ctrl: Controller, flag: asyncio.Event) -> None:
+async def run(ctrl: Controller, flag: asyncio.Event, drawing_mode: str) -> None:
     """Controls the main game loop."""
     # loop through each player until someone wins
     # player is forced to roll at the start of their turn, resource cards are automatically distributed
@@ -218,6 +213,8 @@ async def run(ctrl: Controller, flag: asyncio.Event) -> None:
 
     #TMP TEST SENDING IMAGE
     #await bot.send_image("test.png")
+
+    ctrl.board = board.Board()
 
     ctrl.flag = flag
 
