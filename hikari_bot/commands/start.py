@@ -11,7 +11,7 @@ plugin = lightbulb.Plugin("Start", description="Start the game.")
 
 # Creates a command in the plugin
 @plugin.command
-@lightbulb.option("drawing_mode", description="The mode the board will be drawn in.", required=True)
+@lightbulb.option("drawing_mode", description="The mode the board will be drawn in.", required=True, choices=["normal", "minecraft"])
 @lightbulb.command("start", description="Start the game.")
 @lightbulb.implements(lightbulb.SlashCommand)
 async def start(ctx: lightbulb.Context) -> None:
