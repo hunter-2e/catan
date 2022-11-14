@@ -21,27 +21,17 @@ async def join(ctx: lightbulb.Context) -> None:
     ctrl = bot.ctrl
     name = str(ctx.author).split("#")[0]
 
-    # Start the game
-    if len(ctrl.players) < 4:
-        # If game has not been started yet
-        ctrl.add_player(name, ctx.options.color)
+    # Verify the game has not started yet
+    if bot.started:
+        await ctx.respond(content=f"Cannot use /join. The game has already started.")
 
-        #await bot.bot.rest.create_message(ctx.channel_id, content=f"{name} has joined the game as {ctx.options.color}.")
+    if len(ctrl.players) < 4:
+        ctrl.add_player(name, ctx.options.color)
 
         await ctx.respond(content=f"{name} has joined the game as {ctx.options.color}.")
     
-    if len(ctrl.players) == 4 and not bot.started:
-        #await bot.bot.rest.create_message(ctx.channel_id, content=f"Game starting.")
-
-        for p in ctrl.players:
-            p.modCurrResource("wood", 1)
-            p.modCurrResource("brick", 1)
-            p.modCurrResource("wheat", 1)
-            p.modCurrResource("sheep", 1)
-            p.modCurrResource("rock", 1)
-
-        await ctx.respond(content=f"Game starting.")
-        asyncio.create_task(controller.run(ctrl, asyncio.Event()))
+    if len(ctrl.players) == 4:
+        await ctx.respond(content=f"Cannot use /join. There are already 4 players.")
 
 
 
