@@ -138,12 +138,13 @@ class Controller:
     def move_robber(self, new_location: tuple, player_to_rob: str) -> str:
         """Moves the robber."""
         
+        player_to_rob = self.get_player(player_to_rob)
         self.board.moveRobber(new_location)
         stolenCard = None
 
-        for tile in board.settleOnTile:
-            if '(' + str(board.robberLocation[0]) + ',' + str(board.robberLocation[1]) + ')' in tile:
-                if player_to_rob.name + "'s Settlement" or player_to_rob.name + "'s City" in board.settleOnTile[tile]:
+        for tile in self.board.settleOnTile:
+            if '(' + str(self.board.robberLocation[0]) + ',' + str(self.board.robberLocation[1]) + ')' in tile:
+                if player_to_rob.name + "'s Settlement" or player_to_rob.name + "'s City" in self.board.settleOnTile[tile]:
                     possibleStolenCards = []
                     for card in player_to_rob.currentResources:
                         if player_to_rob.currentResources[card] > 0:
@@ -155,7 +156,7 @@ class Controller:
                     stolenCard = random.choice(possibleStolenCards)
 
                     player_to_rob.currentResources[stolenCard] -= 1
-                    player.currentResources[stolenCard] += 1
+                    self.players[self.current_player].currentResources[stolenCard] += 1
 
         return stolenCard
 

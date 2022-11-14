@@ -23,7 +23,7 @@ bot = lightbulb.BotApp(
 def setup() -> None:
     """Startup the bot."""
 
-    bot.load_extensions("hikari_bot.commands.build", "hikari_bot.commands.trade", "hikari_bot.commands.accept", "hikari_bot.commands.hand", "hikari_bot.commands.join", "hikari_bot.commands.endturn", "hikari_bot.commands.use")
+    bot.load_extensions("hikari_bot.commands.build", "hikari_bot.commands.trade", "hikari_bot.commands.accept", "hikari_bot.commands.hand", "hikari_bot.commands.join", "hikari_bot.commands.endturn", "hikari_bot.commands.use", "hikari_bot.commands.rob")
     bot.run(activity=hikari.Activity(name="Catan", type=hikari.ActivityType.PLAYING))
 
 async def shutdown() -> None:
@@ -52,9 +52,10 @@ async def send_image_or_message(image: Union[str, None], message: Union[str, hik
 
     chnl = None
     try:
-        chnl = get_channel()
+        chnl = await get_channel()
     except Exception as e:
         print(e)
+        return
 
     if image is None and message is not None:
         await bot.rest.create_message(channel=chnl, content=message)
@@ -62,15 +63,6 @@ async def send_image_or_message(image: Union[str, None], message: Union[str, hik
         await bot.rest.create_message(channel=chnl, content=hikari.File(image))
     else:
         print("bot.send_image_or_message(): invalid parameters!")
-
-async def prompt_robber(player: str):
-    """Prompts the current player to choose a new location for the robber and to steal from someone."""
-
-    chnl = None
-    try:
-        chnl = get_channel()
-    except Exception as e:
-        print(e)
 
 async def get_channel() -> hikari.GuildChannel:
     """Returns the channel to send messages to."""

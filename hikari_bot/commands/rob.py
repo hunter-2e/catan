@@ -21,7 +21,7 @@ async def rob(ctx: lightbulb.Context) -> None:
     """
 
     name = str(ctx.author).split("#")[0]
-    location = (list(string.ascii_uppercase).index(ctx.options.location[0].upper()), int(ctx.options.location[1:]))
+    location = (list(string.ascii_uppercase).index(ctx.options.location[0].upper()), float(ctx.options.location[1:]))
     ctrl = bot.ctrl
     resource_stolen = None
 
