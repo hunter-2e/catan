@@ -3,7 +3,8 @@ import player as ply
 import draw
 
 class Board:
-    def __init__(self):
+    def __init__(self, mode):
+        self.mode = mode
         self.robberLocation = None
         #Places a settlement can be built
 
@@ -124,7 +125,7 @@ class Board:
                  zPoints += 1
             xTile += 1
     
-        draw.drawBoard(self, draw.img)
+        draw.drawBoard(self, mode)
 
 
 
@@ -306,12 +307,12 @@ class Board:
         newLocation = (newLocation[1], newLocation[0])
 
         if newLocation[0] in [1.5, 9.5]:
-            if newLocation == 1.5:
+            if newLocation[0] == 1.5:
                 newLocation = (0, int(((newLocation[1] - 1)/2) - 1))
             else: newLocation = (4, int(((newLocation[1] - 1)/2) - 1))
 
         elif newLocation[0] in [3.5, 7.5]:
-            if newLocation == 3.5:
+            if newLocation[0] == 3.5:
                 newLocation = (1, int((newLocation[1]/2) - 1))
             else: newLocation = (3, int((newLocation[1]/2) - 1))
 
