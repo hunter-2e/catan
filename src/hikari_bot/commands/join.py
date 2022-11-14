@@ -1,7 +1,7 @@
 import lightbulb
 import asyncio
 
-from src.hikari_bot.bot import bot
+import src.hikari_bot.bot as bot
 import src.controller as controller
 
 # Plugins are structures that allow the grouping of multiple commands and listeners together.
@@ -28,10 +28,8 @@ async def join(ctx: lightbulb.Context) -> None:
 
     if len(ctrl.players) < 4:
         ctrl.add_player(name, ctx.options.color)
-
         await ctx.respond(content=f"{name} has joined the game as {ctx.options.color}.")
-    
-    if len(ctrl.players) == 4:
+    elif len(ctrl.players) == 4:
         await ctx.respond(content=f"Cannot use /join. There are already 4 players.")
 
 

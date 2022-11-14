@@ -3,15 +3,15 @@ import hikari
 import string
 import asyncio
 
-from hikari_bot import bot
-import controller
+import src.hikari_bot.bot as bot
+import src.controller as controller
 
 # Plugins are structures that allow the grouping of multiple commands and listeners together.
 plugin = lightbulb.Plugin("Start", description="Start the game.")
 
 # Creates a command in the plugin
 @plugin.command
-@lightbulb.option("drawing_mode", description="The mode the board will be drawn in.", required=True)
+@lightbulb.option("drawing_mode", description="The mode the board will be drawn in.", required=True, choices=["normal", "minecraft"])
 @lightbulb.command("start", description="Start the game.")
 @lightbulb.implements(lightbulb.SlashCommand)
 async def start(ctx: lightbulb.Context) -> None:

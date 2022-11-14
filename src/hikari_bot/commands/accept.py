@@ -2,7 +2,7 @@ import lightbulb
 import hikari
 
 import src.controller as controller
-from src.hikari_bot.bot import bot
+import src.hikari_bot.bot as bot
 
 # Plugins are structures that allow the grouping of multiple commands and listeners together.
 plugin = lightbulb.Plugin("Accept", description="Accept a trade.")

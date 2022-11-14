@@ -1,12 +1,14 @@
-import src.board as board
-import src.hikari_bot.bot as bot
-import src.player as player
 from typing import Union
-import src.development as development
 import asyncio
 import random
 
 import hikari
+
+import src.board as board
+import src.hikari_bot.bot as bot
+import src.player as player
+import src.development as development
+import src.hikari_bot.bot as bot
 
 class Controller:
     """Handles all tasks related to the core functionality of the game."""
@@ -208,7 +210,7 @@ async def run(ctrl: Controller, flag: asyncio.Event, drawing_mode: str) -> None:
     #TMP TEST SENDING IMAGE
     #await bot.send_image("test.png")
 
-    ctrl.board = board.Board()
+    ctrl.board = board.Board(drawing_mode)
 
     ctrl.flag = flag
 

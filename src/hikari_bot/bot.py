@@ -6,6 +6,7 @@ from typing import Union
 
 import hikari
 import lightbulb
+import miru
 
 import src.controller as controller
 
@@ -23,7 +24,12 @@ bot = lightbulb.BotApp(
 def setup() -> None:
     """Startup the bot."""
 
-    bot.load_extensions("src.hikari_bot.commands.build", "src.hikari_bot.commands.trade", "src.hikari_bot.commands.accept", "src.hikari_bot.commands.hand", "src.hikari_bot.commands.join", "src.hikari_bot.commands.endturn", "src.hikari_bot.commands.use", "src.hikari_bot.commands.rob")
+    bot.load_extensions("src.hikari_bot.commands.build", "src.hikari_bot.commands.trade", "src.hikari_bot.commands.accept", "src.hikari_bot.commands.hand", 
+                        "src.hikari_bot.commands.join", "src.hikari_bot.commands.endturn", "src.hikari_bot.commands.use", "src.hikari_bot.commands.rob",
+                        "src.hikari_bot.commands.start"
+    )
+
+    miru.install(bot)
     bot.run(activity=hikari.Activity(name="Catan", type=hikari.ActivityType.PLAYING))
 
 async def shutdown() -> None:
@@ -46,6 +52,8 @@ async def bot_disconnected(event: hikari.StoppedEvent) -> None:
     """Called once the bot has disconnected from Discord."""
 
     print("The bot has disconnected from Discord!")
+
+    miru.uninstall()
 
 async def send_image_or_message(image: Union[str, None], message: Union[str, hikari.Embed, None]) -> None:
     """Sends the most updated version of the game board to a discord channel OR a message."""
