@@ -1,6 +1,5 @@
 import random
-import player as ply
-import draw
+import src.draw as draw
 
 class Board:
     def __init__(self, mode):
