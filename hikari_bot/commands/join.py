@@ -24,6 +24,7 @@ async def join(ctx: lightbulb.Context) -> None:
     # Verify the game has not started yet
     if bot.started:
         await ctx.respond(content=f"Cannot use /join. The game has already started.")
+        return
 
     if len(ctrl.players) < 4:
         ctrl.add_player(name, ctx.options.color)
