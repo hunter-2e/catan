@@ -1,9 +1,8 @@
-import board, player as ply
-import draw
-import hikari_bot.bot as bot
-import player
+import src.board as board
+import src.hikari_bot.bot as bot
+import src.player as player
 from typing import Union
-import development
+import src.development as development
 import asyncio
 import random
 import hikari
@@ -234,7 +233,7 @@ async def run(ctrl: Controller, flag: asyncio.Event) -> None:
         )
         await bot.send_image_or_message(None, message)
 
-        await bot.send_image_or_message("test.png", None)
+        await bot.send_image_or_message("images/test.png", None)
         
         if ctrl.cur_dice == 7:
             # Prompt user user for new robber location, wait for response

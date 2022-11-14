@@ -5,8 +5,8 @@ from PIL import Image
 
 def setModeBackground(mode):
     if mode == 'minecraft':
-            photo  = 'water.png'
-    else: photo = 'background.png'
+            photo  = 'images/water.png'
+    else: photo = 'images/background.png'
 
     path = cv2.imread(photo)
 
@@ -33,7 +33,7 @@ def drawBoard(board, mode):
     startingTile = [0,0]
 
     if mode == 'minecraft':
-        image = np.array(Image.open("water.png"))
+        image = np.array(Image.open("images/water.png"))
     
     tileNumbers = board.materialNumberTile
     tileColors = list(itertools.chain.from_iterable(board.tileSpots))
@@ -77,26 +77,26 @@ def drawBoard(board, mode):
 
         if tileColors[tile] == 'rockTile':
             color = (120, 115, 99)
-            block = "rock.png"
+            block = "images/rock.png"
         elif tileColors[tile] == 'brickTile':
             color = (166, 104, 28)
-            block = "brick.png"
+            block = "images/brick.png"
         elif tileColors[tile] == 'sheepTile':
             color = (82, 161, 48)
-            block = "sheep.png"
+            block = "images/sheep.png"
         elif tileColors[tile] == 'wheatTile':
             color = (230, 231, 121)
-            block = "wheat.png"
+            block = "images/wheat.png"
         elif tileColors[tile] == 'treeTile':
             color = (84, 63, 17)
-            block = "tree.png"
+            block = "images/tree.png"
         else:
             color = (166, 7,44)
-            block = "sand.png"
+            block = "images/sand.png"
 
         if mode == 'minecraft':
             minecraftMode(int(topLeft[0]) -8, top[1], block, image)
-            image = np.array(Image.open("test.png"))
+            image = np.array(Image.open("images/test.png"))
 
         else: cv2.fillPoly(image, [pts], color)
 
@@ -121,11 +121,11 @@ def drawBoard(board, mode):
                 vertex[0] += 173
             else: vertex[0] += 175
         drawGrid(image)
-    cv2.imwrite('test.png', image)
+    cv2.imwrite('images/test.png', image)
 
-    im_cv = cv2.imread('test.png')
+    im_cv = cv2.imread('images/test.png')
     im_cv = cv2.cvtColor(im_cv, cv2.COLOR_BGR2RGB)
-    cv2.imwrite('test.png', im_cv)
+    cv2.imwrite('images/test.png', im_cv)
 
 def drawRobber(board, image):
     topLeft = [225,90]
@@ -188,7 +188,7 @@ def drawRobber(board, image):
 
         for vertex in allVertex:
                 vertex[0] += 175
-    cv2.imwrite('test.png', image)
+    cv2.imwrite('images/test.png', image)
 
 def drawGrid(image):
     capitalLetters = list(string.ascii_uppercase)
@@ -269,7 +269,7 @@ def drawSettle(image, player, spot):
     settleColor = determineColor(player)
     
     cv2.rectangle(image,(boardLocation[0] - 15,boardLocation[1]-15),(boardLocation[0] + 15,boardLocation[1] + 15),settleColor,-1)
-    cv2.imwrite('test.png', image)
+    cv2.imwrite('images/test.png', image)
 
 def drawCity(image, player, spot):
 
@@ -277,7 +277,7 @@ def drawCity(image, player, spot):
     settleColor = (255,255,255)
     
     cv2.rectangle(image,(boardLocation[0] - 10,boardLocation[1]-10),(boardLocation[0] + 10,boardLocation[1] + 10),settleColor,-1)
-    cv2.imwrite('test.png', image)
+    cv2.imwrite('images/test.png', image)
 
 def drawRoad(image, player, spot1, spot2):
     
@@ -287,7 +287,7 @@ def drawRoad(image, player, spot1, spot2):
     roadColor = determineColor(player)
 
     cv2.line(image, boardLocation1, boardLocation2, roadColor, 15) 
-    cv2.imwrite('test.png', image)
+    cv2.imwrite('images/test.png', image)
 
 
 def overlay_image_alpha(img, img_overlay, x, y, alpha_mask):
@@ -326,6 +326,6 @@ def minecraftMode(x, y, material_img, img):
     overlay_image_alpha(img_result, img_overlay, x, y, alpha_mask)
 
     # Save result
-    Image.fromarray(img_result).save("test.png")
+    Image.fromarray(img_result).save("images/test.png")
 
 

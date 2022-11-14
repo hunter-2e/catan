@@ -7,7 +7,7 @@ from typing import Union
 import hikari
 import lightbulb
 
-import controller
+import src.controller as controller
 
 dotenv.load_dotenv()    # Load environment variables
 
@@ -23,7 +23,7 @@ bot = lightbulb.BotApp(
 def setup() -> None:
     """Startup the bot."""
 
-    bot.load_extensions("hikari_bot.commands.build", "hikari_bot.commands.trade", "hikari_bot.commands.accept", "hikari_bot.commands.hand", "hikari_bot.commands.join", "hikari_bot.commands.endturn", "hikari_bot.commands.use", "hikari_bot.commands.rob")
+    bot.load_extensions("src.hikari_bot.commands.build", "src.hikari_bot.commands.trade", "src.hikari_bot.commands.accept", "src.hikari_bot.commands.hand", "src.hikari_bot.commands.join", "src.hikari_bot.commands.endturn", "src.hikari_bot.commands.use", "src.hikari_bot.commands.rob")
     bot.run(activity=hikari.Activity(name="Catan", type=hikari.ActivityType.PLAYING))
 
 async def shutdown() -> None:
