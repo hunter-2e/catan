@@ -127,3 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+#############
+# PROJECT SPECIFIC
+test.png
