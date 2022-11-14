@@ -6,6 +6,7 @@ from typing import Union
 
 import hikari
 import lightbulb
+import miru
 
 import controller
 
@@ -27,6 +28,8 @@ def setup() -> None:
                         "hikari_bot.commands.join", "hikari_bot.commands.endturn", "hikari_bot.commands.use", "hikari_bot.commands.rob",
                         "hikari_bot.commands.start"
                     )
+
+    miru.install(bot)
     bot.run(activity=hikari.Activity(name="Catan", type=hikari.ActivityType.PLAYING))
 
 async def shutdown() -> None:
@@ -49,6 +52,8 @@ async def bot_disconnected(event: hikari.StoppedEvent) -> None:
     """Called once the bot has disconnected from Discord."""
 
     print("The bot has disconnected from Discord!")
+
+    miru.uninstall()
 
 async def send_image_or_message(image: Union[str, None], message: Union[str, hikari.Embed, None]) -> None:
     """Sends the most updated version of the game board to a discord channel OR a message."""
