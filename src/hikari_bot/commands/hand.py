@@ -1,7 +1,7 @@
 import lightbulb
 import hikari
 
-from src.hikari_bot.bot import bot
+import src.hikari_bot.bot as bot
 
 # Plugins are structures that allow the grouping of multiple commands and listeners together.
 plugin = lightbulb.Plugin("Hand", description="Get your current hand.")

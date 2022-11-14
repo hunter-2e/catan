@@ -2,7 +2,7 @@ import lightbulb
 import hikari
 import miru
 
-from src.hikari_bot.bot import bot
+import src.hikari_bot.bot as bot
 
 # Plugins are structures that allow the grouping of multiple commands and listeners together.
 plugin = lightbulb.Plugin("Use", description="Use a development card.")
@@ -20,19 +20,14 @@ async def use(ctx: lightbulb.Context) -> None:
     ctrl = bot.ctrl
 
     if ctx.options.development_card == "Knight":
-        print("knight card used")
+        if ctrl.get_player(name).unusedDevelopmentCards["KnightCard"] == 0:
+            await ctx.respond("Error: You do not have any knight cards to play.")
     elif ctx.options.development_card == "Year of Plenty":
             print("YEP used")
     elif ctx.options.development_card == "Monopoly":
             print("monop card used")
     else:
         print("Road Builder used")
-
-    #view = MyView(timeout=60)  # Create a new view
-    #message = await ctx.respond("Rock Paper Scissors!", components=view.build())
-    #await view.start(message)  # Start listening for interactions
-    #await view.wait() # Wait until the view times out or gets stopped
-    #await ctx.respond("Thank you for playing!")
 
     modal = KnightModal(title="Example Title")
 

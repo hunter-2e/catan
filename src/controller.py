@@ -1,18 +1,14 @@
-import src.board as board
-import src.hikari_bot.bot as bot
-import src.player as player
 from typing import Union
-import src.development as development
 import asyncio
 import random
 
 import hikari
 
-import development
-import board
-import draw
-import hikari_bot.bot as bot
-import player
+import src.board as board
+import src.hikari_bot.bot as bot
+import src.player as player
+import src.development as development
+import src.hikari_bot.bot as bot
 
 class Controller:
     """Handles all tasks related to the core functionality of the game."""

@@ -3,8 +3,8 @@ import hikari
 import string
 import asyncio
 
-from hikari_bot import bot
-import controller
+import src.hikari_bot.bot as bot
+import src.controller as controller
 
 # Plugins are structures that allow the grouping of multiple commands and listeners together.
 plugin = lightbulb.Plugin("Start", description="Start the game.")

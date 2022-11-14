@@ -24,7 +24,10 @@ bot = lightbulb.BotApp(
 def setup() -> None:
     """Startup the bot."""
 
-    bot.load_extensions("src.hikari_bot.commands.build", "src.hikari_bot.commands.trade", "src.hikari_bot.commands.accept", "src.hikari_bot.commands.hand", "src.hikari_bot.commands.join", "src.hikari_bot.commands.endturn", "src.hikari_bot.commands.use", "src.hikari_bot.commands.rob")
+    bot.load_extensions("src.hikari_bot.commands.build", "src.hikari_bot.commands.trade", "src.hikari_bot.commands.accept", "src.hikari_bot.commands.hand", 
+                        "src.hikari_bot.commands.join", "src.hikari_bot.commands.endturn", "src.hikari_bot.commands.use", "src.hikari_bot.commands.rob",
+                        "src.hikari_bot.commands.start"
+    )
 
     miru.install(bot)
     bot.run(activity=hikari.Activity(name="Catan", type=hikari.ActivityType.PLAYING))
