@@ -51,8 +51,8 @@ def unload(bot):
     bot.remove_plugin(plugin)
 
 class KnightModal(miru.Modal):
-    location = miru.TextInput(label="Location", placeholder="Type your name!", required=True, custom_id="location")
-    player = miru.TextInput(label="Player to rob", required=True, custom_id="player")
+    location = miru.TextInput(label="Location", placeholder="Ex: D3", required=True, custom_id="location")
+    player = miru.TextInput(label="Player to rob", placeholder="Ex: Emanuels", required=True, custom_id="player")
 
     # The callback function is called after the user hits 'Submit'
     async def callback(self, ctx: miru.ModalContext) -> None:
