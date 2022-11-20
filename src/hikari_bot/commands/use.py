@@ -25,8 +25,8 @@ async def use(ctx: lightbulb.Context) -> None:
 
         modal = modals.KnightModal(title="Use Knight Card")
         await modal.send(ctx.interaction)
-        print(modal.location)
-        print(modal.player)
+        #while modal.
+        #print(modal.values)
         
     elif ctx.options.development_card == "Year of Plenty":
         if ctrl.get_player(name).unusedDevelopmentCards["YearOfPlenty"] == 0:

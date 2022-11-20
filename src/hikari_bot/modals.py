@@ -1,5 +1,7 @@
 import miru
 
+#import src.development as development
+
 class KnightModal(miru.Modal):
     """Discord popup for playing a knight card."""
 
@@ -9,6 +11,8 @@ class KnightModal(miru.Modal):
     # The callback function is called after the user hits 'Submit'
     async def callback(self, ctx: miru.ModalContext) -> None:
         # You can also access the values using ctx.values, Modal.values, or use ctx.get_value_by_id()
+
+        #development.devCard.playKnightCard()
         await ctx.respond(f"{str(ctx.author).split('#')[0]} moved the robber to {ctx.get_value_by_id('location')} and stole from {ctx.get_value_by_id('player')} with a Knight card.")
 
 class YOPModal(miru.Modal):
