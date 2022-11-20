@@ -9,7 +9,7 @@ class devCard:
             "Monopoly":         2,
             "VictoryPointCard": 5,    }
 
-    def buyDevCard(self, player):
+    def buyDevCard(self, player) -> str:
         possibleDevCards = []
         for card in self.devDeck:
             if self.devDeck[card] > 0:
@@ -20,7 +20,7 @@ class devCard:
         player.unusedDevelopmentCards[boughtCard] += 1
         self.devDeck[boughtCard] -= 1
 
-
+        return boughtCard
 
     def playKnightCard(self, board, player, newLocation, playerToRob):
         if player.unusedDevelopmentCards["KnightCard"] < 1:
