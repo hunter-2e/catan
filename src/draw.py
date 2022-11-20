@@ -309,14 +309,29 @@ def drawPorts(image, board):
     for port in board.portsSettleSpots:
         if port == 'Sheep':
             for spot in board.portsSettleSpots['Sheep']:
-                cv2.line(image, getSpot(spot), (550,40), (0,0,0), 15)
+                cv2.line(image, getSpot(spot), (550,40), (0,0,0), 2)
         elif port == 'Rock':
             for spot in board.portsSettleSpots['Rock']:
-                cv2.line(image, getSpot(spot), (75,250), (0,0,0), 15)
-        elif port == 'Rock':
-            for spot in board.portsSettleSpots['Rock']:
-                cv2.line(image, getSpot(spot), (75,250), (0,0,0), 15)
-    
+                cv2.line(image, getSpot(spot), (75,250), (0,0,0), 2)
+        elif port == 'Brick':
+            for spot in board.portsSettleSpots['Brick']:
+                cv2.line(image, getSpot(spot), (775,645), (0,0,0), 2)
+        elif port == 'Wheat':
+            for spot in board.portsSettleSpots['Wheat']:
+                cv2.line(image, getSpot(spot), (75,560), (0,0,0), 2)
+        elif port == 'Wood':
+            for spot in board.portsSettleSpots['Wood']:
+                cv2.line(image, getSpot(spot), (550,775), (0,0,0), 2)
+        else:
+            for spot in board.portsSettleSpots['3for1']:
+                if spot in [(0,0), (1,0)]:
+                    cv2.line(image, getSpot(spot), (200,30), (0,0,0), 2)
+                elif spot in [(2,3), (3,4)]:
+                    cv2.line(image, getSpot(spot), (775,150), (0,0,0), 2)
+                elif spot in [(5,5), (6,5)]:
+                    cv2.line(image, getSpot(spot), (930,400), (0,0,0), 2)
+                else: cv2.line(image, getSpot(spot), (200,775), (0,0,0), 2)
+
     minecraftMode(550, 40, 'images/sheepPort.png', image)
     image = np.array(Image.open("images/test.png"))
     minecraftMode(200, 30, 'images/3for1.png', image)
