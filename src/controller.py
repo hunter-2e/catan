@@ -77,7 +77,7 @@ class Controller:
             player2.modCurrResource(resource, num * -1)
             player1.modCurrResource(resource, num)
 
-    def build(self, player: str, building: str, location_1: tuple, location_2: Union[tuple, None]) -> None:
+    def build(self, player: str, building: str, location_1: tuple, location_2: Union[tuple, None]) -> Union[None, str]:
         """Maybe split this into seperate methods for each building?
 
         Raises:
@@ -118,11 +118,13 @@ class Controller:
             if not player_obj.hasResource("wheat", 1) or not player_obj.hasResource("rock", 1) or not player_obj.hasResource("sheep", 1):
                 raise Resource(f"Player: {player_obj.name} does not have the necessary resources.")
 
-            self.dev_deck.buyDevCard(player_obj)
+            bought_card = self.dev_deck.buyDevCard(player_obj)
 
             player_obj.modCurrResource("wheat", -1)
             player_obj.modCurrResource("rock", -1)
             player_obj.modCurrResource("sheep", -1)
+
+            return bought_card
 
         #bot.send_image_or_message("test.png", None)
 
@@ -156,6 +158,8 @@ class Controller:
         ...
 
     def has_won(self) -> None:
+        """Checks if any players have won the game."""
+
         for player in self.players:
             if player.victoryPoints == 10:
                 return True
