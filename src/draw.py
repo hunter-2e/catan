@@ -31,9 +31,6 @@ def drawBoard(board, mode):
 
 
     startingTile = [0,0]
-
-    if mode == 'minecraft':
-        image = np.array(Image.open("images/water.png"))
     
     tileNumbers = board.materialNumberTile
     tileColors = list(itertools.chain.from_iterable(board.tileSpots))
@@ -121,6 +118,8 @@ def drawBoard(board, mode):
                 vertex[0] += 173
             else: vertex[0] += 175
         drawGrid(image)
+        drawPorts(image)
+        image = np.array(Image.open("images/test.png"))
     cv2.imwrite('images/test.png', image)
 
     im_cv = cv2.imread('images/test.png')
@@ -289,7 +288,14 @@ def drawRoad(image, player, spot1, spot2):
     cv2.line(image, boardLocation1, boardLocation2, roadColor, 15) 
     cv2.imwrite('images/test.png', image)
 
+def drawPorts(image):
+     minecraftMode(0, 0, 'images/brickPort1.png', image)
+     
 
+
+#Following two functions deal with placing png over another image
+
+#First function acts as helper to minecraftMode
 def overlay_image_alpha(img, img_overlay, x, y, alpha_mask):
     """Overlay `img_overlay` onto `img` at (x, y) and blend using `alpha_mask`.
 
