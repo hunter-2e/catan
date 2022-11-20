@@ -1,5 +1,7 @@
 import random
 import src.draw as draw
+import numpy as np
+from PIL import Image
 
 class Board:
     def __init__(self, mode):
@@ -189,7 +191,9 @@ class Board:
 
         player.roadsPlaced.append((spot1,spot2))
         player.roadQuantity -= 1
-        draw.drawRoad(draw.img, player, spot1,spot2)
+
+        image = np.array(Image.open("images/test.png"))
+        draw.drawRoad(image, player, spot1,spot2)
 
     def getRoad(self, spot1, spot2):
         if([spot1, spot2] in self.roadsPlaced):
@@ -235,7 +239,8 @@ class Board:
                 if spot in self.settleOnTile[key]:
                     insertSpot = self.settleOnTile[key].index(spot)
                     self.settleOnTile[key].insert(insertSpot, player.name + "'s " + 'Settlement')
-            draw.drawSettle(draw.img, player, spot)
+            image = np.array(Image.open("images/test.png"))
+            draw.drawSettle(image, player, spot)
 
         else:
             #Check if player has there own settlement there return False if they don't and can't upgrade to city or return False if anyone already has a city there
@@ -253,7 +258,8 @@ class Board:
                 if spot in self.settleOnTile[key]:
                     insertSpot = self.settleOnTile[key].index(spot)
                     self.settleOnTile[key].insert(insertSpot, player.name + "'s " + 'City')
-            draw.drawCity(draw.img, player, spot)
+            image = np.array(Image.open("images/test.png"))
+            draw.drawCity(image, player, spot)
 
     def getSettlement(self, spot):
         return self.settleSpots[spot[0]][spot[1]]
@@ -319,4 +325,5 @@ class Board:
             newLocation = (2, int((newLocation[1] - 1)/2))
 
         self.robberLocation = newLocation
-        draw.drawRobber(self, draw.img)
+        image = np.array(Image.open("images/test.png"))
+        draw.drawRobber(self, image)
