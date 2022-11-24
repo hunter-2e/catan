@@ -257,9 +257,9 @@ def determineColor(player):
     color = player.color
 
     if(color == "Blue"):
-        color = (255,0,0)
-    elif(color == "Red"):
         color = (0,0,255)
+    elif(color == "Red"):
+        color = (255,0,0)
     elif(color == "Orange"):
         color = (27, 133, 241)
     elif(color == "White"):
