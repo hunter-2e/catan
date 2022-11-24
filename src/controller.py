@@ -88,16 +88,20 @@ class Controller:
         player_obj = self.get_player(player)
 
         if building == "Road":
-            if (self.cur_phase == 0 and len(player_obj.roadsPlaced) == 0) or (self.cur_phase == 1 and len(player_obj.roadsPlaced) == 1):
-                self.board.setRoad(player_obj, location_1, location_2)
+            if (len(player_obj.settlementSpots) > 0) and (self.cur_phase == 0 and len(player_obj.roadsPlaced) == 0) or (self.cur_phase == 1 and len(player_obj.roadsPlaced) == 1):
+                if not self.board.setRoad(player_obj, location_1, location_2):
+                    raise Exception("Invalid road.")
                 return
+            elif len(player_obj.settlementSpots) == 0:
+                raise Exception("Build a settlement first.")
             elif self.cur_phase != 2:
                 raise Exception("You already built your 2 starting roads.")
 
             if not player_obj.hasResource("wood", 1) or not player_obj.hasResource("brick", 1):
                 raise Resource(f"Player: {player_obj.name} does not have the necessary resources.")
 
-            self.board.setRoad(player_obj, location_1, location_2)
+            if not self.board.setRoad(player_obj, location_1, location_2):
+                raise Exception("Invalid road.")
 
             player_obj.modCurrResource("wood", -1)
             player_obj.modCurrResource("brick", -1)

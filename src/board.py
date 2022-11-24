@@ -202,7 +202,7 @@ class Board:
         else:
             spot2 = (spot2[0], int(spot2[1]/2))
 
-        canBeBuilt = self.validRoad((spot1,spot2))
+        canBeBuilt = self.validRoad((spot1,spot2), player)
         if canBeBuilt == False:
             return False
 
