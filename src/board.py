@@ -130,7 +130,7 @@ class Board:
 
 
     def checkValidity(self, spot):
-        if spot[0][0] == 0 and spot[1][0] == spot[0][0] + 1 and (spot[0][1] == spot[1][1] or spot[0][1] == spot[1][1] + 1):
+        if spot[0][0] == 0 and spot[1][0] == spot[0][0] + 1 and (spot[0][1] == spot[1][1] or spot[0][1] + 1 == spot[1][1]):
                 return True
         elif spot[0][0] % 2 == 0:
             if ((spot[1][0] == spot[0][0] + 1) and (spot[0][1] == spot[1][1] or spot[0][1] + 1 == spot[1][1])) or (spot[0][0] - 1 == spot[1][0] and spot[0][1] == spot[1][1]):
@@ -202,7 +202,7 @@ class Board:
         else:
             spot2 = (spot2[0], int(spot2[1]/2))
 
-        canBeBuilt = self.validRoad((spot1,spot2))
+        canBeBuilt = self.validRoad((spot1,spot2), player)
         if canBeBuilt == False:
             return False
 
