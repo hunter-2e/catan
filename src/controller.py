@@ -168,12 +168,14 @@ class Controller:
         """Handled the activation of a development card."""
         ...
 
-    def has_won(self) -> None:
+    def has_won(self) -> Union[None, player.Player]:
         """Checks if any players have won the game."""
 
         for player in self.players:
             if player.victoryPoints == 10:
-                return True
+                return player
+
+        return None
 
     def roll_dice(self) -> int:
         """Rolls 2 dice randomly.
@@ -182,7 +184,6 @@ class Controller:
             The 2 dice rolls.
         """
 
-        #return (random.randint(1, 6), random.randint(1, 6))
         return random.randint(1, 6) + random.randint(1, 6)
 
     def get_player(self, name: str) -> player.Player:
@@ -219,6 +220,7 @@ async def run(ctrl: Controller, flag: asyncio.Event, drawing_mode: str) -> None:
     # upon every relevent action, checking if the player has won needs to happen: building city/settlement/development card or recieving largest army/longest road
 
     ctrl.board = board.Board(drawing_mode)
+    winner = None
 
     ctrl.flag = flag
 
@@ -249,7 +251,7 @@ async def run(ctrl: Controller, flag: asyncio.Event, drawing_mode: str) -> None:
     ctrl.players.reverse()
     ctrl.cur_phase = 2
 
-    while not ctrl.has_won():
+    while winner is None:
         ctrl.has_robber_moved = False
         ctrl.flag.clear()
         ctrl.active_trades = []     # emptied at start of each turn
@@ -282,11 +284,18 @@ async def run(ctrl: Controller, flag: asyncio.Event, drawing_mode: str) -> None:
         else:
             ctrl.current_player += 1
 
+        winner = ctrl.has_won()
 
+    game_over(winner)
 
-def game_over():
+async def game_over(winner: player.Player) -> None:
     """Handles any cleanup that needs to occur when a player wins the game."""
-    ...
+    
+    message = hikari.Embed(title=f"Congratulations!",
+                description=f"{winner.name} has won the game",
+                color=hikari.Color(0x00FF00)
+        )
+    await bot.send_image_or_message(None, message)
 
 class Resource(Exception):
     """Custom exception representing when a player does not have a resource."""
