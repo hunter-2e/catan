@@ -32,6 +32,7 @@ class Controller:
         self.flag = None
         self.cur_dice = None
         self.has_robber_moved = False
+        self.first_build_phase = True
 
     def trade(self, trade_num: int, player2: Union[player.Player, str]) -> None:
         """Handles a trade.
@@ -87,7 +88,11 @@ class Controller:
         player_obj = self.get_player(player)
 
         if building == "Road":
-            # TODO: STILL NEED TO ADD CHECKER FOR IF THE ROAD LOCATIONS ARE VALID OR NOT
+            if self.first_build_phase and len(player_obj.roadsPlaced) < 2:
+                self.board.setRoad(player_obj, location_1, location_2)
+                return
+            elif self.first_build_phase:
+                raise Exception("You already built your 2 starting roads.")
 
             if not player_obj.hasResource("wood", 1) or not player_obj.hasResource("brick", 1):
                 raise Resource(f"Player: {player_obj.name} does not have the necessary resources.")
@@ -97,6 +102,12 @@ class Controller:
             player_obj.modCurrResource("wood", -1)
             player_obj.modCurrResource("brick", -1)
         elif building == "Settlement":
+            if self.first_build_phase and len(player_obj.settlementSpots) < 2:
+                self.board.setSettlement(self.players, player_obj, location_1, 1)
+                return
+            elif self.first_build_phase:
+                raise Exception("You already built your 2 starting settlements.")
+
             if not player_obj.hasResource("wood", 1) or not player_obj.hasResource("brick", 1) or not player_obj.hasResource("wheat", 1) or not player_obj.hasResource("sheep", 1):
                 raise Resource(f"Player: {player_obj.name} does not have the necessary resources.")
 
@@ -205,18 +216,33 @@ def setup() -> Controller:
 
 async def run(ctrl: Controller, flag: asyncio.Event, drawing_mode: str) -> None:
     """Controls the main game loop."""
-    # loop through each player until someone wins
-    # player is forced to roll at the start of their turn, resource cards are automatically distributed
-    # if a 7 is rolled handle robber stuff
-    # player is then allowed to trade, play up to 1 development card, and build as much as they want in any order until they end their turn
     # upon every relevent action, checking if the player has won needs to happen: building city/settlement/development card or recieving largest army/longest road
-
-    #TMP TEST SENDING IMAGE
-    #await bot.send_image("test.png")
 
     ctrl.board = board.Board(drawing_mode)
 
     ctrl.flag = flag
+
+    # Handle initial settlement and road placements
+    for player in ctrl.players:
+        await bot.send_image_or_message(None, f"{player.name}'s turn to build a settlement and road.\nUse /build")
+        await bot.send_image_or_message("images/test.png", None)
+
+        await ctrl.flag.wait()
+
+        ctrl.flag.clear()
+
+    ctrl.players.reverse()
+
+    for player in ctrl.players:
+        await bot.send_image_or_message(None, f"{player.name}'s turn to build a settlement and road.\nUse /build")
+        await bot.send_image_or_message("images/test.png", None)
+
+        await ctrl.flag.wait()
+
+        ctrl.flag.clear()
+
+    ctrl.players.reverse()
+    ctrl.first_build_phase = False
 
     while not ctrl.has_won():
         ctrl.has_robber_moved = False
@@ -245,6 +271,7 @@ async def run(ctrl: Controller, flag: asyncio.Event, drawing_mode: str) -> None:
 
         await ctrl.flag.wait()  # flag is set when play calls the /endturn command
 
+        # Update current player
         if ctrl.current_player == len(ctrl.players) - 1:
             ctrl.current_player = 0
         else:
