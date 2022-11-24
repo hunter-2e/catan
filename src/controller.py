@@ -95,7 +95,7 @@ class Controller:
             elif len(player_obj.settlementSpots) == 0:
                 raise Exception("Build a settlement first.")
             elif self.cur_phase != 2:
-                raise Exception("You already built your 2 starting roads.")
+                raise Exception("You already built your starting road for this turn.")
 
             if not player_obj.hasResource("wood", 1) or not player_obj.hasResource("brick", 1):
                 raise Resource(f"Player: {player_obj.name} does not have the necessary resources.")
@@ -110,7 +110,7 @@ class Controller:
                 self.board.setSettlement(self.players, player_obj, location_1, 1)
                 return
             elif self.cur_phase != 2:
-                raise Exception("You already built your 2 starting settlements.")
+                raise Exception("You already built your starting settlement for this turn.")
 
             if not player_obj.hasResource("wood", 1) or not player_obj.hasResource("brick", 1) or not player_obj.hasResource("wheat", 1) or not player_obj.hasResource("sheep", 1):
                 raise Resource(f"Player: {player_obj.name} does not have the necessary resources.")
