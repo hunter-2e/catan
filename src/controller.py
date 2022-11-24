@@ -32,7 +32,7 @@ class Controller:
         self.flag = None
         self.cur_dice = None
         self.has_robber_moved = False
-        self.first_build_phase = True
+        self.cur_phase = 0      # 0 = first half of initial build cycle, 1 = 2nd half, 2 = main game
 
     def trade(self, trade_num: int, player2: Union[player.Player, str]) -> None:
         """Handles a trade.
@@ -88,10 +88,10 @@ class Controller:
         player_obj = self.get_player(player)
 
         if building == "Road":
-            if self.first_build_phase and len(player_obj.roadsPlaced) < 2:
+            if (self.cur_phase == 0 and len(player_obj.roadsPlaced) == 0) or (self.cur_phase == 1 and len(player_obj.roadsPlaced) == 1):
                 self.board.setRoad(player_obj, location_1, location_2)
                 return
-            elif self.first_build_phase:
+            elif self.cur_phase != 2:
                 raise Exception("You already built your 2 starting roads.")
 
             if not player_obj.hasResource("wood", 1) or not player_obj.hasResource("brick", 1):
@@ -102,10 +102,10 @@ class Controller:
             player_obj.modCurrResource("wood", -1)
             player_obj.modCurrResource("brick", -1)
         elif building == "Settlement":
-            if self.first_build_phase and len(player_obj.settlementSpots) < 2:
+            if (self.cur_phase == 0 and len(player_obj.settlementSpots) == 0) or (self.cur_phase == 1 and len(player_obj.settlementSpots) == 1):
                 self.board.setSettlement(self.players, player_obj, location_1, 1)
                 return
-            elif self.first_build_phase:
+            elif self.cur_phase != 2:
                 raise Exception("You already built your 2 starting settlements.")
 
             if not player_obj.hasResource("wood", 1) or not player_obj.hasResource("brick", 1) or not player_obj.hasResource("wheat", 1) or not player_obj.hasResource("sheep", 1):
@@ -168,12 +168,14 @@ class Controller:
         """Handled the activation of a development card."""
         ...
 
-    def has_won(self) -> None:
+    def has_won(self) -> Union[None, player.Player]:
         """Checks if any players have won the game."""
 
         for player in self.players:
             if player.victoryPoints == 10:
-                return True
+                return player
+
+        return None
 
     def roll_dice(self) -> int:
         """Rolls 2 dice randomly.
@@ -182,7 +184,6 @@ class Controller:
             The 2 dice rolls.
         """
 
-        #return (random.randint(1, 6), random.randint(1, 6))
         return random.randint(1, 6) + random.randint(1, 6)
 
     def get_player(self, name: str) -> player.Player:
@@ -219,11 +220,27 @@ async def run(ctrl: Controller, flag: asyncio.Event, drawing_mode: str) -> None:
     # upon every relevent action, checking if the player has won needs to happen: building city/settlement/development card or recieving largest army/longest road
 
     ctrl.board = board.Board(drawing_mode)
+    winner = None
 
     ctrl.flag = flag
 
     # Handle initial settlement and road placements
-    for player in ctrl.players:
+    for i, player in enumerate(ctrl.players):
+        ctrl.current_player = i
+
+        await bot.send_image_or_message(None, f"{player.name}'s turn to build a settlement and road.\nUse /build")
+        await bot.send_image_or_message("images/test.png", None)
+
+        await ctrl.flag.wait()
+
+        ctrl.flag.clear()
+
+    ctrl.cur_phase = 1
+    ctrl.players.reverse()
+
+    for i, player in enumerate(ctrl.players):
+        ctrl.current_player = i
+
         await bot.send_image_or_message(None, f"{player.name}'s turn to build a settlement and road.\nUse /build")
         await bot.send_image_or_message("images/test.png", None)
 
@@ -232,19 +249,9 @@ async def run(ctrl: Controller, flag: asyncio.Event, drawing_mode: str) -> None:
         ctrl.flag.clear()
 
     ctrl.players.reverse()
+    ctrl.cur_phase = 2
 
-    for player in ctrl.players:
-        await bot.send_image_or_message(None, f"{player.name}'s turn to build a settlement and road.\nUse /build")
-        await bot.send_image_or_message("images/test.png", None)
-
-        await ctrl.flag.wait()
-
-        ctrl.flag.clear()
-
-    ctrl.players.reverse()
-    ctrl.first_build_phase = False
-
-    while not ctrl.has_won():
+    while winner is None:
         ctrl.has_robber_moved = False
         ctrl.flag.clear()
         ctrl.active_trades = []     # emptied at start of each turn
@@ -277,11 +284,18 @@ async def run(ctrl: Controller, flag: asyncio.Event, drawing_mode: str) -> None:
         else:
             ctrl.current_player += 1
 
+        winner = ctrl.has_won()
 
+    game_over(winner)
 
-def game_over():
+async def game_over(winner: player.Player) -> None:
     """Handles any cleanup that needs to occur when a player wins the game."""
-    ...
+    
+    message = hikari.Embed(title=f"Congratulations!",
+                description=f"{winner.name} has won the game",
+                color=hikari.Color(0x00FF00)
+        )
+    await bot.send_image_or_message(None, message)
 
 class Resource(Exception):
     """Custom exception representing when a player does not have a resource."""

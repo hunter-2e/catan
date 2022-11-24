@@ -29,6 +29,24 @@ async def endturn(ctx: lightbulb.Context) -> None:
 
         return
 
+    player_obj = ctrl.players[ctrl.current_player]
+
+    # verify player has built the necessary road and settlement in the beginning sequence
+    if (ctrl.cur_phase == 0 and len(player_obj.roadsPlaced) == 0) or (ctrl.cur_phase == 1 and len(player_obj.roadsPlaced) == 1):
+        await ctx.respond(content=hikari.Embed(
+                title="Error!",
+                description=f"You need to build a road before you end your turn.",
+                color=hikari.Color(0xFF0000)))
+
+        return
+    if (ctrl.cur_phase == 0 and len(player_obj.settlementSpots) == 0) or (ctrl.cur_phase == 1 and len(player_obj.settlementSpots) == 1):
+        await ctx.respond(content=hikari.Embed(
+                title="Error!",
+                description=f"You need to build a settlement before you end your turn.",
+                color=hikari.Color(0xFF0000)))
+
+        return
+
     await ctx.respond(content=f"{name} has ended their turn.")
 
     bot.ctrl.flag.set()
