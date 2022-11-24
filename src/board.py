@@ -129,10 +129,22 @@ class Board:
         draw.drawBoard(self, mode)
 
 
+    def checkValidity(self, spot):
+        if spot[0][0] == 0 and spot[1][0] == spot[0][0] + 1 and (spot[0][1] == spot[1][1] or spot[0][1] == spot[1][1] + 1):
+                return True
+        elif spot[0][0] % 2 == 0:
+            if ((spot[1][0] == spot[0][0] + 1) and (spot[0][1] == spot[1][1] or spot[0][1] + 1 == spot[1][1])) or (spot[0][0] - 1 == spot[1][0] and spot[0][1] == spot[1][1]):
+                return True
+        elif spot[0][0] == 11 and spot[1][0] == spot[0][0] - 1 and (spot[0][1] == spot[1][1] or spot[0][1] + 1 == spot[1][1]):
+            return True
+        else:
+            if ((spot[1][0] == spot[0][0] - 1) and (spot[0][1] == spot[1][1] or spot[0][1] + 1 == spot[1][1])) or ((spot[1][0] == spot[0][0] + 1) and (spot[0][1] == spot[1][1])):
+                return True
+            else: return False
 
   
-    def validRoad(spot, player):
-        if spot[0] == spot[1]:
+    def validRoad(self, spot, player):
+        if spot[0] == spot[1] or ((spot[0],spot[1]) or (spot[1], spot[0]) in self.roadsPlaced):
             return False
 
         # being passed in ((),())
@@ -146,26 +158,27 @@ class Board:
 
         for i in player.roadsPlaced:
             for j in i:
-                relevantSpot.append(j) 
+                relevantSpot.append(j)
+
+        maybeBuildable = False
 
         for i in relevantSpot:
-            if i == spot[0]:
-                if spot[0][0] == spot[1][0]:
-                    return False
-                
-                if spot[0][0] % 2 == 0:
-                    if (spot[0][0] == spot[1][0] + 1 and spot[0][1] == spot[1][1]) or (spot[0][0] == spot[1][0] + 1 and spot[0][1] == spot[1][1] + 1):
-                        return True
-                else:
-                    if (spot[0][0] == spot[1][0] + 1 and spot[0][1] == spot[1][1]):
-                        return True
+            if spot[0] or spot[1] == i:
+                maybeBuildable = True
+        
+        if maybeBuildable != True:
+            return False
 
-            elif i == spot[1]:
-                if spot[0][0] == spot[1][0]:
-                    return False
+        for i in relevantSpot:
+            if i in [spot[0], spot[1]]:
+                spotInRelevant = i
+        
 
-            else: return False
-            
+        if spotInRelevant == spot[0]:
+            return self.checkValidity((spotInRelevant, spot[1]))
+        else:
+            return self.checkValidity((spot[0], spotInRelevant))
+    
 
     def setRoad(self, player, spot1, spot2):
         spot1 = [spot1[1], spot1[0]]
@@ -189,8 +202,14 @@ class Board:
         else:
             spot2 = (spot2[0], int(spot2[1]/2))
 
+        canBeBuilt = self.validRoad((spot1,spot2))
+        if canBeBuilt == False:
+            return False
+
         player.roadsPlaced.append((spot1,spot2))
         player.roadQuantity -= 1
+
+        self.roadsPlaced.append((spot1),(spot2))
 
         image = np.array(Image.open("images/test.png"))
         draw.drawRoad(image, player, spot1,spot2)

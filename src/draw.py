@@ -261,7 +261,7 @@ def determineColor(player):
     elif(color == "Red"):
         color = (255,0,0)
     elif(color == "Orange"):
-        color = (27, 133, 241)
+        color = (255, 191, 0)
     elif(color == "White"):
         color = (255,255,255)
 
