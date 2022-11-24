@@ -223,7 +223,9 @@ async def run(ctrl: Controller, flag: asyncio.Event, drawing_mode: str) -> None:
     ctrl.flag = flag
 
     # Handle initial settlement and road placements
-    for player in ctrl.players:
+    for i, player in enumerate(ctrl.players):
+        ctrl.current_player = i
+
         await bot.send_image_or_message(None, f"{player.name}'s turn to build a settlement and road.\nUse /build")
         await bot.send_image_or_message("images/test.png", None)
 
@@ -233,7 +235,9 @@ async def run(ctrl: Controller, flag: asyncio.Event, drawing_mode: str) -> None:
 
     ctrl.players.reverse()
 
-    for player in ctrl.players:
+    for i, player in enumerate(ctrl.players):
+        ctrl.current_player = i
+
         await bot.send_image_or_message(None, f"{player.name}'s turn to build a settlement and road.\nUse /build")
         await bot.send_image_or_message("images/test.png", None)
 
