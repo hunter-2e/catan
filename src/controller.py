@@ -32,7 +32,7 @@ class Controller:
         self.flag = None
         self.cur_dice = None
         self.has_robber_moved = False
-        self.first_build_phase = True
+        self.cur_phase = 0      # 0 = first half of initial build cycle, 1 = 2nd half, 2 = main game
 
     def trade(self, trade_num: int, player2: Union[player.Player, str]) -> None:
         """Handles a trade.
@@ -88,10 +88,10 @@ class Controller:
         player_obj = self.get_player(player)
 
         if building == "Road":
-            if self.first_build_phase and len(player_obj.roadsPlaced) < 2:
+            if (self.cur_phase == 0 and len(player_obj.roadsPlaced) == 0) or (self.cur_phase == 1 and len(player_obj.roadsPlaced) == 1):
                 self.board.setRoad(player_obj, location_1, location_2)
                 return
-            elif self.first_build_phase:
+            elif self.cur_phase != 2:
                 raise Exception("You already built your 2 starting roads.")
 
             if not player_obj.hasResource("wood", 1) or not player_obj.hasResource("brick", 1):
@@ -102,10 +102,10 @@ class Controller:
             player_obj.modCurrResource("wood", -1)
             player_obj.modCurrResource("brick", -1)
         elif building == "Settlement":
-            if self.first_build_phase and len(player_obj.settlementSpots) < 2:
+            if (self.cur_phase == 0 and len(player_obj.settlementSpots) == 0) or (self.cur_phase == 1 and len(player_obj.settlementSpots) == 1):
                 self.board.setSettlement(self.players, player_obj, location_1, 1)
                 return
-            elif self.first_build_phase:
+            elif self.cur_phase != 2:
                 raise Exception("You already built your 2 starting settlements.")
 
             if not player_obj.hasResource("wood", 1) or not player_obj.hasResource("brick", 1) or not player_obj.hasResource("wheat", 1) or not player_obj.hasResource("sheep", 1):
@@ -233,6 +233,7 @@ async def run(ctrl: Controller, flag: asyncio.Event, drawing_mode: str) -> None:
 
         ctrl.flag.clear()
 
+    ctrl.cur_phase = 1
     ctrl.players.reverse()
 
     for i, player in enumerate(ctrl.players):
@@ -246,7 +247,7 @@ async def run(ctrl: Controller, flag: asyncio.Event, drawing_mode: str) -> None:
         ctrl.flag.clear()
 
     ctrl.players.reverse()
-    ctrl.first_build_phase = False
+    ctrl.cur_phase = 2
 
     while not ctrl.has_won():
         ctrl.has_robber_moved = False
