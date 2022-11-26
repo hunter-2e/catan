@@ -130,34 +130,39 @@ class Board:
 
 
     def checkValidity(self, spot):
+        print(spot)
         if spot[0][0] == 0 and spot[1][0] == spot[0][0] + 1 and (spot[0][1] == spot[1][1] or spot[0][1] + 1 == spot[1][1]):
-                return True
+            return True
         elif spot[0][0] % 2 == 0:
             if ((spot[1][0] == spot[0][0] + 1) and (spot[0][1] == spot[1][1] or spot[0][1] + 1 == spot[1][1])) or (spot[0][0] - 1 == spot[1][0] and spot[0][1] == spot[1][1]):
                 return True
         elif spot[0][0] == 11 and spot[1][0] == spot[0][0] - 1 and (spot[0][1] == spot[1][1] or spot[0][1] + 1 == spot[1][1]):
             return True
         else:
-            if ((spot[1][0] == spot[0][0] - 1) and (spot[0][1] == spot[1][1] or spot[0][1] + 1 == spot[1][1])) or ((spot[1][0] == spot[0][0] + 1) and (spot[0][1] == spot[1][1])):
+            if ((spot[1][0] == spot[0][0] - 1) and (spot[0][1] - 1 == spot[1][1] or spot[0][1] + 1 == spot[1][1])) or ((spot[1][0] == spot[0][0] + 1) and (spot[0][1] == spot[1][1])):
                 return True
             else: return False
 
   
     def validRoad(self, spot, player):
-        if spot[0] == spot[1] or ((spot[0],spot[1]) or (spot[1], spot[0]) in self.roadsPlaced):
+        if spot[0] == spot[1] or ((spot[0],spot[1]) in self.roadsPlaced or (spot[1], spot[0]) in self.roadsPlaced):
+            print(1)
             return False
 
         # being passed in ((),())
         relevantSpot = []
         
         for i in player.settlementSpots:
+            print(2)
             relevantSpot.append(i)
 
         for i in player.citySpots:
+            print(3)
             relevantSpot.append(i)
 
         for i in player.roadsPlaced:
             for j in i:
+                print(4)
                 relevantSpot.append(j)
 
         maybeBuildable = False
@@ -167,6 +172,7 @@ class Board:
                 maybeBuildable = True
         
         if maybeBuildable != True:
+            print(2)
             return False
 
         for i in relevantSpot:
@@ -202,6 +208,10 @@ class Board:
         else:
             spot2 = (spot2[0], int(spot2[1]/2))
 
+        #Make sure both points are settlement spots at the very least
+        if self.isSpotValid(spot1) == False or self.isSpotValid(spot2):
+            return False
+
         canBeBuilt = self.validRoad((spot1,spot2), player)
         if canBeBuilt == False:
             return False
@@ -209,15 +219,41 @@ class Board:
         player.roadsPlaced.append((spot1,spot2))
         player.roadQuantity -= 1
 
-        self.roadsPlaced.append((spot1),(spot2))
+        self.roadsPlaced.append((spot1,spot2))
 
         image = np.array(Image.open("images/test.png"))
         draw.drawRoad(image, player, spot1,spot2)
+
+        return True
+
+    def isSpotValid(self, spot):
+        spotValid = False
+
+        for row in self.associatedPoints:
+            if spot in row:
+                spotValid = True
+                break
+            
+        if(spotValid is False):
+            return False
 
     def getRoad(self, spot1, spot2):
         if([spot1, spot2] in self.roadsPlaced):
             return True
         else: return False
+
+    def validSettlement(self, spot):
+        if spot[0][0] == 0 and self.getSettlement(spot[0] + 1, spot[1]) == None and (spot[0][1] == spot[1][1] or spot[0][1] + 1 == spot[1][1]):
+            return True
+        elif spot[0][0] % 2 == 0:
+            if ((spot[1][0] == spot[0][0] + 1) and (spot[0][1] == spot[1][1] or spot[0][1] + 1 == spot[1][1])) or (spot[0][0] - 1 == spot[1][0] and spot[0][1] == spot[1][1]):
+                return True
+        elif spot[0][0] == 11 and spot[1][0] == spot[0][0] - 1 and (spot[0][1] == spot[1][1] or spot[0][1] + 1 == spot[1][1]):
+            return True
+        else:
+            if ((spot[1][0] == spot[0][0] - 1) and (spot[0][1] - 1 == spot[1][1] or spot[0][1] + 1 == spot[1][1])) or ((spot[1][0] == spot[0][0] + 1) and (spot[0][1] == spot[1][1])):
+                return True
+            else: return False
 
 
     def setSettlement(self, controller, player, spot, settType):
@@ -232,14 +268,7 @@ class Board:
         else:
             spot = (spot[0], int(spot[1]/2))
 
-        spotValid = False
-
-        for row in self.associatedPoints:
-            if spot in row:
-                spotValid = True
-                break
-            
-        if(spotValid is False):
+        if self.isSpotValid(spot) == False:
             return False
 
         if(settType == 1):

@@ -89,7 +89,7 @@ class Controller:
 
         if building == "Road":
             if (len(player_obj.settlementSpots) > 0) and (self.cur_phase == 0 and len(player_obj.roadsPlaced) == 0) or (self.cur_phase == 1 and len(player_obj.roadsPlaced) == 1):
-                if not self.board.setRoad(player_obj, location_1, location_2):
+                if self.board.setRoad(player_obj, location_1, location_2) == False:
                     raise Exception("Invalid road.")
                 return
             elif len(player_obj.settlementSpots) == 0:
