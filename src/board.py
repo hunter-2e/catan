@@ -139,9 +139,9 @@ class Board:
         elif spot[0][0] == 11 and spot[1][0] == spot[0][0] - 1 and (spot[0][1] == spot[1][1] or spot[0][1] + 1 == spot[1][1]):
             return True
         else:
-            if ((spot[1][0] == spot[0][0] - 1) and (spot[0][1] - 1 == spot[1][1] or spot[0][1] + 1 == spot[1][1])) or ((spot[1][0] == spot[0][0] + 1) and (spot[0][1] == spot[1][1])):
+            if ((spot[1][0] == spot[0][0] - 1) and (spot[0][1] == spot[1][1] or spot[0][1] - 1 == spot[1][1])) or ((spot[1][0] == spot[0][0] + 1) and (spot[0][1] == spot[1][1])):
                 return True
-            else: return False
+        return False
 
   
     def validRoad(self, spot, player):
@@ -242,18 +242,33 @@ class Board:
             return True
         else: return False
 
-    def validSettlement(self, spot):
-        if spot[0][0] == 0 and self.getSettlement(spot[0] + 1, spot[1]) == None and (spot[0][1] == spot[1][1] or spot[0][1] + 1 == spot[1][1]):
+    def validSettlement(self, spot, player, players):
+        #spots that are in the players built roads
+        relevantSpots = []
+
+
+        #Add each spot of road to relevant spots
+        for roadSpot in player.roadsPlaced:
+            relevantSpots.append(roadSpot[0])
+            relevantSpots.append(roadSpot[1])
+
+        #Check is spot to be placed is on that players road
+        if spot not in relevantSpots:
+            return False
+
+
+        print(spot)
+        if spot[0] == 0 and self.getSettlement(spot[0], spot[1] + 1) == None and self.getSettlement(spot[0], spot[1]) == None:
             return True
         elif spot[0][0] % 2 == 0:
-            if ((spot[1][0] == spot[0][0] + 1) and (spot[0][1] == spot[1][1] or spot[0][1] + 1 == spot[1][1])) or (spot[0][0] - 1 == spot[1][0] and spot[0][1] == spot[1][1]):
+            if self.getSettlement(spot[0] + 1, spot[1]) == None and self.getSettlement(spot[0] + 1, spot[1] + 1) == None and self.getSettlement(spot[0] - 1, spot[1]) == None:
                 return True
-        elif spot[0][0] == 11 and spot[1][0] == spot[0][0] - 1 and (spot[0][1] == spot[1][1] or spot[0][1] + 1 == spot[1][1]):
+        elif spot[0] == 11 and self.getSettlement(spot[0], spot[1]) == None and self.getSettlement(spot[0], spot[1] + 1) == None:
             return True
         else:
-            if ((spot[1][0] == spot[0][0] - 1) and (spot[0][1] - 1 == spot[1][1] or spot[0][1] + 1 == spot[1][1])) or ((spot[1][0] == spot[0][0] + 1) and (spot[0][1] == spot[1][1])):
+            if self.getSettlement(spot[0] + 1, spot[1]) == None and self.getSettlement(spot[0] - 1, spot[1]) == None and self.getSettlement(spot[0] - 1, spot[1] + 1) == None:
                 return True
-            else: return False
+        return False
 
 
     def setSettlement(self, controller, player, spot, settType):
@@ -270,6 +285,8 @@ class Board:
 
         if self.isSpotValid(spot) == False:
             return False
+
+        self.validSettlement(spot, player, controller)
 
         if(settType == 1):
             #Check if player already has settlement there and return False if they do
