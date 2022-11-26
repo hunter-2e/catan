@@ -95,7 +95,7 @@ class Controller:
             elif len(player_obj.settlementSpots) == 0:
                 raise Exception("Build a settlement first.")
             elif self.cur_phase != 2:
-                raise Exception("You already built your 2 starting roads.")
+                raise Exception("You already built your starting road for this turn.")
 
             if not player_obj.hasResource("wood", 1) or not player_obj.hasResource("brick", 1):
                 raise Resource(f"Player: {player_obj.name} does not have the necessary resources.")
@@ -110,7 +110,7 @@ class Controller:
                 self.board.setSettlement(self.players, player_obj, location_1, 1)
                 return
             elif self.cur_phase != 2:
-                raise Exception("You already built your 2 starting settlements.")
+                raise Exception("You already built your starting settlement for this turn.")
 
             if not player_obj.hasResource("wood", 1) or not player_obj.hasResource("brick", 1) or not player_obj.hasResource("wheat", 1) or not player_obj.hasResource("sheep", 1):
                 raise Resource(f"Player: {player_obj.name} does not have the necessary resources.")
@@ -270,7 +270,26 @@ async def run(ctrl: Controller, flag: asyncio.Event, drawing_mode: str) -> None:
         await bot.send_image_or_message("images/test.png", None)
         
         if ctrl.cur_dice == 7:
-            # Prompt user user for new robber location, wait for response
+            # Prompt player's with more than 7 cards to discard half
+            players_over_7 = []
+
+            for player in ctrl.players:
+                sum = 0
+
+                for card_type, val in player.currentResources.keys():
+                    sum += val
+
+                if sum > 7:
+                    players_over_7.append(player)
+                    player.cardsToDiscard = sum // 2
+
+            await bot.send_image_or_message(None, f"Players with over 7 cards: {str(players_over_7)}")
+            await bot.send_image_or_message(None, "Use /discard <cards> to get rid of half of your cards.\nExample: /discard sheep sheep rock wood")
+
+            await ctrl.flag.wait()
+            ctrl.flag.clear()
+
+            # Prompt player for new robber location, wait for response
             await bot.send_image_or_message(None, "Use /rob <location> <player> to move the robber and steal from someone.")
 
             await ctrl.flag.wait()

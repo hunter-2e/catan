@@ -25,8 +25,6 @@ async def use(ctx: lightbulb.Context) -> None:
 
         modal = modals.KnightModal(title="Use Knight Card")
         await modal.send(ctx.interaction)
-        #while modal.
-        #print(modal.values)
         
     elif ctx.options.development_card == "Year of Plenty":
         if ctrl.get_player(name).unusedDevelopmentCards["YearOfPlenty"] == 0:
@@ -49,12 +47,6 @@ async def use(ctx: lightbulb.Context) -> None:
 
         modal = modals.RoadBuildingModal(title="Use Road Building Card")
         await modal.send(ctx.interaction)
-
-    #await bot.bot.rest.create_message(ctx.channel_id, content=hikari.Embed(
-    #            title=f"{name} has used the {ctx.options.development_card} Card!",
-    #            color=hikari.Color(0xFFFF00)))
-    
-    #await ctx.respond(content="Use successful")
 
 # Extensions are hot-reloadable (can be loaded/unloaded while the bot is live)
 

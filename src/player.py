@@ -3,6 +3,7 @@ class Player:
         self.name = name
         self.color = color
 
+        self.cardsToDiscard = 0
         self.victoryPoints          = 0
         self.settlementQuantity     = 5
         self.cityQuantity           = 4
