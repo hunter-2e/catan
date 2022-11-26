@@ -65,7 +65,7 @@ async def rob(ctx: lightbulb.Context) -> None:
     await ctx.respond(content=f"Successfully stole {resource_stolen} from {ctx.options.player}.")
     await bot.bot.rest.create_message(ctx.channel_id, content=f"{name} moved the robber to {location} and stole from {ctx.options.player}.")
 
-    bot.ctrl.flag.set()
+    ctrl.flag.set()
 
 
 
