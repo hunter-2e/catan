@@ -53,7 +53,7 @@ async def accept(ctx: lightbulb.Context) -> None:
         return
 
     try:
-        ctrl.trade(ctx.options.trade_num, player2_name)
+        ctrl.trade(ctx.options.trade_num, ctrl.get_player(player2_name))
 
         await bot.bot.rest.create_message(ctx.channel_id, content=f"Trade # {ctx.options.trade_num} from {player1_name} accepted by {player2_name}.")
     except controller.Resource:
