@@ -140,7 +140,7 @@ class Board:
         elif spot[0][0] == 11 and spot[1][0] == spot[0][0] - 1 and (spot[0][1] == spot[1][1] or spot[0][1] + 1 == spot[1][1]):
             return True
         else:
-            if ((spot[1][0] == spot[0][0] - 1) and (spot[0][1] == spot[1][1] or spot[0][1] - 1 == spot[1][1])) or ((spot[1][0] == spot[0][0] + 1) and (spot[0][1] == spot[1][1])):
+            if ((spot[1][0] == spot[0][0] - 1) and (spot[0][1] - 1 == spot[1][1] or spot[0][1] == spot[1][1])) or ((spot[1][0] == spot[0][0] + 1) and (spot[0][1] == spot[1][1])):
                 return True
         return False
 
@@ -184,8 +184,10 @@ class Board:
             return False
 
         if spotInRelevant == spot[0]:
+            print("FIRST")
             return self.checkValidity((spotInRelevant, spot[1]))
         else:
+            print("SECOND")
             return self.checkValidity((spot[0], spotInRelevant))
     
 
