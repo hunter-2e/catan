@@ -174,7 +174,7 @@ def drawRobber(board, image):
         pts = pts.reshape((-1, 1, 2))
 
         try:
-            if(circleColor == (0,0,255)):
+            if(circleColor == (255,0,0)):
                 image = cv2.circle(image, (int(top[0]), top[1] + 95), 30, circleColor, -1)
                 circleColor = None
             else: image = cv2.circle(image, (int(top[0]), top[1] + 95), 30, (0,0,0), -1)

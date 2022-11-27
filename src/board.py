@@ -140,12 +140,12 @@ class Board:
         elif spot[0][0] == 11 and spot[1][0] == spot[0][0] - 1 and (spot[0][1] == spot[1][1] or spot[0][1] + 1 == spot[1][1]):
             return True
         else:
-            if ((spot[1][0] == spot[0][0] - 1) and (spot[0][1] - 1 == spot[1][1] or spot[0][1] == spot[1][1])) or ((spot[1][0] == spot[0][0] + 1) and (spot[0][1] == spot[1][1])):
+            if ((spot[1][0] == spot[0][0] - 1) and ((spot[0] > 6 and spot[0][1] + 1 == spot[1][1] or spot[0][1] == spot[1][1]) or (spot[0] < 6 and spot[0][1] - 1 == spot[1][1] or spot[0][1] == spot[1][1]))) or ((spot[1][0] == spot[0][0] + 1) and (spot[0][1] == spot[1][1])):
                 return True
         return False
 
   
-    def validRoad(self, spot, player):
+    def validRoad(self, spot, player, players):
         if spot[0] == spot[1] or ((spot[0],spot[1]) in self.roadsPlaced or (spot[1], spot[0]) in self.roadsPlaced):
             print(1)
             return False
@@ -153,18 +153,25 @@ class Board:
         # being passed in ((),())
         relevantSpot = []
         
-        for i in player.settlementSpots:
-            print(2)
-            relevantSpot.append(i)
+        #Add all relevant spots to build off of to array unless it is the first turn, in which case only add most recent settlement placed
+        if self.setSettleCalls <= len(players):
+            relevantSpot.append(player.settlementSpots[-1])
 
-        for i in player.citySpots:
-            print(3)
-            relevantSpot.append(i)
+        else:
+            for i in player.settlementSpots:
+                print(2)
+                relevantSpot.append(i)
+                
+            for i in player.roadsPlaced:
+                for j in i:
+                    print(4)
+                    relevantSpot.append(j)
 
-        for i in player.roadsPlaced:
-            for j in i:
-                print(4)
-                relevantSpot.append(j)
+            for i in player.citySpots:
+                print(3)
+                relevantSpot.append(i)
+
+        
 
         maybeBuildable = False
 
@@ -217,6 +224,7 @@ class Board:
         if self.isSpotValid(spot1) == False or self.isSpotValid(spot2):
             return False
 
+        #If both are valid points check if road can be placed based on game's rules
         canBeBuilt = self.validRoad((spot1,spot2), player)
         if canBeBuilt == False:
             return False
@@ -257,8 +265,7 @@ class Board:
             relevantSpots.append(roadSpot[0])
             relevantSpots.append(roadSpot[1])
 
-        #Check is spot to be placed is on that players road
-        
+        #Check if spot to be placed is on that players road unless they haven't taken initial turns
         if self.setSettleCalls >= len(players) * 2:
             if spot not in relevantSpots:
                 return False
@@ -320,9 +327,11 @@ class Board:
             draw.drawSettle(image, player, spot)
 
         else:
+            print("GOT HERE")
             #Check if player has there own settlement there return False if they don't and can't upgrade to city or return False if anyone already has a city there
             for players in controller:
                 if spot in players.citySpots or spot not in player.settlementSpots:
+                    print("City not allowed")
                     return False
 
             player.cityQuantity -= 1 
