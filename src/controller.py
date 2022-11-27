@@ -89,7 +89,7 @@ class Controller:
 
         if building == "Road":
             if (len(player_obj.settlementSpots) > 0) and (self.cur_phase == 0 and len(player_obj.roadsPlaced) == 0) or (self.cur_phase == 1 and len(player_obj.roadsPlaced) == 1):
-                if self.board.setRoad(player_obj, location_1, location_2) == False:
+                if not self.board.setRoad(player_obj, location_1, location_2):
                     raise Exception("Invalid road.")
                 return
             elif len(player_obj.settlementSpots) == 0:
@@ -107,7 +107,8 @@ class Controller:
             player_obj.modCurrResource("brick", -1)
         elif building == "Settlement":
             if (self.cur_phase == 0 and len(player_obj.settlementSpots) == 0) or (self.cur_phase == 1 and len(player_obj.settlementSpots) == 1):
-                self.board.setSettlement(self.players, player_obj, location_1, 1)
+                if not self.board.setSettlement(self.players, player_obj, location_1, 1):
+                    raise Exception("Invalid settlement.")
                 return
             elif self.cur_phase != 2:
                 raise Exception("You already built your starting settlement for this turn.")
@@ -115,7 +116,8 @@ class Controller:
             if not player_obj.hasResource("wood", 1) or not player_obj.hasResource("brick", 1) or not player_obj.hasResource("wheat", 1) or not player_obj.hasResource("sheep", 1):
                 raise Resource(f"Player: {player_obj.name} does not have the necessary resources.")
 
-            self.board.setSettlement(self.players, player_obj, location_1, 1)
+            if not self.board.setSettlement(self.players, player_obj, location_1, 1):
+                raise Exception("Invalid settlement.")
 
             player_obj.modCurrResource("wood", -1)
             player_obj.modCurrResource("brick", -1)
@@ -125,7 +127,8 @@ class Controller:
             if not player_obj.hasResource("wheat", 2) or not player_obj.hasResource("rock", 3):
                 raise Resource(f"Player: {player_obj.name} does not have the necessary resources.")
 
-            self.board.setSettlement(self.players, player_obj, location_1, 2)
+            if not self.board.setSettlement(self.players, player_obj, location_1, 2):
+                raise Exception("Invalid city.")
 
             player_obj.modCurrResource("wheat", -2)
             player_obj.modCurrResource("rock", -3)
