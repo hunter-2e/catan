@@ -26,7 +26,7 @@ def setup() -> None:
 
     bot.load_extensions("src.hikari_bot.commands.build", "src.hikari_bot.commands.trade", "src.hikari_bot.commands.accept", "src.hikari_bot.commands.hand", 
                         "src.hikari_bot.commands.join", "src.hikari_bot.commands.endturn", "src.hikari_bot.commands.use", "src.hikari_bot.commands.rob",
-                        "src.hikari_bot.commands.start"
+                        "src.hikari_bot.commands.start", "src.hikari_bot.commands.discard"
     )
 
     miru.install(bot)

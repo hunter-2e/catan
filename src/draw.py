@@ -31,9 +31,6 @@ def drawBoard(board, mode):
 
 
     startingTile = [0,0]
-
-    if mode == 'minecraft':
-        image = np.array(Image.open("images/water.png"))
     
     tileNumbers = board.materialNumberTile
     tileColors = list(itertools.chain.from_iterable(board.tileSpots))
@@ -121,6 +118,8 @@ def drawBoard(board, mode):
                 vertex[0] += 173
             else: vertex[0] += 175
         drawGrid(image)
+        drawPorts(image, board)
+        image = np.array(Image.open("images/test.png"))
     cv2.imwrite('images/test.png', image)
 
     im_cv = cv2.imread('images/test.png')
@@ -175,7 +174,7 @@ def drawRobber(board, image):
         pts = pts.reshape((-1, 1, 2))
 
         try:
-            if(circleColor == (0,0,255)):
+            if(circleColor == (255,0,0)):
                 image = cv2.circle(image, (int(top[0]), top[1] + 95), 30, circleColor, -1)
                 circleColor = None
             else: image = cv2.circle(image, (int(top[0]), top[1] + 95), 30, (0,0,0), -1)
@@ -188,7 +187,12 @@ def drawRobber(board, image):
 
         for vertex in allVertex:
                 vertex[0] += 175
+
     cv2.imwrite('images/test.png', image)
+
+    im_cv = cv2.imread('images/test.png')
+    im_cv = cv2.cvtColor(im_cv, cv2.COLOR_BGR2RGB)
+    cv2.imwrite('images/test.png', im_cv)
 
 def drawGrid(image):
     capitalLetters = list(string.ascii_uppercase)
@@ -253,11 +257,11 @@ def determineColor(player):
     color = player.color
 
     if(color == "Blue"):
-        color = (255,0,0)
-    elif(color == "Red"):
         color = (0,0,255)
+    elif(color == "Red"):
+        color = (255,0,0)
     elif(color == "Orange"):
-        color = (27, 133, 241)
+        color = (255, 191, 0)
     elif(color == "White"):
         color = (255,255,255)
 
@@ -268,16 +272,24 @@ def drawSettle(image, player, spot):
     boardLocation = getSpot(spot)
     settleColor = determineColor(player)
     
-    cv2.rectangle(image,(boardLocation[0] - 15,boardLocation[1]-15),(boardLocation[0] + 15,boardLocation[1] + 15),settleColor,-1)
+    cv2.rectangle(image,(boardLocation[0] - 15,boardLocation[1]-15),(boardLocation[0] + 15,boardLocation[1] + 15), settleColor, -1)
     cv2.imwrite('images/test.png', image)
+
+    im_cv = cv2.imread('images/test.png')
+    im_cv = cv2.cvtColor(im_cv, cv2.COLOR_BGR2RGB)
+    cv2.imwrite('images/test.png', im_cv)
 
 def drawCity(image, player, spot):
 
     boardLocation = getSpot(spot)
     settleColor = (255,255,255)
     
-    cv2.rectangle(image,(boardLocation[0] - 10,boardLocation[1]-10),(boardLocation[0] + 10,boardLocation[1] + 10),settleColor,-1)
+    cv2.rectangle(image,(boardLocation[0] - 10,boardLocation[1]-10),(boardLocation[0] + 10,boardLocation[1] + 10), settleColor, -1)
     cv2.imwrite('images/test.png', image)
+
+    im_cv = cv2.imread('images/test.png')
+    im_cv = cv2.cvtColor(im_cv, cv2.COLOR_BGR2RGB)
+    cv2.imwrite('images/test.png', im_cv)
 
 def drawRoad(image, player, spot1, spot2):
     
@@ -289,7 +301,60 @@ def drawRoad(image, player, spot1, spot2):
     cv2.line(image, boardLocation1, boardLocation2, roadColor, 15) 
     cv2.imwrite('images/test.png', image)
 
+    im_cv = cv2.imread('images/test.png')
+    im_cv = cv2.cvtColor(im_cv, cv2.COLOR_BGR2RGB)
+    cv2.imwrite('images/test.png', im_cv)
 
+def drawPorts(image, board):
+    for port in board.portsSettleSpots:
+        if port == 'Sheep':
+            for spot in board.portsSettleSpots['Sheep']:
+                cv2.line(image, getSpot(spot), (550,40), (0,0,0), 2)
+        elif port == 'Rock':
+            for spot in board.portsSettleSpots['Rock']:
+                cv2.line(image, getSpot(spot), (75,250), (0,0,0), 2)
+        elif port == 'Brick':
+            for spot in board.portsSettleSpots['Brick']:
+                cv2.line(image, getSpot(spot), (775,645), (0,0,0), 2)
+        elif port == 'Wheat':
+            for spot in board.portsSettleSpots['Wheat']:
+                cv2.line(image, getSpot(spot), (75,560), (0,0,0), 2)
+        elif port == 'Wood':
+            for spot in board.portsSettleSpots['Wood']:
+                cv2.line(image, getSpot(spot), (550,775), (0,0,0), 2)
+        else:
+            for spot in board.portsSettleSpots['3for1']:
+                if spot in [(0,0), (1,0)]:
+                    cv2.line(image, getSpot(spot), (200,30), (0,0,0), 2)
+                elif spot in [(2,3), (3,4)]:
+                    cv2.line(image, getSpot(spot), (775,150), (0,0,0), 2)
+                elif spot in [(5,5), (6,5)]:
+                    cv2.line(image, getSpot(spot), (930,400), (0,0,0), 2)
+                else: cv2.line(image, getSpot(spot), (200,775), (0,0,0), 2)
+
+    minecraftMode(550, 40, 'images/sheepPort.png', image)
+    image = np.array(Image.open("images/test.png"))
+    minecraftMode(200, 30, 'images/3for1.png', image)
+    image = np.array(Image.open("images/test.png"))
+    minecraftMode(775, 150, 'images/3for1.png', image)
+    image = np.array(Image.open("images/test.png"))
+    minecraftMode(75, 250, 'images/rockPort.png', image)
+    image = np.array(Image.open("images/test.png"))
+    minecraftMode(75, 560, 'images/wheatPort.png', image)
+    image = np.array(Image.open("images/test.png"))
+    minecraftMode(200, 775, 'images/3for1.png', image)
+    image = np.array(Image.open("images/test.png"))
+    minecraftMode(550, 775, 'images/treePort.png', image)
+    image = np.array(Image.open("images/test.png"))
+    minecraftMode(775, 645, 'images/brickPort.png', image)
+    image = np.array(Image.open("images/test.png"))
+    minecraftMode(930, 400, 'images/3for1.png', image)
+    image = np.array(Image.open("images/test.png"))
+
+    
+#Following two functions deal with placing png over another image
+
+#First function acts as helper to minecraftMode
 def overlay_image_alpha(img, img_overlay, x, y, alpha_mask):
     """Overlay `img_overlay` onto `img` at (x, y) and blend using `alpha_mask`.
 

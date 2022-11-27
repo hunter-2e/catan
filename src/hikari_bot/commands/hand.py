@@ -20,10 +20,13 @@ async def hand(ctx: lightbulb.Context) -> None:
     name = str(ctx.author).split("#")[0]
     player = ctrl.get_player(name)
 
-    await ctx.respond(content=hikari.Embed(
-                title="Hand:",
-                description=f"{player.currentResources}\n{player.unusedDevelopmentCards}",
-                color=hikari.Color(0x0000FF)))
+    response = hikari.Embed(
+        title="Hand:",
+        description=f"{player.currentResources}\n{player.unusedDevelopmentCards}",
+        color=hikari.Color(0x0000FF))
+    response.set_image(hikari.File("images/buildCosts.png"))
+
+    await ctx.respond(content=response)
 
 # Extensions are hot-reloadable (can be loaded/unloaded while the bot is live)
 

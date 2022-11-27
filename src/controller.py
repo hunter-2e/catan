@@ -32,6 +32,7 @@ class Controller:
         self.flag = None
         self.cur_dice = None
         self.has_robber_moved = False
+        self.cur_phase = 0      # 0 = first half of initial build cycle, 1 = 2nd half, 2 = main game
 
     def trade(self, trade_num: int, player2: Union[player.Player, str]) -> None:
         """Handles a trade.
@@ -77,7 +78,7 @@ class Controller:
             player2.modCurrResource(resource, num * -1)
             player1.modCurrResource(resource, num)
 
-    def build(self, player: str, building: str, location_1: tuple, location_2: Union[tuple, None]) -> None:
+    def build(self, player: str, building: str, location_1: tuple, location_2: Union[tuple, None]) -> Union[None, str]:
         """Maybe split this into seperate methods for each building?
 
         Raises:
@@ -87,20 +88,36 @@ class Controller:
         player_obj = self.get_player(player)
 
         if building == "Road":
-            # TODO: STILL NEED TO ADD CHECKER FOR IF THE ROAD LOCATIONS ARE VALID OR NOT
+            if (len(player_obj.settlementSpots) > 0) and (self.cur_phase == 0 and len(player_obj.roadsPlaced) == 0) or (self.cur_phase == 1 and len(player_obj.roadsPlaced) == 1):
+                if not self.board.setRoad(player_obj, location_1, location_2):
+                    raise Exception("Invalid road.")
+                return
+            elif len(player_obj.settlementSpots) == 0:
+                raise Exception("Build a settlement first.")
+            elif self.cur_phase != 2:
+                raise Exception("You already built your starting road for this turn.")
 
             if not player_obj.hasResource("wood", 1) or not player_obj.hasResource("brick", 1):
                 raise Resource(f"Player: {player_obj.name} does not have the necessary resources.")
 
-            self.board.setRoad(player_obj, location_1, location_2)
+            if not self.board.setRoad(player_obj, location_1, location_2):
+                raise Exception("Invalid road.")
 
             player_obj.modCurrResource("wood", -1)
             player_obj.modCurrResource("brick", -1)
         elif building == "Settlement":
+            if (self.cur_phase == 0 and len(player_obj.settlementSpots) == 0) or (self.cur_phase == 1 and len(player_obj.settlementSpots) == 1):
+                if not self.board.setSettlement(self.players, player_obj, location_1, 1):
+                    raise Exception("Invalid settlement.")
+                return
+            elif self.cur_phase != 2:
+                raise Exception("You already built your starting settlement for this turn.")
+
             if not player_obj.hasResource("wood", 1) or not player_obj.hasResource("brick", 1) or not player_obj.hasResource("wheat", 1) or not player_obj.hasResource("sheep", 1):
                 raise Resource(f"Player: {player_obj.name} does not have the necessary resources.")
 
-            self.board.setSettlement(self.players, player_obj, location_1, 1)
+            if not self.board.setSettlement(self.players, player_obj, location_1, 1):
+                raise Exception("Invalid settlement.")
 
             player_obj.modCurrResource("wood", -1)
             player_obj.modCurrResource("brick", -1)
@@ -110,7 +127,8 @@ class Controller:
             if not player_obj.hasResource("wheat", 2) or not player_obj.hasResource("rock", 3):
                 raise Resource(f"Player: {player_obj.name} does not have the necessary resources.")
 
-            self.board.setSettlement(self.players, player_obj, location_1, 2)
+            if not self.board.setSettlement(self.players, player_obj, location_1, 2):
+                raise Exception("Invalid city.")
 
             player_obj.modCurrResource("wheat", -2)
             player_obj.modCurrResource("rock", -3)
@@ -118,11 +136,13 @@ class Controller:
             if not player_obj.hasResource("wheat", 1) or not player_obj.hasResource("rock", 1) or not player_obj.hasResource("sheep", 1):
                 raise Resource(f"Player: {player_obj.name} does not have the necessary resources.")
 
-            self.dev_deck.buyDevCard(player_obj)
+            bought_card = self.dev_deck.buyDevCard(player_obj)
 
             player_obj.modCurrResource("wheat", -1)
             player_obj.modCurrResource("rock", -1)
             player_obj.modCurrResource("sheep", -1)
+
+            return bought_card
 
         #bot.send_image_or_message("test.png", None)
 
@@ -155,10 +175,14 @@ class Controller:
         """Handled the activation of a development card."""
         ...
 
-    def has_won(self) -> None:
+    def has_won(self) -> Union[None, player.Player]:
+        """Checks if any players have won the game."""
+
         for player in self.players:
             if player.victoryPoints == 10:
-                return True
+                return player
+
+        return None
 
     def roll_dice(self) -> int:
         """Rolls 2 dice randomly.
@@ -167,7 +191,6 @@ class Controller:
             The 2 dice rolls.
         """
 
-        #return (random.randint(1, 6), random.randint(1, 6))
         return random.randint(1, 6) + random.randint(1, 6)
 
     def get_player(self, name: str) -> player.Player:
@@ -201,20 +224,41 @@ def setup() -> Controller:
 
 async def run(ctrl: Controller, flag: asyncio.Event, drawing_mode: str) -> None:
     """Controls the main game loop."""
-    # loop through each player until someone wins
-    # player is forced to roll at the start of their turn, resource cards are automatically distributed
-    # if a 7 is rolled handle robber stuff
-    # player is then allowed to trade, play up to 1 development card, and build as much as they want in any order until they end their turn
     # upon every relevent action, checking if the player has won needs to happen: building city/settlement/development card or recieving largest army/longest road
 
-    #TMP TEST SENDING IMAGE
-    #await bot.send_image("test.png")
-
     ctrl.board = board.Board(drawing_mode)
+    winner = None
 
     ctrl.flag = flag
 
-    while not ctrl.has_won():
+    # Handle initial settlement and road placements
+    for i, player in enumerate(ctrl.players):
+        ctrl.current_player = i
+
+        await bot.send_image_or_message(None, f"{player.name}'s turn to build a settlement and road.\nUse /build")
+        await bot.send_image_or_message("images/test.png", None)
+
+        await ctrl.flag.wait()
+
+        ctrl.flag.clear()
+
+    ctrl.cur_phase = 1
+    ctrl.players.reverse()
+
+    for i, player in enumerate(ctrl.players):
+        ctrl.current_player = i
+
+        await bot.send_image_or_message(None, f"{player.name}'s turn to build a settlement and road.\nUse /build")
+        await bot.send_image_or_message("images/test.png", None)
+
+        await ctrl.flag.wait()
+
+        ctrl.flag.clear()
+
+    ctrl.players.reverse()
+    ctrl.cur_phase = 2
+
+    while winner is None:
         ctrl.has_robber_moved = False
         ctrl.flag.clear()
         ctrl.active_trades = []     # emptied at start of each turn
@@ -229,7 +273,26 @@ async def run(ctrl: Controller, flag: asyncio.Event, drawing_mode: str) -> None:
         await bot.send_image_or_message("images/test.png", None)
         
         if ctrl.cur_dice == 7:
-            # Prompt user user for new robber location, wait for response
+            # Prompt player's with more than 7 cards to discard half
+            players_over_7 = []
+
+            for player in ctrl.players:
+                sum = 0
+
+                for val in player.currentResources.values():
+                    sum += val
+
+                if sum > 7:
+                    players_over_7.append(player)
+                    player.cardsToDiscard = sum // 2
+
+            await bot.send_image_or_message(None, f"Players with over 7 cards: {str(players_over_7)}")
+            await bot.send_image_or_message(None, "Use /discard <cards> to get rid of half of your cards.\nExample: /discard sheep sheep rock wood")
+
+            await ctrl.flag.wait()
+            ctrl.flag.clear()
+
+            # Prompt player for new robber location, wait for response
             await bot.send_image_or_message(None, "Use /rob <location> <player> to move the robber and steal from someone.")
 
             await ctrl.flag.wait()
@@ -241,16 +304,24 @@ async def run(ctrl: Controller, flag: asyncio.Event, drawing_mode: str) -> None:
 
         await ctrl.flag.wait()  # flag is set when play calls the /endturn command
 
+        # Update current player
         if ctrl.current_player == len(ctrl.players) - 1:
             ctrl.current_player = 0
         else:
             ctrl.current_player += 1
 
+        winner = ctrl.has_won()
 
+    game_over(winner)
 
-def game_over():
+async def game_over(winner: player.Player) -> None:
     """Handles any cleanup that needs to occur when a player wins the game."""
-    ...
+    
+    message = hikari.Embed(title=f"Congratulations!",
+                description=f"{winner.name} has won the game",
+                color=hikari.Color(0x00FF00)
+        )
+    await bot.send_image_or_message(None, message)
 
 class Resource(Exception):
     """Custom exception representing when a player does not have a resource."""

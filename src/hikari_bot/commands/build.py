@@ -26,7 +26,6 @@ async def build(ctx: lightbulb.Context) -> None:
 
     location_1 = (list(string.ascii_uppercase).index(ctx.options.location[0].upper()), int(ctx.options.location[1:]))
     location_2 = None
-    print(location_1)
 
     try:
         ctrl.get_player(name)
@@ -48,11 +47,14 @@ async def build(ctx: lightbulb.Context) -> None:
         return
     elif ctx.options.building == "Road":
         location_2 = (list(string.ascii_uppercase).index(ctx.options.location_2_road[0]), int(ctx.options.location_2_road[1:]))
-        print(location_2)
 
     try:
-        ctrl.build(str(ctx.author).split("#")[0], ctx.options.building, location_1, location_2)
+        bought_card = ctrl.build(str(ctx.author).split("#")[0], ctx.options.building, location_1, location_2)
+
         await bot.bot.rest.create_message(ctx.channel_id, content=f"{name} built a {ctx.options.building}.")
+        if bought_card is not None:
+            await ctx.respond(content=f"You recieved a {bought_card} development card.")
+            return
 
         await ctx.respond(content="Success")
     except controller.Resource:
@@ -62,10 +64,10 @@ async def build(ctx: lightbulb.Context) -> None:
                 color=hikari.Color(0xFF0000)))
     except Exception as e:
         print(e)
-        #await ctx.respond(content=hikari.Embed(
-        #        title="Error!",
-        #        description=f"Failed to build {ctx.options.building}.",
-        #        color=hikari.Color(0xFF0000)))
+        await ctx.respond(content=hikari.Embed(
+                title="Error!",
+                description=f"Failed to build {ctx.options.building} with exception: {e}.",
+                color=hikari.Color(0xFF0000)))
     
 
 # Extensions are hot-reloadable (can be loaded/unloaded while the bot is live)

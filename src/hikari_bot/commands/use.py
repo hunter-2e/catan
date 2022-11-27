@@ -1,8 +1,7 @@
 import lightbulb
-import hikari
-import miru
 
 import src.hikari_bot.bot as bot
+import src.hikari_bot.modals as modals
 
 # Plugins are structures that allow the grouping of multiple commands and listeners together.
 plugin = lightbulb.Plugin("Use", description="Use a development card.")
@@ -21,26 +20,33 @@ async def use(ctx: lightbulb.Context) -> None:
 
     if ctx.options.development_card == "Knight":
         if ctrl.get_player(name).unusedDevelopmentCards["KnightCard"] == 0:
-            await ctx.respond(content="Error: You do not have any knight cards to play.")
+            await ctx.respond(content="Error: You do not have any Knight cards to play.")
             return
 
+        modal = modals.KnightModal(title="Use Knight Card")
+        await modal.send(ctx.interaction)
         
     elif ctx.options.development_card == "Year of Plenty":
-            print("YEP used")
+        if ctrl.get_player(name).unusedDevelopmentCards["YearOfPlenty"] == 0:
+            await ctx.respond(content="Error: You do not have any Year Of Plenty cards to play.")
+            return
+
+        modal = modals.YOPModal(title="Use Year Of Plenty Card")
+        await modal.send(ctx.interaction)
     elif ctx.options.development_card == "Monopoly":
-            print("monop card used")
+        if ctrl.get_player(name).unusedDevelopmentCards["Monopoly"] == 0:
+            await ctx.respond(content="Error: You do not have any Monopoly cards to play.")
+            return
+
+        modal = modals.MonopolyModal(title="Use Monopoly Card")
+        await modal.send(ctx.interaction)
     else:
-        print("Road Builder used")
+        if ctrl.get_player(name).unusedDevelopmentCards["RoadBuilding"] == 0:
+            await ctx.respond(content="Error: You do not have any Road Building cards to play.")
+            return
 
-    modal = KnightModal(title="Example Title")
-
-    await modal.send(ctx.interaction)
-
-    #await bot.bot.rest.create_message(ctx.channel_id, content=hikari.Embed(
-    #            title=f"{name} has used the {ctx.options.development_card} Card!",
-    #            color=hikari.Color(0xFFFF00)))
-    
-    #await ctx.respond(content="Use successful")
+        modal = modals.RoadBuildingModal(title="Use Road Building Card")
+        await modal.send(ctx.interaction)
 
 # Extensions are hot-reloadable (can be loaded/unloaded while the bot is live)
 
@@ -49,12 +55,3 @@ def load(bot):
 
 def unload(bot):
     bot.remove_plugin(plugin)
-
-class KnightModal(miru.Modal):
-    location = miru.TextInput(label="Location", placeholder="Ex: D3", required=True, custom_id="location")
-    player = miru.TextInput(label="Player to rob", placeholder="Ex: Emanuels", required=True, custom_id="player")
-
-    # The callback function is called after the user hits 'Submit'
-    async def callback(self, ctx: miru.ModalContext) -> None:
-        # You can also access the values using ctx.values, Modal.values, or use ctx.get_value_by_id()
-        await ctx.respond(f"{str(ctx.author).split('#')[0]} moved the robber to {ctx.get_value_by_id('location')} and stole from {ctx.get_value_by_id('player')}")
