@@ -284,7 +284,7 @@ async def run(ctrl: Controller, flag: asyncio.Event, drawing_mode: str) -> None:
                     sum += val
 
                 if sum > 7:
-                    players_over_7.append(player)
+                    players_over_7.append(player.name)
                     player.cardsToDiscard = sum // 2
 
             await bot.send_image_or_message(None, f"Players with over 7 cards: {str(players_over_7)}")

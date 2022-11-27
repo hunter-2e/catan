@@ -15,6 +15,9 @@ class KnightModal(miru.Modal):
         super().__init__(title=title, custom_id=custom_id, timeout=timeout)
 
         self.ctrl = ctrl
+        print("banana")
+        print(ctrl)
+        print(self.ctrl)
 
     location = miru.TextInput(label="Location", placeholder="Ex: D3", required=True, custom_id="location")
     player = miru.TextInput(label="Player to rob", placeholder="Ex: Emanuels", required=True, custom_id="player")
@@ -23,12 +26,12 @@ class KnightModal(miru.Modal):
     async def callback(self, ctx: miru.ModalContext) -> None:
         # You can also access the values using ctx.values, Modal.values, or use ctx.get_value_by_id()
 
-        name_activator = str(ctx.author).split("#")[0]
-        name_robbed = ctx.get_value_by_id('player')
+        name_activator = str(ctx.author).split("#")[0].strip()
+        name_robbed = str(ctx.get_value_by_id('player').strip())
         location = (list(string.ascii_uppercase).index(ctx.get_value_by_id('location')[0].upper()), float(ctx.get_value_by_id('location')[1:]))
-        print(location)
+
         try:
-            development.playKnightCard(self.ctrl, self.ctrl.get_player(name_activator), location, self.ctrl.get_player(name_robbed))
+            development.playKnightCard(self.ctrl, self.ctrl.get_player(name_activator), location, name_robbed)
             await ctx.respond(f"{name_activator} moved the robber to {ctx.get_value_by_id('location')} and stole from {name_robbed} with a Knight card.")
         except Exception as e:
             print(e)
