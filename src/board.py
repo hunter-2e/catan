@@ -140,7 +140,7 @@ class Board:
         elif spot[0][0] == 11 and spot[1][0] == spot[0][0] - 1 and (spot[0][1] == spot[1][1] or spot[0][1] + 1 == spot[1][1]):
             return True
         else:
-            if ((spot[1][0] == spot[0][0] - 1) and ((spot[0] > 6 and spot[0][1] + 1 == spot[1][1] or spot[0][1] == spot[1][1]) or (spot[0] < 6 and spot[0][1] - 1 == spot[1][1] or spot[0][1] == spot[1][1]))) or ((spot[1][0] == spot[0][0] + 1) and (spot[0][1] == spot[1][1])):
+            if ((spot[1][0] == spot[0][0] - 1) and ((spot[0][0] > 6 and spot[0][1] + 1 == spot[1][1] or spot[0][1] == spot[1][1]) or (spot[0] < 6 and spot[0][1] - 1 == spot[1][1] or spot[0][1] == spot[1][1]))) or ((spot[1][0] == spot[0][0] + 1) and (spot[0][1] == spot[1][1])):
                 return True
         return False
 
@@ -154,7 +154,7 @@ class Board:
         relevantSpot = []
         
         #Add all relevant spots to build off of to array unless it is the first turn, in which case only add most recent settlement placed
-        if self.setSettleCalls <= len(players):
+        if self.setSettleCalls <= len(players) * 2:
             relevantSpot.append(player.settlementSpots[-1])
 
         else:
@@ -187,7 +187,10 @@ class Board:
             if i in [spot[0], spot[1]]:
                 spotInRelevant = i
         
-        if spotInRelevant is None:
+        try:
+            if spotInRelevant is None:
+                return False
+        except:
             return False
 
         if spotInRelevant == spot[0]:
@@ -198,7 +201,7 @@ class Board:
             return self.checkValidity((spot[0], spotInRelevant))
     
 
-    def setRoad(self, player, spot1, spot2):
+    def setRoad(self, player, spot1, spot2, players):
         spot1 = [spot1[1], spot1[0]]
         spot2 = [spot2[1], spot2[0]]
 
@@ -225,7 +228,7 @@ class Board:
             return False
 
         #If both are valid points check if road can be placed based on game's rules
-        canBeBuilt = self.validRoad((spot1,spot2), player)
+        canBeBuilt = self.validRoad((spot1,spot2), player, players)
         if canBeBuilt == False:
             return False
 
@@ -301,7 +304,7 @@ class Board:
         else:
             spot = (spot[0], int(spot[1]/2))
 
-        if self.isSpotValid(spot) == False or self.getSettlement((spot[0], spot[1])) != None:
+        if self.isSpotValid(spot) == False or (self.getSettlement((spot[0], spot[1])) != None and settType == 1):
             return False
         
         if self.validSettlement(spot, player, controller) == False:
@@ -360,38 +363,24 @@ class Board:
 
         for material in materialAndPoints:
             for player in controller:
-                if player.name + "'s Settlement" in materialAndPoints[material]:
-                    toBeGiven = materialAndPoints[material].count(player.name + "'s Settlement")
+                toBeGiven = materialAndPoints[material].count(player.name + "'s Settlement") + materialAndPoints[material].count(player.name + "'s City") * 2
 
-                    if('rock' in material):
-                        player.currentResources['rock'] += toBeGiven
-                    elif('brick' in material):
-                        player.currentResources['brick'] += toBeGiven
-                    elif('wheat' in material):
-                        player.currentResources['wheat'] += toBeGiven
-                    elif('tree' in material):
-                        player.currentResources['wood'] += toBeGiven
-                    else: player.currentResources['sheep'] += toBeGiven
-
-                if player.name + "'s City" in materialAndPoints[material]:
-                    toBeGiven = materialAndPoints[material].count(player.name + "'s City") * 2
-
-                    if('rock' in material):
-                        player.currentResources['rock'] += toBeGiven
-                    elif('brick' in material):
-                        player.currentResources['brick'] += toBeGiven
-                    elif('wheat' in material):
-                        player.currentResources['wheat'] += toBeGiven
-                    elif('tree' in material):
-                        player.currentResources['wood'] += toBeGiven
-                    else: player.currentResources['sheep'] += toBeGiven
+                if('rock' in material):
+                    player.currentResources['rock'] += toBeGiven
+                elif('brick' in material):
+                    player.currentResources['brick'] += toBeGiven
+                elif('wheat' in material):
+                    player.currentResources['wheat'] += toBeGiven
+                elif('tree' in material):
+                    player.currentResources['wood'] += toBeGiven
+                else: player.currentResources['sheep'] += toBeGiven
                
     #postType one of ["Wheat", "Rock", "Brick", "3for1", "Wood"]
-    def postAccess(self, spot, postType):
+    def postAccess(self, player, postType):
         for key in self.portsSettleSpots:
             if postType == key:
                 for value in self.portsSettleSpots[key]:
-                    if value == spot:
+                    if value in player.settlementSpots:
                         return True
                 return False
 

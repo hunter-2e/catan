@@ -122,9 +122,7 @@ def drawBoard(board, mode):
         image = np.array(Image.open("images/test.png"))
     cv2.imwrite('images/test.png', image)
 
-    im_cv = cv2.imread('images/test.png')
-    im_cv = cv2.cvtColor(im_cv, cv2.COLOR_BGR2RGB)
-    cv2.imwrite('images/test.png', im_cv)
+    convertToRGB()
 
 def drawRobber(board, image):
     topLeft = [225,90]
@@ -190,9 +188,7 @@ def drawRobber(board, image):
 
     cv2.imwrite('images/test.png', image)
 
-    im_cv = cv2.imread('images/test.png')
-    im_cv = cv2.cvtColor(im_cv, cv2.COLOR_BGR2RGB)
-    cv2.imwrite('images/test.png', im_cv)
+    convertToRGB()
 
 def drawGrid(image):
     capitalLetters = list(string.ascii_uppercase)
@@ -275,9 +271,7 @@ def drawSettle(image, player, spot):
     cv2.rectangle(image,(boardLocation[0] - 15,boardLocation[1]-15),(boardLocation[0] + 15,boardLocation[1] + 15), settleColor, -1)
     cv2.imwrite('images/test.png', image)
 
-    im_cv = cv2.imread('images/test.png')
-    im_cv = cv2.cvtColor(im_cv, cv2.COLOR_BGR2RGB)
-    cv2.imwrite('images/test.png', im_cv)
+    convertToRGB()
 
 def drawCity(image, player, spot):
 
@@ -287,9 +281,7 @@ def drawCity(image, player, spot):
     cv2.rectangle(image,(boardLocation[0] - 10,boardLocation[1]-10),(boardLocation[0] + 10,boardLocation[1] + 10), settleColor, -1)
     cv2.imwrite('images/test.png', image)
 
-    im_cv = cv2.imread('images/test.png')
-    im_cv = cv2.cvtColor(im_cv, cv2.COLOR_BGR2RGB)
-    cv2.imwrite('images/test.png', im_cv)
+    convertToRGB()
 
 def drawRoad(image, player, spot1, spot2):
     
@@ -301,55 +293,60 @@ def drawRoad(image, player, spot1, spot2):
     cv2.line(image, boardLocation1, boardLocation2, roadColor, 15) 
     cv2.imwrite('images/test.png', image)
 
-    im_cv = cv2.imread('images/test.png')
-    im_cv = cv2.cvtColor(im_cv, cv2.COLOR_BGR2RGB)
-    cv2.imwrite('images/test.png', im_cv)
+    convertToRGB()
 
 def drawPorts(image, board):
+    lineColor = (0,0,0)
+    lineThickness = 2
+
     for port in board.portsSettleSpots:
         if port == 'Sheep':
+            x, y = 550, 40
+            portToAdd = 'images/sheepPort.png'
             for spot in board.portsSettleSpots['Sheep']:
-                cv2.line(image, getSpot(spot), (550,40), (0,0,0), 2)
+                cv2.line(image, getSpot(spot), (x,y), lineColor, lineThickness)
         elif port == 'Rock':
+            x, y = 75, 250
+            portToAdd = 'images/rockPort.png'
             for spot in board.portsSettleSpots['Rock']:
-                cv2.line(image, getSpot(spot), (75,250), (0,0,0), 2)
+                cv2.line(image, getSpot(spot), (x,y), lineColor, lineThickness)
         elif port == 'Brick':
+            x, y = 775, 645
+            portToAdd = 'images/brickPort.png'
             for spot in board.portsSettleSpots['Brick']:
-                cv2.line(image, getSpot(spot), (775,645), (0,0,0), 2)
+                cv2.line(image, getSpot(spot), (x,y), lineColor, lineThickness)
         elif port == 'Wheat':
+            x, y = 75, 560
+            portToAdd = 'images/wheatPort.png'
             for spot in board.portsSettleSpots['Wheat']:
-                cv2.line(image, getSpot(spot), (75,560), (0,0,0), 2)
+                cv2.line(image, getSpot(spot), (x,y), lineColor, lineThickness)
         elif port == 'Wood':
+            x, y = 550, 775
+            portToAdd = 'images/treePort.png'
             for spot in board.portsSettleSpots['Wood']:
-                cv2.line(image, getSpot(spot), (550,775), (0,0,0), 2)
+                cv2.line(image, getSpot(spot), (x,y), lineColor, lineThickness)
         else:
+            portToAdd = 'images/3for1.png'
             for spot in board.portsSettleSpots['3for1']:
                 if spot in [(0,0), (1,0)]:
-                    cv2.line(image, getSpot(spot), (200,30), (0,0,0), 2)
+                    x, y = 200, 30
+                    cv2.line(image, getSpot(spot), (x,y), lineColor, lineThickness)
                 elif spot in [(2,3), (3,4)]:
-                    cv2.line(image, getSpot(spot), (775,150), (0,0,0), 2)
+                    x, y = 775, 150
+                    cv2.line(image, getSpot(spot), (x,y), lineColor, lineThickness)
                 elif spot in [(5,5), (6,5)]:
-                    cv2.line(image, getSpot(spot), (930,400), (0,0,0), 2)
-                else: cv2.line(image, getSpot(spot), (200,775), (0,0,0), 2)
+                    x, y = 930, 400
+                    cv2.line(image, getSpot(spot), (x,y), lineColor, lineThickness)
+                else: 
+                    x, y = 200, 775
+                    cv2.line(image, getSpot(spot), (x,y), lineColor, lineThickness)
 
-    minecraftMode(550, 40, 'images/sheepPort.png', image)
-    image = np.array(Image.open("images/test.png"))
-    minecraftMode(200, 30, 'images/3for1.png', image)
-    image = np.array(Image.open("images/test.png"))
-    minecraftMode(775, 150, 'images/3for1.png', image)
-    image = np.array(Image.open("images/test.png"))
-    minecraftMode(75, 250, 'images/rockPort.png', image)
-    image = np.array(Image.open("images/test.png"))
-    minecraftMode(75, 560, 'images/wheatPort.png', image)
-    image = np.array(Image.open("images/test.png"))
-    minecraftMode(200, 775, 'images/3for1.png', image)
-    image = np.array(Image.open("images/test.png"))
-    minecraftMode(550, 775, 'images/treePort.png', image)
-    image = np.array(Image.open("images/test.png"))
-    minecraftMode(775, 645, 'images/brickPort.png', image)
-    image = np.array(Image.open("images/test.png"))
-    minecraftMode(930, 400, 'images/3for1.png', image)
-    image = np.array(Image.open("images/test.png"))
+                minecraftMode(x, y, portToAdd, image)
+                image = np.array(Image.open("images/test.png")) 
+            continue
+
+        minecraftMode(x, y, portToAdd, image)
+        image = np.array(Image.open("images/test.png"))
 
     
 #Following two functions deal with placing png over another image
@@ -393,4 +390,7 @@ def minecraftMode(x, y, material_img, img):
     # Save result
     Image.fromarray(img_result).save("images/test.png")
 
-
+def convertToRGB():
+    im_cv = cv2.imread('images/test.png')
+    im_cv = cv2.cvtColor(im_cv, cv2.COLOR_BGR2RGB)
+    cv2.imwrite('images/test.png', im_cv)
