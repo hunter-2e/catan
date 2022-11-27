@@ -13,7 +13,7 @@ import src.hikari_bot.bot as bot
 class Controller:
     """Handles all tasks related to the core functionality of the game."""
 
-    def __init__(self, dev_deck) -> None:
+    def __init__(self) -> None:
         # store deck of dev card here?
 
         self.resource_bank = {
@@ -24,11 +24,18 @@ class Controller:
             "sheep": 19
         }
 
+        self.dev_deck = {
+            "KnightCard":       14,
+            "RoadBuilding":     2,
+            "YearOfPlenty":     2,
+            "Monopoly":         2,
+            "VictoryPointCard": 5
+        }
+
         self.board = None
         self.active_trades = []
         self.players = []
         self.current_player = 0     # Index in self.players of the player whose turn it is
-        self.dev_deck = dev_deck
         self.flag = None
         self.cur_dice = None
         self.has_robber_moved = False
@@ -136,7 +143,7 @@ class Controller:
             if not player_obj.hasResource("wheat", 1) or not player_obj.hasResource("rock", 1) or not player_obj.hasResource("sheep", 1):
                 raise Resource(f"Player: {player_obj.name} does not have the necessary resources.")
 
-            bought_card = self.dev_deck.buyDevCard(player_obj)
+            bought_card = development.buyDevCard(player_obj, self.dev_deck)
 
             player_obj.modCurrResource("wheat", -1)
             player_obj.modCurrResource("rock", -1)
@@ -144,7 +151,7 @@ class Controller:
 
             return bought_card
 
-        #bot.send_image_or_message("test.png", None)
+        bot.send_image_or_message("images/test.png", None)
 
     def move_robber(self, new_location: tuple, player_to_rob: str) -> str:
         """Moves the robber."""
@@ -170,10 +177,6 @@ class Controller:
                     self.players[self.current_player].currentResources[stolenCard] += 1
 
         return stolenCard
-
-    def activate_dev_card(self, card) -> None:
-        """Handled the activation of a development card."""
-        ...
 
     def has_won(self) -> Union[None, player.Player]:
         """Checks if any players have won the game."""
@@ -214,11 +217,9 @@ def setup() -> Controller:
     # players are given a color, and their starting pieces
     # via some method, board is setup
     # players are randomly given a starting order (or with dice rolls)
-    # shuffle deck of development cards?
     # put the first 2 settling turns in here or main loop?
 
-    dev_deck = development.devCard()
-    ctrl = Controller(dev_deck)
+    ctrl = Controller()
 
     return ctrl
 

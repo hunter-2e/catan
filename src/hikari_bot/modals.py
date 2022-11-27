@@ -1,9 +1,20 @@
-import miru
+import typing as t
+import datetime
+import string
 
-#import src.development as development
+import miru
+import hikari
+
+import src.development as development
+import src.controller as controller
 
 class KnightModal(miru.Modal):
     """Discord popup for playing a knight card."""
+
+    def __init__(self, ctrl: controller.Controller, title: str, *, custom_id: t.Optional[str] = None, timeout: t.Optional[t.Union[float, int, datetime.timedelta]] = 300) -> None:
+        super().__init__(title=title, custom_id=custom_id, timeout=timeout)
+
+        self.ctrl = ctrl
 
     location = miru.TextInput(label="Location", placeholder="Ex: D3", required=True, custom_id="location")
     player = miru.TextInput(label="Player to rob", placeholder="Ex: Emanuels", required=True, custom_id="player")
@@ -12,8 +23,18 @@ class KnightModal(miru.Modal):
     async def callback(self, ctx: miru.ModalContext) -> None:
         # You can also access the values using ctx.values, Modal.values, or use ctx.get_value_by_id()
 
-        #development.devCard.playKnightCard()
-        await ctx.respond(f"{str(ctx.author).split('#')[0]} moved the robber to {ctx.get_value_by_id('location')} and stole from {ctx.get_value_by_id('player')} with a Knight card.")
+        name_activator = str(ctx.author).split("#")[0]
+        name_robbed = ctx.get_value_by_id('player')
+        location = (list(string.ascii_uppercase).index(ctx.get_value_by_id('location')[0].upper()), int(ctx.get_value_by_id('location')[1:]))
+
+        try:
+            development.playKnightCard(self.ctrl, self.ctrl.get_player(name_activator), location, self.ctrl.get_player(name_robbed))
+            await ctx.respond(f"{name_activator} moved the robber to {ctx.get_value_by_id('location')} and stole from {name_robbed} with a Knight card.")
+        except Exception as e:
+            await ctx.respond(content=hikari.Embed(
+                title="Error!",
+                description=str(e),
+                color=hikari.Color(0xFF0000)))
 
 class YOPModal(miru.Modal):
     """Discord popup for playing a year of plenty card."""
