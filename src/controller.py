@@ -279,7 +279,7 @@ async def run(ctrl: Controller, flag: asyncio.Event, drawing_mode: str) -> None:
             for player in ctrl.players:
                 sum = 0
 
-                for card_type, val in player.currentResources.keys():
+                for val in player.currentResources.values():
                     sum += val
 
                 if sum > 7:
