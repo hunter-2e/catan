@@ -96,7 +96,7 @@ class Controller:
 
         if building == "Road":
             if (len(player_obj.settlementSpots) > 0) and (self.cur_phase == 0 and len(player_obj.roadsPlaced) == 0) or (self.cur_phase == 1 and len(player_obj.roadsPlaced) == 1):
-                if not self.board.setRoad(player_obj, location_1, location_2):
+                if not self.board.setRoad(player_obj, location_1, location_2, self.players):
                     raise Exception("Invalid road.")
                 return
             elif len(player_obj.settlementSpots) == 0:
@@ -107,7 +107,7 @@ class Controller:
             if not player_obj.hasResource("wood", 1) or not player_obj.hasResource("brick", 1):
                 raise Resource(f"Player: {player_obj.name} does not have the necessary resources.")
 
-            if not self.board.setRoad(player_obj, location_1, location_2):
+            if not self.board.setRoad(player_obj, location_1, location_2, self.players):
                 raise Exception("Invalid road.")
 
             player_obj.modCurrResource("wood", -1)
