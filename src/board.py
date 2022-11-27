@@ -242,7 +242,7 @@ class Board:
             return True
         else: return False
 
-    def validSettlement(self, spot, player, players):
+    def validSettlement(self, spot, player):
         #spots that are in the players built roads
         relevantSpots = []
 
@@ -283,10 +283,8 @@ class Board:
         else:
             spot = (spot[0], int(spot[1]/2))
 
-        if self.isSpotValid(spot) == False:
+        if self.isSpotValid(spot) == False or self.validSettlement(spot, player) == False:
             return False
-
-        self.validSettlement(spot, player, controller)
 
         if(settType == 1):
             #Check if player already has settlement there and return False if they do
