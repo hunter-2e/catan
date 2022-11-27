@@ -140,7 +140,7 @@ class Board:
         elif spot[0][0] == 11 and spot[1][0] == spot[0][0] - 1 and (spot[0][1] == spot[1][1] or spot[0][1] + 1 == spot[1][1]):
             return True
         else:
-            if ((spot[1][0] == spot[0][0] - 1) and ((spot[0][0] > 6 and spot[0][1] + 1 == spot[1][1] or spot[0][1] == spot[1][1]) or (spot[0] < 6 and spot[0][1] - 1 == spot[1][1] or spot[0][1] == spot[1][1]))) or ((spot[1][0] == spot[0][0] + 1) and (spot[0][1] == spot[1][1])):
+            if ((spot[1][0] == spot[0][0] - 1) and ((spot[0][0] > 6 and spot[0][1] + 1 == spot[1][1] or spot[0][1] == spot[1][1]) or (spot[0][0] < 6 and spot[0][1] - 1 == spot[1][1] or spot[0][1] == spot[1][1]))) or ((spot[1][0] == spot[0][0] + 1) and (spot[0][1] == spot[1][1])):
                 return True
         return False
 
@@ -154,7 +154,7 @@ class Board:
         relevantSpot = []
         
         #Add all relevant spots to build off of to array unless it is the first turn, in which case only add most recent settlement placed
-        if self.setSettleCalls <= len(players) * 2:
+        if self.setSettleCalls < len(players) * 2:
             relevantSpot.append(player.settlementSpots[-1])
 
         else:
@@ -269,7 +269,7 @@ class Board:
             relevantSpots.append(roadSpot[1])
 
         #Check if spot to be placed is on that players road unless they haven't taken initial turns
-        if self.setSettleCalls >= len(players) * 2:
+        if self.setSettleCalls > len(players) * 2:
             if spot not in relevantSpots:
                 return False
 
@@ -352,7 +352,10 @@ class Board:
         return True
 
     def getSettlement(self, spot):
-        return self.settleSpots[spot[0]][spot[1]]
+        try:
+            return self.settleSpots[spot[0]][spot[1]]
+        except:
+            return None
 
     def getMaterial(self, controller, num):
         materialAndPoints = {}
