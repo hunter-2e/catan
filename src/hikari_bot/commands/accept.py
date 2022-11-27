@@ -10,7 +10,7 @@ plugin = lightbulb.Plugin("Accept", description="Accept a trade.")
 # Creates a command in the plugin
 @plugin.command
 @lightbulb.option("trade_num", description="# of the trade to accept.", type=int, required=True)
-@lightbulb.command("accept", description="Accept a trade.", ephemeral=True)
+@lightbulb.command("accept", description="Accept a trade.")
 @lightbulb.implements(lightbulb.SlashCommand)
 async def accept(ctx: lightbulb.Context) -> None:
     """Accept a trade.
@@ -62,7 +62,10 @@ async def accept(ctx: lightbulb.Context) -> None:
                 description=f"A player does not have the necessary resources to complete the trade.",
                 color=hikari.Color(0xFF0000)))
     except:
-        raise Exception("Failed to do the trade.")
+        await ctx.respond(content=hikari.Embed(
+                title="Error!",
+                description=f"Failed to do the trade.",
+                color=hikari.Color(0xFF0000)))
     
 
 # Extensions are hot-reloadable (can be loaded/unloaded while the bot is live)
