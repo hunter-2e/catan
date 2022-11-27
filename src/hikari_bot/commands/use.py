@@ -23,7 +23,7 @@ async def use(ctx: lightbulb.Context) -> None:
             await ctx.respond(content="Error: You do not have any Knight cards to play.")
             return
 
-        modal = modals.KnightModal(title="Use Knight Card")
+        modal = modals.KnightModal(ctrl, title="Use Knight Card")
         await modal.send(ctx.interaction)
         
     elif ctx.options.development_card == "Year of Plenty":

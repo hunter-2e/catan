@@ -62,12 +62,12 @@ async def build(ctx: lightbulb.Context) -> None:
                 title="Error!",
                 description=f"You do not have the necessary resources to build a {ctx.options.building}.",
                 color=hikari.Color(0xFF0000)))
-    except Exception as e:
-        print(e)
-        await ctx.respond(content=hikari.Embed(
-                title="Error!",
-                description=f"Failed to build {ctx.options.building} with exception: {e}.",
-                color=hikari.Color(0xFF0000)))
+    #except Exception as e:
+    #    print(e)
+    #    await ctx.respond(content=hikari.Embed(
+    #            title="Error!",
+    #            description=f"Failed to build {ctx.options.building} with exception: {e}.",
+    #            color=hikari.Color(0xFF0000)))
     
 
 # Extensions are hot-reloadable (can be loaded/unloaded while the bot is live)

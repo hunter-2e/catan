@@ -25,7 +25,7 @@ def playKnightCard(ctrl, player, newLocation, playerToRob):
     except Exception as e:
         player.unusedDevelopmentCards["KnightCard"] += 1
         player.usedDevelopmentCards["KnightCard"] -= 1
-
+        print(e)
         raise Exception from e
 
 

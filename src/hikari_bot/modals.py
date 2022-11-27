@@ -25,12 +25,13 @@ class KnightModal(miru.Modal):
 
         name_activator = str(ctx.author).split("#")[0]
         name_robbed = ctx.get_value_by_id('player')
-        location = (list(string.ascii_uppercase).index(ctx.get_value_by_id('location')[0].upper()), int(ctx.get_value_by_id('location')[1:]))
-
+        location = (list(string.ascii_uppercase).index(ctx.get_value_by_id('location')[0].upper()), float(ctx.get_value_by_id('location')[1:]))
+        print(location)
         try:
             development.playKnightCard(self.ctrl, self.ctrl.get_player(name_activator), location, self.ctrl.get_player(name_robbed))
             await ctx.respond(f"{name_activator} moved the robber to {ctx.get_value_by_id('location')} and stole from {name_robbed} with a Knight card.")
         except Exception as e:
+            print(e)
             await ctx.respond(content=hikari.Embed(
                 title="Error!",
                 description=str(e),
