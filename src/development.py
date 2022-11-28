@@ -15,7 +15,7 @@ def buyDevCard(player, devDeck) -> str:
 
 def playKnightCard(ctrl, player, newLocation, playerToRob):
     if player.unusedDevelopmentCards["KnightCard"] < 1:
-        return False
+        raise Exception("You do not have a knight card to play.")
 
     player.unusedDevelopmentCards["KnightCard"] -= 1
     player.usedDevelopmentCards["KnightCard"] += 1
@@ -31,7 +31,7 @@ def playKnightCard(ctrl, player, newLocation, playerToRob):
 
 def playRoadBuilding(board, player, firstRoad, secondRoad):
     if player.unusedDevelopmentCards["RoadBuilding"] < 1:
-        return False
+        raise Exception("You do not have a road building card to play.")
 
     player.unusedDevelopmentCards["RoadBuilding"] -= 1
 
@@ -42,12 +42,12 @@ def playRoadBuilding(board, player, firstRoad, secondRoad):
 
 def playYearOfPlenty(controller, player, materialOne, materialTwo):
     if player.unusedDevelopmentCards["YearOfPlenty"] < 1:
-        return False
-
-    player.unusedDevelopmentCards["YearOfPlenty"] -= 1
+        raise Exception("You do not have a year of plenty card to play.")
 
     if controller.resource_bank[materialOne] < 1 or controller.resource_bank[materialTwo] < 1:
-        return False
+        raise Exception("Resource bank does not have the necessary resources.")
+
+    player.unusedDevelopmentCards["YearOfPlenty"] -= 1
     
     controller.resource_bank[materialOne] -= 1
     player.currentResources[materialOne] += 1
@@ -57,7 +57,7 @@ def playYearOfPlenty(controller, player, materialOne, materialTwo):
 
 def playMonopoly(controller, player, chosenMaterial):
     if player.unusedDevelopmentCards["Monopoly"] < 1:
-        return False
+        raise Exception("You do not have a monopoly card to play.")
 
     player.unusedDevelopmentCards["Monopoly"] -= 1
 
