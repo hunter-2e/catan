@@ -22,7 +22,7 @@ async def hand(ctx: lightbulb.Context) -> None:
 
     response = hikari.Embed(
         title="Hand:",
-        description=f"{player.currentResources}\n{player.unusedDevelopmentCards}",
+        description=f"Victory Points: {player.victoryPoints}\nCurrent Resources: {player.currentResources}\nUnused Development Cards: {player.unusedDevelopmentCards}\nUsed Development Cards: {player.usedDevelopmentCards}",
         color=hikari.Color(0x0000FF))
     response.set_image(hikari.File("images/buildCosts.png"))
 

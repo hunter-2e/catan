@@ -188,11 +188,7 @@ class Controller:
         return None
 
     def roll_dice(self) -> int:
-        """Rolls 2 dice randomly.
-        
-        Returns:
-            The 2 dice rolls.
-        """
+        """Rolls 2 dice randomly."""
 
         return random.randint(1, 6) + random.randint(1, 6)
 

@@ -8,16 +8,27 @@ plugin = lightbulb.Plugin("Discard", description="Discard resource cards.")
 
 # Creates a command in the plugin
 @plugin.command
-@lightbulb.option("cards", description="Resource cards to discard", required=True)
+@lightbulb.option("brick", description="Brick cards to discard", required=True, default=0, type=int)
+@lightbulb.option("wood", description="Wood cards to discard", required=True, default=0, type=int)
+@lightbulb.option("rock", description="Rock cards to discard", required=True, default=0, type=int)
+@lightbulb.option("wheat", description="Wheat cards to discard", required=True, default=0, type=int)
+@lightbulb.option("sheep", description="Sheep cards to discard", required=True, default=0, type=int)
 @lightbulb.command("discard", description="Discard resource cards.", ephemeral=True)
 @lightbulb.implements(lightbulb.SlashCommand)
 async def discard(ctx: lightbulb.Context) -> None:
     name = str(ctx.author).split("#")[0]
     ctrl = bot.ctrl
 
-    cards_to_list = ctx.options.cards.split()
+    cards_to_dict = {
+        "brick": int(ctx.options.brick),
+        "wood": int(ctx.options.wood),
+        "rock": int(ctx.options.rock),
+        "wheat": int(ctx.options.wheat),
+        "sheep": int(ctx.options.sheep)
+    }
+    total = sum(cards_to_dict.values())
     
-    if len(cards_to_list) != ctrl.get_player(name).cardsToDiscard:
+    if total != ctrl.get_player(name).cardsToDiscard:
         await ctx.respond(content=hikari.Embed(
                 title="Error!",
                 description=f"You need to discard {ctrl.get_player(name).cardsToDiscard} cards.",
@@ -25,22 +36,22 @@ async def discard(ctx: lightbulb.Context) -> None:
 
         return
 
-    for card in cards_to_list:
-        if card not in ctrl.resource_bank:
+    for card, val in cards_to_dict.items():
+        if ctrl.get_player(name).currentResources[card] < val:
             await ctx.respond(content=hikari.Embed(
                 title="Error!",
-                description=f"Invalid input: {card}.",
+                description=f"You do not have {val} {card} cards to discard.",
                 color=hikari.Color(0xFF0000)))
 
             return
 
-    for card in cards_to_list:
-        ctrl.resource_bank[card] += 1
-        ctrl.get_player(name).currentResources[card] -= 1
+    for card, val in cards_to_dict.items():
+        ctrl.resource_bank[card] += val
+        ctrl.get_player(name).currentResources[card] -= val
 
     ctrl.get_player(name).cardsToDiscard = 0
 
-    await ctx.respond(content=f"Success.")
+    await ctx.respond(content=f"Successfully discarded {total} cards.")
 
     all_discarded = True
     for player in ctrl.players:
