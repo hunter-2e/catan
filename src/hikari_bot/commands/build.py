@@ -1,6 +1,8 @@
+import string
+import traceback
+
 import lightbulb
 import hikari
-import string
 
 import src.controller as controller
 import src.hikari_bot.bot as bot
@@ -62,12 +64,12 @@ async def build(ctx: lightbulb.Context) -> None:
                 title="Error!",
                 description=f"You do not have the necessary resources to build a {ctx.options.building}.",
                 color=hikari.Color(0xFF0000)))
-    #except Exception as e:
-    #    print(e)
-    #    await ctx.respond(content=hikari.Embed(
-    #            title="Error!",
-    #            description=f"Failed to build {ctx.options.building} with exception: {e}.",
-    #            color=hikari.Color(0xFF0000)))
+    except Exception as e:
+        print(traceback.print_exc())
+        await ctx.respond(content=hikari.Embed(
+                title="Error!",
+                description=f"Failed to build {ctx.options.building} with exception: {e}.",
+                color=hikari.Color(0xFF0000)))
     
 
 # Extensions are hot-reloadable (can be loaded/unloaded while the bot is live)

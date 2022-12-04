@@ -48,6 +48,8 @@ async def use(ctx: lightbulb.Context) -> None:
         modal = modals.RoadBuildingModal(ctrl, title="Use Road Building Card")
         await modal.send(ctx.interaction)
 
+        
+
 # Extensions are hot-reloadable (can be loaded/unloaded while the bot is live)
 
 def load(bot):

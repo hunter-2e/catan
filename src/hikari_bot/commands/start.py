@@ -35,7 +35,6 @@ async def start(ctx: lightbulb.Context) -> None:
             p.modCurrResource("sheep", 4)
             p.modCurrResource("rock", 4)
             p.unusedDevelopmentCards["KnightCard"] += 1
-            p.unusedDevelopmentCards["VictoryPointCard"] += 1
             p.unusedDevelopmentCards["Monopoly"] += 1
             p.unusedDevelopmentCards["YearOfPlenty"] += 1
             p.unusedDevelopmentCards["RoadBuilding"] += 1

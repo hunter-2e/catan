@@ -378,9 +378,9 @@ class Board:
                     player.currentResources['wood'] += toBeGiven
                 else: player.currentResources['sheep'] += toBeGiven
                
-    #postType one of ["Wheat", "Rock", "Brick", "3for1", "Wood"]
+    #postType one of ["Wheat", "Rock", "Brick", "Wood", "Sheep", "3for1", "4for1"]
     def postAccess(self, player, postType):
-        if postType.upper() == "BANK":
+        if postType == "4for1":
             return True
 
         for key in self.portsSettleSpots:
