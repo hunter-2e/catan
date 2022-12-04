@@ -40,6 +40,7 @@ class Controller:
         self.cur_dice = None
         self.has_robber_moved = False
         self.cur_phase = 0      # 0 = first half of initial build cycle, 1 = 2nd half, 2 = main game
+        self.victory_points_to_win = 3
 
     def trade(self, trade_num: int, player2: Union[player.Player, str]) -> None:
         """Handles a trade.
@@ -98,6 +99,7 @@ class Controller:
             if (len(player_obj.settlementSpots) > 0) and (self.cur_phase == 0 and len(player_obj.roadsPlaced) == 0) or (self.cur_phase == 1 and len(player_obj.roadsPlaced) == 1):
                 if not self.board.setRoad(player_obj, location_1, location_2, self.players):
                     raise Exception("Invalid road.")
+                bot.send_image_or_message("images/test.png", None)
                 return
             elif len(player_obj.settlementSpots) == 0:
                 raise Exception("Build a settlement first.")
@@ -116,6 +118,7 @@ class Controller:
             if (self.cur_phase == 0 and len(player_obj.settlementSpots) == 0) or (self.cur_phase == 1 and len(player_obj.settlementSpots) == 1):
                 if not self.board.setSettlement(self.players, player_obj, location_1, 1):
                     raise Exception("Invalid settlement.")
+                bot.send_image_or_message("images/test.png", None)
                 return
             elif self.cur_phase != 2:
                 raise Exception("You already built your starting settlement for this turn.")
@@ -182,7 +185,7 @@ class Controller:
         """Checks if any players have won the game."""
 
         for player in self.players:
-            if player.victoryPoints == 10:
+            if player.victoryPoints == self.victory_points_to_win:
                 return player
 
         return None
