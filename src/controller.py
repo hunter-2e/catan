@@ -42,6 +42,13 @@ class Controller:
         self.cur_phase = 0      # 0 = first half of initial build cycle, 1 = 2nd half, 2 = main game
         self.victory_points_to_win = 3
 
+    def exchange(self, player, wanted, giving):
+        if player.currentResources[giving] < 4:
+            return False
+        else: 
+            player.currentResources[giving] -= 4
+            player.currentResources[wanted] += 1
+
     def trade(self, trade_num: int, player2: Union[player.Player, str]) -> None:
         """Handles a trade.
 
