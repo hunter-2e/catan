@@ -189,6 +189,19 @@ class Controller:
 
         return None
 
+    def largest_army(self):
+        player_most_knights = None
+
+        for player in self.players:
+            if player.usedDevelopmentCards["KnightCard"] >= 3 and (player_most_knights is None or player_most_knights.usedDevelopmentCards["KnightCard"] < player.usedDevelopmentCards["KnightCard"]):
+                player_most_knights = player
+
+
+        if player_most_knights is None:
+            return
+
+
+
     def roll_dice(self) -> int:
         """Rolls 2 dice randomly."""
 
