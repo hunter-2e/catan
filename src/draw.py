@@ -304,6 +304,7 @@ def drawPorts(image, board):
             x, y = 550, 40
             portToAdd = 'images/sheepPort.png'
             for spot in board.portsSettleSpots['Sheep']:
+                
                 cv2.line(image, getSpot(spot), (x,y), lineColor, lineThickness)
         elif port == 'Rock':
             x, y = 75, 250
@@ -345,6 +346,7 @@ def drawPorts(image, board):
                 image = np.array(Image.open("images/test.png")) 
             continue
 
+        
         minecraftMode(x, y, portToAdd, image)
         image = np.array(Image.open("images/test.png"))
 

@@ -380,6 +380,9 @@ class Board:
                
     #postType one of ["Wheat", "Rock", "Brick", "3for1", "Wood"]
     def postAccess(self, player, postType):
+        if postType.upper() == "BANK":
+            return True
+
         for key in self.portsSettleSpots:
             if postType == key:
                 for value in self.portsSettleSpots[key]:
