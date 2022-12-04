@@ -276,7 +276,7 @@ def drawSettle(image, player, spot):
 def drawCity(image, player, spot):
 
     boardLocation = getSpot(spot)
-    settleColor = (255,255,255)
+    settleColor = (0,0,0)
     
     cv2.rectangle(image,(boardLocation[0] - 10,boardLocation[1]-10),(boardLocation[0] + 10,boardLocation[1] + 10), settleColor, -1)
     cv2.imwrite('images/test.png', image)
