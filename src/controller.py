@@ -41,6 +41,13 @@ class Controller:
         self.has_robber_moved = False
         self.cur_phase = 0      # 0 = first half of initial build cycle, 1 = 2nd half, 2 = main game
 
+    def exchange(self, player, wanted, giving):
+        if player.currentResources[giving] < 4:
+            return False
+        else: 
+            player.currentResources[giving] -= 4
+            player.currentResources[wanted] += 1
+
     def trade(self, trade_num: int, player2: Union[player.Player, str]) -> None:
         """Handles a trade.
 
