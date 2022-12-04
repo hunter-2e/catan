@@ -1,6 +1,7 @@
 import typing as t
 import datetime
 import string
+import traceback
 
 import miru
 import hikari
@@ -30,7 +31,7 @@ class KnightModal(miru.Modal):
             development.playKnightCard(self.ctrl, self.ctrl.get_player(name_activator), location, name_robbed)
             await ctx.respond(f"{name_activator} moved the robber to {ctx.get_value_by_id('location')} and stole from {name_robbed} with a Knight card.")
         except Exception as e:
-            print(e)
+            print(traceback.print_exc())
             await ctx.respond(content=hikari.Embed(
                 title="Error!",
                 description=str(e),
@@ -56,7 +57,7 @@ class YOPModal(miru.Modal):
             development.playYearOfPlenty(self.ctrl, self.ctrl.get_player(name), ctx.get_value_by_id('resource1'), ctx.get_value_by_id('resource2'))
             await ctx.respond(f"{str(ctx.author).split('#')[0]} recieved {ctx.get_value_by_id('resource1')} and {ctx.get_value_by_id('resource2')} from a Year of Plenty card.")
         except Exception as e:
-            print(e)
+            print(traceback.print_exc())
             await ctx.respond(content=hikari.Embed(
                 title="Error!",
                 description=str(e),
@@ -81,7 +82,7 @@ class MonopolyModal(miru.Modal):
             development.playMonopoly(self.ctrl, self.ctrl.get_player(name), ctx.get_value_by_id('resource'))
             await ctx.respond(f"{str(ctx.author).split('#')[0]} stole all {ctx.get_value_by_id('resource')} with a Monopoly card.")
         except Exception as e:
-            print(e)
+            print(traceback.print_exc())
             await ctx.respond(content=hikari.Embed(
                 title="Error!",
                 description=str(e),
@@ -104,14 +105,20 @@ class RoadBuildingModal(miru.Modal):
         # You can also access the values using ctx.values, Modal.values, or use ctx.get_value_by_id()
 
         name = str(ctx.author).split("#")[0].strip()
-        loc1 = (ctx.get_value_by_id('road1location1'), ctx.get_value_by_id('road1location2'))
-        loc2 = (ctx.get_value_by_id('road2location1'), ctx.get_value_by_id('road2location2'))
+
+        loc_1_1 = (list(string.ascii_uppercase).index(ctx.get_value_by_id('road1location1')[0].upper()), int(ctx.get_value_by_id('road1location1')[1:]))
+        loc_1_2 = (list(string.ascii_uppercase).index(ctx.get_value_by_id('road1location2')[0].upper()), int(ctx.get_value_by_id('road1location2')[1:]))
+        loc_2_1 = (list(string.ascii_uppercase).index(ctx.get_value_by_id('road2location1')[0].upper()), int(ctx.get_value_by_id('road2location1')[1:]))
+        loc_2_2 = (list(string.ascii_uppercase).index(ctx.get_value_by_id('road2location2')[0].upper()), int(ctx.get_value_by_id('road2location2')[1:]))
+
+        road1 = (loc_1_1, loc_1_2)
+        road2 = (loc_2_1, loc_2_2)
 
         try:
-            development.playRoadBuilding(self.ctrl.board, self.ctrl.get_player(name), loc1, loc2)
+            development.playRoadBuilding(self.ctrl, self.ctrl.get_player(name), road1, road2)
             await ctx.respond(f"{str(ctx.author).split('#')[0]} built a road between {ctx.get_value_by_id('road1location1')} and {ctx.get_value_by_id('road1location2')} and a road between {ctx.get_value_by_id('road2location1')} and {ctx.get_value_by_id('road2location2')} with a Road Builder card.")
         except Exception as e:
-            print(e)
+            print(traceback.print_exc())
             await ctx.respond(content=hikari.Embed(
                 title="Error!",
                 description=str(e),

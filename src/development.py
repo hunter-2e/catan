@@ -29,14 +29,14 @@ def playKnightCard(ctrl, player, newLocation, playerToRob):
         raise e
 
 
-def playRoadBuilding(board, player, firstRoad, secondRoad):
+def playRoadBuilding(ctrl, player, firstRoad, secondRoad):
     if player.unusedDevelopmentCards["RoadBuilding"] < 1:
         raise Exception("You do not have a road building card to play.")
 
     player.unusedDevelopmentCards["RoadBuilding"] -= 1
 
-    board.setRoad(player, firstRoad[0], firstRoad[1])
-    board.setRoad(player, secondRoad[0], secondRoad[1])
+    ctrl.board.setRoad(player, firstRoad[0], firstRoad[1], ctrl.players)
+    ctrl.board.setRoad(player, secondRoad[0], secondRoad[1], ctrl.players)
 
 
 

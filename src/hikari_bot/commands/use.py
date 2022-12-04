@@ -31,21 +31,21 @@ async def use(ctx: lightbulb.Context) -> None:
             await ctx.respond(content="Error: You do not have any Year Of Plenty cards to play.")
             return
 
-        modal = modals.YOPModal(title="Use Year Of Plenty Card")
+        modal = modals.YOPModal(ctrl, title="Use Year Of Plenty Card")
         await modal.send(ctx.interaction)
     elif ctx.options.development_card == "Monopoly":
         if ctrl.get_player(name).unusedDevelopmentCards["Monopoly"] == 0:
             await ctx.respond(content="Error: You do not have any Monopoly cards to play.")
             return
 
-        modal = modals.MonopolyModal(title="Use Monopoly Card")
+        modal = modals.MonopolyModal(ctrl, title="Use Monopoly Card")
         await modal.send(ctx.interaction)
     else:
         if ctrl.get_player(name).unusedDevelopmentCards["RoadBuilding"] == 0:
             await ctx.respond(content="Error: You do not have any Road Building cards to play.")
             return
 
-        modal = modals.RoadBuildingModal(title="Use Road Building Card")
+        modal = modals.RoadBuildingModal(ctrl, title="Use Road Building Card")
         await modal.send(ctx.interaction)
 
 # Extensions are hot-reloadable (can be loaded/unloaded while the bot is live)
