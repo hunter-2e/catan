@@ -28,7 +28,7 @@ class Player:
             "VictoryPointCard": 0,    }
 
         self.usedDevelopmentCards   = {
-            "KnightCard":       0,
+            "KnightCard":       3,
             "RoadBuilding":     0,
             "YearOfPlenty":     0,
             "Monopoly":         0,

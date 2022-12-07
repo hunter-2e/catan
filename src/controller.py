@@ -40,7 +40,7 @@ class Controller:
         self.cur_dice = None
         self.has_robber_moved = False
         self.cur_phase = 0      # 0 = first half of initial build cycle, 1 = 2nd half, 2 = main game
-        self.victory_points_to_win = 2
+        self.victory_points_to_win = 5
 
     def trade(self, trade_num: int, player2: Union[player.Player, str]) -> None:
         """Handles a trade.
@@ -194,11 +194,19 @@ class Controller:
 
         for player in self.players:
             if player.usedDevelopmentCards["KnightCard"] >= 3 and (player_most_knights is None or player_most_knights.usedDevelopmentCards["KnightCard"] < player.usedDevelopmentCards["KnightCard"]):
-                player_most_knights = player
+                if player_most_knights is not None:
+                    player_most_knights.largestArmy = False
+                    player_most_knights.victoryPoints -= 2
 
+                player.largestArmy = True
+                player.victoryPoints += 2
+
+                player_most_knights = player
 
         if player_most_knights is None:
             return
+
+
 
 
 
@@ -322,6 +330,7 @@ async def run(ctrl: Controller, flag: asyncio.Event, drawing_mode: str) -> None:
         else:
             ctrl.current_player += 1
 
+        ctrl.largest_army()
         winner = ctrl.has_won()
 
     await game_over(winner)

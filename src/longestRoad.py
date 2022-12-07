@@ -5,7 +5,6 @@ import itertools
 # this should be how you structure the input of the singlePlayerLongestRoad function
 # i have to test if this works with the following: https://boardgames.stackexchange.com/questions/15526/in-catan-can-you-continue-a-circular-road
 
-
 Emanuel = [((0,0),(1,1)),   # Cycle with two protrusions, it should return 7 and does
            ((1,1),(2,1)),   #
            ((2,1),(3,1)),   #    / \
@@ -237,4 +236,3 @@ print("Chamin  : " + str(outerLongestRoad(Chamin)) + "\n")
 print("Chamin2 : " + str(outerLongestRoad(Chamin2)) + "\n")
 print("Chamin3 : " + str(outerLongestRoad(Chamin3)) + "\n")
 print("Hunter  : " + str(outerLongestRoad(Hunter)) + "\n")
-print("Hunter2 : " + str(outerLongestRoad(Hunter2)) + "\n")

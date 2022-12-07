@@ -396,3 +396,42 @@ def convertToRGB():
     im_cv = cv2.imread('images/test.png')
     im_cv = cv2.cvtColor(im_cv, cv2.COLOR_BGR2RGB)
     cv2.imwrite('images/test.png', im_cv)
+
+def drawHand(player):
+    emptyHand = cv2.imread("images/cards.jpg")
+    emptyHand = cv2.cvtColor(emptyHand, cv2.COLOR_BGR2RGB)
+
+    for resource in player.currentResources:
+        if resource == 'brick':
+            x,y = 30, 67
+        elif resource == 'rock':
+            x,y = 530,47
+        elif resource == 'wheat':
+            x,y = 415,30
+        elif resource == 'wood':
+            x,y = 158, 35
+        else:
+            x,y = 276, 22
+        
+        num = player.currentResources[resource]
+
+        fullHand = cv2.putText(emptyHand, str(num), (x, y), cv2.FONT_HERSHEY_DUPLEX, 1, (0,0,0), 2)
+
+    for dev in player.unusedDevelopmentCards:
+        if dev == 'KnightCard':
+            x,y = 491,343
+        elif dev == 'YearOfPlenty':
+            x,y = 389, 320
+        elif dev == 'Monopoly':
+            x,y = 167, 337
+        elif dev == 'RoadBuilding':
+            x,y = 277, 317
+        else:
+            x,y = 74, 361
+        
+        num = player.unusedDevelopmentCards[dev]
+
+        fullHand = cv2.putText(emptyHand, str(num), (x, y), cv2.FONT_HERSHEY_DUPLEX, 1, (0,0,0), 2)
+        
+        fullHand = cv2.cvtColor(fullHand, cv2.COLOR_BGR2RGB)
+        cv2.imwrite("images/playerHand.jpg", fullHand)
