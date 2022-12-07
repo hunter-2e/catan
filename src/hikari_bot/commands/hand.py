@@ -23,7 +23,7 @@ async def hand(ctx: lightbulb.Context) -> None:
 
     response = hikari.Embed(
         title="Hand:",
-        description=f"Victory Points: {player.victoryPoints}\nUsed Knights: {player.usedDevelopmentCards['KnightCard']}",
+        description=f"Victory Points: {player.victoryPoints}\n\nUsed Knights: {player.usedDevelopmentCards['KnightCard']}\nLargest Army: {player.largestArmy}\nLongest Road: {player.longestRoad}\n",
         color=hikari.Color(0x0000FF))
 
     draw.drawHand(player)
