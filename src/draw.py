@@ -73,19 +73,19 @@ def drawBoard(board, mode):
         pts = pts.reshape((-1, 1, 2))
 
         if tileColors[tile] == 'rockTile':
-            color = (120, 115, 99)
+            color = (144, 145, 143)
             block = "images/rock.png"
         elif tileColors[tile] == 'brickTile':
-            color = (166, 104, 28)
+            color = (188, 74, 60)
             block = "images/brick.png"
         elif tileColors[tile] == 'sheepTile':
-            color = (82, 161, 48)
+            color = (0,154,23)
             block = "images/sheep.png"
         elif tileColors[tile] == 'wheatTile':
-            color = (230, 231, 121)
+            color = (255, 211, 0)
             block = "images/wheat.png"
         elif tileColors[tile] == 'treeTile':
-            color = (84, 63, 17)
+            color = (102,51,0)
             block = "images/tree.png"
         else:
             color = (166, 7,44)
