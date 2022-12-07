@@ -403,15 +403,15 @@ def drawHand(player):
 
     for resource in player.currentResources:
         if resource == 'brick':
-            x,y = 30, 67
+            x,y = 26, 61
         elif resource == 'rock':
-            x,y = 530,47
+            x,y =415, 48
         elif resource == 'wheat':
-            x,y = 415,30
+            x,y = 327, 28
         elif resource == 'wood':
-            x,y = 158, 35
+            x,y = 125, 38
         else:
-            x,y = 276, 22
+            x,y =  221, 27
         
         num = player.currentResources[resource]
 
@@ -419,15 +419,15 @@ def drawHand(player):
 
     for dev in player.unusedDevelopmentCards:
         if dev == 'KnightCard':
-            x,y = 491,343
+            x,y = 380, 263
         elif dev == 'YearOfPlenty':
-            x,y = 389, 320
+            x,y = 301, 245
         elif dev == 'Monopoly':
-            x,y = 167, 337
+            x,y = 126,259
         elif dev == 'RoadBuilding':
-            x,y = 277, 317
+            x,y = 213,242
         else:
-            x,y = 74, 361
+            x,y = 54, 279
         
         num = player.unusedDevelopmentCards[dev]
 
