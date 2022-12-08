@@ -13,6 +13,7 @@ class Player:
         self.roadsPlaced = []
         self.largestArmy = False
         self.longestRoad = False
+        self.longestRoadLength = 0
         
         self.currentResources       = {
             "brick":  0,

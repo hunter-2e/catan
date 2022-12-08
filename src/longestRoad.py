@@ -5,9 +5,6 @@ import itertools
 # this should be how you structure the input of the singlePlayerLongestRoad function
 # i have to test if this works with the following: https://boardgames.stackexchange.com/questions/15526/in-catan-can-you-continue-a-circular-road
 
-Emanuellll = [
-    ((0,0),(1,1)),((1,1),(2,1)),((2,0),(3,0))
-]
 
 Emanuel = [((0,0),(1,1)),   # Cycle with two protrusions, it should return 7 and does
            ((1,1),(2,1)),   #
@@ -153,8 +150,20 @@ class Graph:
  # this is the function that prints longest road. 
  # It's a quick modification to get it to return longest road if that's how you want to structure it
 
-def outerLongestRoad(playerCoords):
+def outerLongestRoad(playerCoords, players, playerChecked):
 
+    disruptingSettles = []
+
+    for player in players:
+        if player != playerChecked:
+            for settle in player.settleSpots:
+                disruptingSettles.append(settle)
+    
+    for connectingRoads in playerCoords:
+        for road in connectingRoads:
+            if road in disruptingSettles:
+                playerCoords.remove(connectingRoads)
+ 
     longestRoadNoRemoval = 0
     longestRoadOneRemoval = 0
     longestRoadTwoRemoval = 0
@@ -236,8 +245,6 @@ def outerLongestRoad(playerCoords):
 
 # testing with the different shapes displayed above:
 # Note that longest road interuption by other players has not been implemented yet
-
-print("Emanuellll : " + str(outerLongestRoad(Emanuellll)) + "\n")
 # print("Emanuel : " + str(outerLongestRoad(Emanuel)) + "\n")
 # print("Kobi    : " + str(outerLongestRoad(Kobi)) + "\n")
 # print("Chamin  : " + str(outerLongestRoad(Chamin)) + "\n")

@@ -419,15 +419,15 @@ def drawHand(player):
 
     for dev in player.unusedDevelopmentCards:
         if dev == 'KnightCard':
-            x,y = 380, 263
+            x,y = 380, 278
         elif dev == 'YearOfPlenty':
-            x,y = 301, 245
+            x,y = 301, 260
         elif dev == 'Monopoly':
-            x,y = 126,259
+            x,y = 126,274
         elif dev == 'RoadBuilding':
-            x,y = 213,242
+            x,y = 213,257
         else:
-            x,y = 54, 279
+            x,y = 54, 294
         
         num = player.unusedDevelopmentCards[dev]
 
