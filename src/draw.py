@@ -336,7 +336,7 @@ def drawPorts(image, board):
                     x, y = 775, 150
                     cv2.line(image, getSpot(spot), (x,y), lineColor, lineThickness)
                 elif spot in [(5,5), (6,5)]:
-                    x, y = 930, 400
+                    x, y = 940, 400
                     cv2.line(image, getSpot(spot), (x,y), lineColor, lineThickness)
                 else: 
                     x, y = 200, 775

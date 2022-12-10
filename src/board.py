@@ -87,13 +87,7 @@ class Board:
             5: 2,
             7: 1
         }
-
-        #Create array of all valid road combinations
-
-        self.validRoads = []
-
         
-
         #Populating tileSpots randomly with available material types and a number
 
         xTile = 0
@@ -135,12 +129,12 @@ class Board:
         if spot[0][0] == 0 and spot[1][0] == spot[0][0] + 1 and (spot[0][1] == spot[1][1] or spot[0][1] + 1 == spot[1][1]):
             return True
         elif spot[0][0] % 2 == 0:
-            if ((spot[1][0] == spot[0][0] + 1) and (spot[0][1] == spot[1][1] or spot[0][1] + 1 == spot[1][1])) or (spot[0][0] - 1 == spot[1][0] and spot[0][1] == spot[1][1]):
+            if ((spot[1][0] == spot[0][0] + 1) and ((spot[0][0] < 6 and (spot[0][1] == spot[1][1] or spot[0][1] + 1 == spot[1][1])) or (spot[0][0] >= 6 and (spot[0][1] - 1 == spot[1][1] or spot[0][1] == spot[1][1])))) or (spot[0][0] - 1 == spot[1][0] and spot[0][1] == spot[1][1]):
                 return True
         elif spot[0][0] == 11 and spot[1][0] == spot[0][0] - 1 and (spot[0][1] == spot[1][1] or spot[0][1] + 1 == spot[1][1]):
             return True
         else:
-            if ((spot[1][0] == spot[0][0] - 1) and ((spot[0][0] > 6 and spot[0][1] + 1 == spot[1][1] or spot[0][1] == spot[1][1]) or (spot[0][0] < 6 and spot[0][1] - 1 == spot[1][1] or spot[0][1] == spot[1][1]))) or ((spot[1][0] == spot[0][0] + 1) and (spot[0][1] == spot[1][1])):
+            if ((spot[1][0] == spot[0][0] - 1) and ((spot[0][0] > 6 and (spot[0][1] + 1 == spot[1][1] or spot[0][1] == spot[1][1])) or (spot[0][0] < 6 and (spot[0][1] - 1 == spot[1][1] or spot[0][1] == spot[1][1])))) or ((spot[1][0] == spot[0][0] + 1) and (spot[0][1] == spot[1][1])):
                 return True
         return False
 
@@ -317,7 +311,6 @@ class Board:
                     return False
 
             player.settlementQuantity -= 1
-            player.victoryPoints += 1
 
             self.settleSpots[spot[0]][spot[1]] = player.name + "'s " + 'Settlement'
             player.settlementSpots.append(spot)
@@ -338,7 +331,6 @@ class Board:
                     return False
 
             player.cityQuantity -= 1 
-            player.victoryPoints += 1
 
             self.settleSpots[spot[0]][spot[1]] = player.name + "'s " + 'City'
             player.citySpots.append(spot)
@@ -349,6 +341,8 @@ class Board:
                     self.settleOnTile[key].insert(insertSpot, player.name + "'s " + 'City')
             image = np.array(Image.open("images/test.png"))
             draw.drawCity(image, player, spot)
+            
+        player.victoryPoints += 1
         return True
 
     def getSettlement(self, spot):
@@ -383,12 +377,10 @@ class Board:
         if postType == "4for1":
             return True
 
-        for key in self.portsSettleSpots:
-            if postType == key:
-                for value in self.portsSettleSpots[key]:
-                    if value in player.settlementSpots:
-                        return True
-                return False
+        for value in self.portsSettleSpots[postType]:
+            if value in player.settlementSpots:
+                return True
+        return False
 
     def moveRobber(self, newLocation):
         newLocation = (newLocation[1], newLocation[0])
