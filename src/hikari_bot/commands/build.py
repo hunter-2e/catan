@@ -12,9 +12,9 @@ plugin = lightbulb.Plugin("Build", description="Build something.")
 
 # Creates a command in the plugin
 @plugin.command
-@lightbulb.option("building", description="The building to create.", choices=["Road", "Settlement", "City", "Development Card"], required=True)
-@lightbulb.option("location", description="The location of the building.", required=True)
 @lightbulb.option("location_2_road", description="2nd point if building a road.", required=False)
+@lightbulb.option("location", description="The location of the building.", required=True)
+@lightbulb.option("building", description="The building to create.", choices=["Road", "Settlement", "City", "Development Card"], required=True)
 @lightbulb.command("build", description="Build something", ephemeral=True)
 @lightbulb.implements(lightbulb.SlashCommand)
 async def build(ctx: lightbulb.Context) -> None:
@@ -48,7 +48,7 @@ async def build(ctx: lightbulb.Context) -> None:
 
         return
     elif ctx.options.building == "Road":
-        location_2 = (list(string.ascii_uppercase).index(ctx.options.location_2_road[0]), int(ctx.options.location_2_road[1:]))
+        location_2 = (list(string.ascii_uppercase).index(ctx.options.location_2_road[0].upper()), int(ctx.options.location_2_road[1:]))
 
     try:
         bought_card = ctrl.build(str(ctx.author).split("#")[0], ctx.options.building, location_1, location_2)
