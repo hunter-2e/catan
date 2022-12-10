@@ -5,6 +5,7 @@ import itertools
 # this should be how you structure the input of the singlePlayerLongestRoad function
 # i have to test if this works with the following: https://boardgames.stackexchange.com/questions/15526/in-catan-can-you-continue-a-circular-road
 
+
 Emanuel = [((0,0),(1,1)),   # Cycle with two protrusions, it should return 7 and does
            ((1,1),(2,1)),   #
            ((2,1),(3,1)),   #    / \
@@ -143,8 +144,20 @@ class Graph:
  # this is the function that prints longest road. 
  # It's a quick modification to get it to return longest road if that's how you want to structure it
 
-def outerLongestRoad(playerCoords):
+def outerLongestRoad(playerCoords, players, playerChecked):
 
+    disruptingSettles = []
+
+    for player in players:
+        if player != playerChecked:
+            for settle in player.settleSpots:
+                disruptingSettles.append(settle)
+    
+    for connectingRoads in playerCoords:
+        for road in connectingRoads:
+            if road in disruptingSettles:
+                playerCoords.remove(connectingRoads)
+ 
     longestRoadNoRemoval = 0
     longestRoadOneRemoval = 0
     longestRoadTwoRemoval = 0
@@ -158,6 +171,7 @@ def outerLongestRoad(playerCoords):
             for coord in coordPair:
                 uniqueCoords.append(coord)
         
+        # all unique coordinates from list of a player's roads
         uniqueCoords = list(sorted(set(uniqueCoords)))
 
         i = 0
@@ -178,28 +192,30 @@ def outerLongestRoad(playerCoords):
         longestRoadNoRemoval = innerLongestRoad(playerCoords)
 
     # code for finding the value of longestRoadOneRemoval
-    OneRemovalTemp = playerCoords
-    for i in OneRemovalTemp:
-        temp = OneRemovalTemp.pop(0)
+    if (len(playerCoords) >= 6):
+        OneRemovalTemp = playerCoords
 
-        if (innerLongestRoad(OneRemovalTemp) > longestRoadOneRemoval):
-            longestRoadOneRemoval = innerLongestRoad(OneRemovalTemp)
+        for i in OneRemovalTemp:
+            temp = OneRemovalTemp.pop(0)
 
-        OneRemovalTemp.append(temp)
+            if (innerLongestRoad(OneRemovalTemp) > longestRoadOneRemoval):
+                longestRoadOneRemoval = innerLongestRoad(OneRemovalTemp)
 
-    # code for finding the value of longestRoadTwoRemoval
-    TwoRemovalTemp = itertools.combinations(playerCoords, len(playerCoords) - 2)
+            OneRemovalTemp.append(temp)
 
-    for i in TwoRemovalTemp:
-        if (innerLongestRoad(i) > longestRoadTwoRemoval):
-            longestRoadTwoRemoval = innerLongestRoad(i)
+        # code for finding the value of longestRoadTwoRemoval
+        TwoRemovalTemp = itertools.combinations(playerCoords, len(playerCoords) - 2)
 
-    # code for finding the value of longestRoadThreeRemoval
-    ThreeRemovalTemp = itertools.combinations(playerCoords, len(playerCoords) - 3)
+        for i in TwoRemovalTemp:
+            if (innerLongestRoad(i) > longestRoadTwoRemoval):
+                longestRoadTwoRemoval = innerLongestRoad(i)
 
-    for i in ThreeRemovalTemp:
-        if (innerLongestRoad(i) > longestRoadThreeRemoval):
-            longestRoadThreeRemoval = innerLongestRoad(i)
+        # code for finding the value of longestRoadThreeRemoval
+        ThreeRemovalTemp = itertools.combinations(playerCoords, len(playerCoords) - 3)
+
+        for i in ThreeRemovalTemp:
+            if (innerLongestRoad(i) > longestRoadThreeRemoval):
+                longestRoadThreeRemoval = innerLongestRoad(i)
 
     print(longestRoadNoRemoval)
     print(longestRoadOneRemoval)
@@ -223,10 +239,9 @@ def outerLongestRoad(playerCoords):
 
 # testing with the different shapes displayed above:
 # Note that longest road interuption by other players has not been implemented yet
-
-print("Emanuel : " + str(outerLongestRoad(Emanuel)) + "\n")
-print("Kobi    : " + str(outerLongestRoad(Kobi)) + "\n")
-print("Chamin  : " + str(outerLongestRoad(Chamin)) + "\n")
-print("Chamin2 : " + str(outerLongestRoad(Chamin2)) + "\n")
-print("Chamin3 : " + str(outerLongestRoad(Chamin3)) + "\n")
-print("Hunter  : " + str(outerLongestRoad(Hunter)) + "\n")
+# print("Emanuel : " + str(outerLongestRoad(Emanuel)) + "\n")
+# print("Kobi    : " + str(outerLongestRoad(Kobi)) + "\n")
+# print("Chamin  : " + str(outerLongestRoad(Chamin)) + "\n")
+# print("Chamin2 : " + str(outerLongestRoad(Chamin2)) + "\n")
+# print("Chamin3 : " + str(outerLongestRoad(Chamin3)) + "\n")
+# print("Hunter  : " + str(outerLongestRoad(Hunter)) + "\n")

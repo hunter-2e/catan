@@ -9,12 +9,16 @@ import src.hikari_bot.bot as bot
 import src.player as player
 import src.development as development
 import src.hikari_bot.bot as bot
+import src.longestRoad as longestRoad
 
 class Controller:
     """Handles all tasks related to the core functionality of the game."""
 
     def __init__(self) -> None:
         # store deck of dev card here?
+        self.player_longest_road = None
+        self.player_longest_road_length = 0
+        self.player_most_knights = None
 
         self.resource_bank = {
             "brick": 19,
@@ -190,23 +194,42 @@ class Controller:
         return None
 
     def largest_army(self):
-        player_most_knights = None
 
         for player in self.players:
-            if player.usedDevelopmentCards["KnightCard"] >= 3 and (player_most_knights is None or player_most_knights.usedDevelopmentCards["KnightCard"] < player.usedDevelopmentCards["KnightCard"]):
-                if player_most_knights is not None:
-                    player_most_knights.largestArmy = False
-                    player_most_knights.victoryPoints -= 2
+            if player.usedDevelopmentCards["KnightCard"] >= 3 and (self.player_most_knights is None or self.player_most_knights.usedDevelopmentCards["KnightCard"] < player.usedDevelopmentCards["KnightCard"]):
+                if self.player_most_knights is not None:
+                    self.player_most_knights.largestArmy = False
+                    self.player_most_knights.victoryPoints -= 2
 
                 player.largestArmy = True
                 player.victoryPoints += 2
 
-                player_most_knights = player
+                self.player_most_knights = player
 
-        if player_most_knights is None:
+        if self.player_most_knights is None:
             return
 
 
+    def longest_road(self):
+        
+
+        for player in self.players:
+            curPlayerLongestRoad = longestRoad.outerLongestRoad(player.roadsPlaced, self.players, player)
+            if curPlayerLongestRoad >= 5 and (self.player_longest_road is None or self.player_longest_road_length < curPlayerLongestRoad):
+
+                self.player_longest_road_length = curPlayerLongestRoad
+
+                if self.player_longest_road is not None:
+                    self.player_longest_road.longestRoad = False
+                    self.player_longest_road.victoryPoints -= 2
+
+                player.longestRoad = True
+                player.victoryPoints += 2
+
+                self.player_longest_road = player
+
+        if self.player_longest_road is None:
+            return
 
 
 
@@ -331,6 +354,8 @@ async def run(ctrl: Controller, flag: asyncio.Event, drawing_mode: str) -> None:
             ctrl.current_player += 1
 
         ctrl.largest_army()
+        ctrl.longest_road()
+
         winner = ctrl.has_won()
 
     await game_over(winner)
