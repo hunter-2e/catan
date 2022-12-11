@@ -172,7 +172,7 @@ class Controller:
                         break
             if atleast_1: break
         
-        player_to_rob = self.get_player_by_name(player_to_rob)
+        player_to_rob = self.get_player_by_color(player_to_rob)
         self.board.moveRobber(new_location)
         stolenCard = None
 
@@ -259,12 +259,9 @@ class Controller:
 
     def get_player_by_color(self, color: str) -> player.Player:
         """Returns the player object given a color OR raises an error if none found."""
-        print(self.players)
+
         for p in self.players:
-            print("p.color: " + p.color)
-            print("color: " + color)
             if p.color == color:
-                print("TEST")
                 return p
 
         raise Exception("Player not found!")

@@ -49,7 +49,7 @@ async def rob(ctx: lightbulb.Context) -> None:
         return
 
     try:
-        resource_stolen = bot.ctrl.move_robber(location, bot.ctrl.get_player_by_color(ctx.options.player))
+        resource_stolen = bot.ctrl.move_robber(location, ctx.options.player)
     #except controller.RobberException:
     #    await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=f"There are no player's with resources to steal. Succesfully moved the robber to {ctx.options.location}.")
     #    await ctx.respond(content=f"{name} moved the robber to {location}.")
