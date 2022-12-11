@@ -28,6 +28,7 @@ async def discard(ctx: lightbulb.Context) -> None:
     }
     total = sum(cards_to_dict.values())
     
+    # prevent player from discarding incorrect # of cards
     if total != ctrl.get_player(name).cardsToDiscard:
         await ctx.respond(content=hikari.Embed(
                 title="Error!",
@@ -36,7 +37,16 @@ async def discard(ctx: lightbulb.Context) -> None:
 
         return
 
+    # prevent discarding negative cards and cards you don't have
     for card, val in cards_to_dict.items():
+        if val < 0:
+            await ctx.respond(content=hikari.Embed(
+                title="Error!",
+                description=f"You cannot discard negative cards.",
+                color=hikari.Color(0xFF0000)))
+
+            return
+
         if ctrl.get_player(name).currentResources[card] < val:
             await ctx.respond(content=hikari.Embed(
                 title="Error!",

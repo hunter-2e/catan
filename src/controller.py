@@ -343,7 +343,7 @@ async def run(ctrl: Controller, flag: asyncio.Event, drawing_mode: str) -> None:
 
             if len(players_over_7) > 0:
                 await bot.send_image_or_message(None, f"Players with over 7 cards: {*players_over_7,}")     # "*" used to unpack the list
-                await bot.send_image_or_message(None, "Use /discard <cards> to get rid of half of your cards.\nExample: /discard sheep sheep rock wood")
+                await bot.send_image_or_message(None, "Use /discard <cards> to get rid of half of your cards.")
 
                 await ctrl.flag.wait()
                 ctrl.flag.clear()
