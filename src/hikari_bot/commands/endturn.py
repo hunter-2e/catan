@@ -20,10 +20,20 @@ async def endturn(ctx: lightbulb.Context) -> None:
 
     name = str(ctx.author).split("#")[0]
 
+    # cannot end someone else's turn
     if bot.ctrl.players[bot.ctrl.current_player].name != name:
         await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=hikari.Embed(
                 title="Error!",
                 description=f"You cannot end someone elses turn.",
+                color=hikari.Color(0xFF0000)))
+
+        return
+
+    # cannot end turn before moving the robber
+    if bot.ctrl.cur_dice == 7 and bot.ctrl.has_robber_moved is False:
+        await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=hikari.Embed(
+                title="Error!",
+                description=f"You need to move the robber before ending your turn.",
                 color=hikari.Color(0xFF0000)))
 
         return
