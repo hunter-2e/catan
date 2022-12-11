@@ -24,12 +24,20 @@ async def join(ctx: lightbulb.Context) -> None:
         await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=f"Cannot use /join. The game has already started.")
         return
 
-    # Verify the player has not already joined
     for player in bot.ctrl.players:
+        # Verify the player has not already joined
         if player.name == name:
             await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=hikari.Embed(
                 title="Error!",
                 description=f"You have already joined the game.",
+                color=hikari.Color(0xFF0000)))
+            return
+
+        # Verify the color has not already been used
+        if player.color == ctx.options.color:
+            await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=hikari.Embed(
+                title="Error!",
+                description=f"{ctx.options.color} has already been used.",
                 color=hikari.Color(0xFF0000)))
             return
 
