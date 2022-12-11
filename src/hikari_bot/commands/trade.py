@@ -49,7 +49,7 @@ async def trade(ctx: lightbulb.Context) -> None:
 
     await ctx.respond(content=hikari.Embed(
                 title=f"Trade #{len(bot.ctrl.active_trades)}!",
-                description=f"{name} wants to give: {player1_resources} for {player2_resources}",
+                description=f"{name} wants to give: {*player1_resources,} for {*player2_resources,}",
                 color=hikari.Color(0xFFFF00)))
     
 
