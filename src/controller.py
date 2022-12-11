@@ -261,6 +261,7 @@ class Controller:
             print("p.color: " + p.color)
             print("color: " + color)
             if p.color == color:
+                print("TEST")
                 return p
 
         raise Exception("Player not found!")
