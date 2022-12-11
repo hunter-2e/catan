@@ -176,6 +176,9 @@ class Controller:
         self.board.moveRobber(new_location)
         stolenCard = None
 
+        if not atleast_1:
+            return
+
         for tile in self.board.settleOnTile:
             if '(' + str(self.board.robberLocation[0]) + ',' + str(self.board.robberLocation[1]) + ')' in tile:
                 if player_to_rob.name + "'s Settlement" or player_to_rob.name + "'s City" in self.board.settleOnTile[tile]:
