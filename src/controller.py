@@ -38,6 +38,7 @@ class Controller:
 
         self.board = None
         self.active_trades = []
+        self.purchased_devs = []    # resets every turn
         self.players = []
         self.current_player = 0     # Index in self.players of the player whose turn it is
         self.flag = None
@@ -149,6 +150,7 @@ class Controller:
                 raise Resource(f"Player: {player_obj.name} does not have the necessary resources.")
 
             bought_card = development.buyDevCard(player_obj, self.dev_deck)
+            self.purchased_devs.append(bought_card)
 
             if bought_card == "VictoryPointCard":
                 development.playVictoryPointCard(player_obj)
@@ -323,7 +325,8 @@ async def run(ctrl: Controller, flag: asyncio.Event, drawing_mode: str) -> None:
     while winner is None:
         ctrl.has_robber_moved = False
         ctrl.flag.clear()
-        ctrl.active_trades = []     # emptied at start of each turn
+        ctrl.active_trades.clear()     # emptied at start of each turn
+        ctrl.purchased_devs.clear()     # emptied at start of each turn
 
         ctrl.cur_dice = ctrl.roll_dice()
         message = hikari.Embed(title=f"{ctrl.players[ctrl.current_player].name}'s turn",

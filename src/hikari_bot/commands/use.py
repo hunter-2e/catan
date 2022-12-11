@@ -17,6 +17,10 @@ async def use(ctx: lightbulb.Context) -> None:
 
     name = str(ctx.author).split("#")[0]
 
+    if bot.ctrl.purchased_devs.count(ctx.options.development_card) >= bot.ctrl.get_player_by_name(name).unusedDevelopmentCards[ctx.options.development_card]:
+        await ctx.respond(content="Error: You cannot play a card on the same turn you bought it.")
+        return
+
     if ctx.options.development_card == "Knight":
         if bot.ctrl.get_player_by_name(name).unusedDevelopmentCards["KnightCard"] == 0:
             await ctx.respond(content="Error: You do not have any Knight cards to play.")
