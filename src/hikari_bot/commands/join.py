@@ -1,8 +1,7 @@
 import lightbulb
-import asyncio
+import hikari
 
 import src.hikari_bot.bot as bot
-import src.controller as controller
 
 # Plugins are structures that allow the grouping of multiple commands and listeners together.
 plugin = lightbulb.Plugin("Join", description="Join the game.")
@@ -23,15 +22,23 @@ async def join(ctx: lightbulb.Context) -> None:
 
     # Verify the game has not started yet
     if bot.started:
-        await ctx.respond(content=f"Cannot use /join. The game has already started.")
+        await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=f"Cannot use /join. The game has already started.")
         return
+
+    # Verify the player has not already joined
+    for player in ctrl.players:
+        if player.name == name:
+            await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=hikari.Embed(
+                title="Error!",
+                description=f"You have already joined the game.",
+                color=hikari.Color(0xFF0000)))
+            return
 
     if len(ctrl.players) < 4:
         ctrl.add_player(name, ctx.options.color)
         await ctx.respond(content=f"{name} has joined the game as {ctx.options.color}.")
     elif len(ctrl.players) == 4:
-        await ctx.respond(content=f"Cannot use /join. There are already 4 players.")
-
+        await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=f"Cannot use /join. There are already 4 players.")
 
 
 # Extensions are hot-reloadable (can be loaded/unloaded while the bot is live)

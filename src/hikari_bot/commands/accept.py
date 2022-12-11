@@ -27,7 +27,7 @@ async def accept(ctx: lightbulb.Context) -> None:
 
     # Cannot accept your own trade
     if player1_name == player2_name:
-        await ctx.respond(content=hikari.Embed(
+        await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=hikari.Embed(
                 title="Error!",
                 description=f"You cannot accept your own trade.",
                 color=hikari.Color(0xFF0000)))
@@ -36,7 +36,7 @@ async def accept(ctx: lightbulb.Context) -> None:
 
     # Player whose turn it is must be one of the player's involved in the trade
     if player1_name != ctrl.players[ctrl.current_player].name and player2_name != ctrl.players[ctrl.current_player].name:
-        await ctx.respond(content=hikari.Embed(
+        await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=hikari.Embed(
                 title="Error!",
                 description=f"Player {ctrl.current_player} must be involved in the trade.",
                 color=hikari.Color(0xFF0000)))
@@ -45,7 +45,7 @@ async def accept(ctx: lightbulb.Context) -> None:
 
     # Invalid trade offer to accept
     if ctx.options.trade_num > len(ctrl.active_trades):
-        await ctx.respond(content=hikari.Embed(
+        await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=hikari.Embed(
                 title="Error!",
                 description=f"Trade Offer #: {ctx.options.trade_num} is invalid.",
                 color=hikari.Color(0xFF0000)))
@@ -55,16 +55,16 @@ async def accept(ctx: lightbulb.Context) -> None:
     try:
         ctrl.trade(ctx.options.trade_num, ctrl.get_player(player2_name))
 
-        await bot.bot.rest.create_message(ctx.channel_id, content=f"Trade # {ctx.options.trade_num} from {player1_name} accepted by {player2_name}.")
+        await ctx.respond(content=f"Trade # {ctx.options.trade_num} from {player1_name} accepted by {player2_name}.")
     except controller.Resource:
-        await ctx.respond(content=hikari.Embed(
+        await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=hikari.Embed(
                 title="Error!",
                 description=f"A player does not have the necessary resources to complete the trade.",
                 color=hikari.Color(0xFF0000)))
-    except:
-        await ctx.respond(content=hikari.Embed(
+    except Exception as e:
+        await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=hikari.Embed(
                 title="Error!",
-                description=f"Failed to do the trade.",
+                description=f"Failed to do the trade: {e}",
                 color=hikari.Color(0xFF0000)))
     
 

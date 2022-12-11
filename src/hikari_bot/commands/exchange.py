@@ -11,7 +11,7 @@ plugin = lightbulb.Plugin("Exchange", description="Exchange resource cards.")
 @lightbulb.option("want", description="card wanted", choices=["Brick", "Wood", "Rock", "Wheat", "Sheep"], type=str)
 @lightbulb.option("give", description="cards to give", choices=["Brick", "Wood", "Rock", "Wheat", "Sheep"], type=str)
 @lightbulb.option("exchange_type", description="exchange_type", choices=["2for1", "3for1", "4for1"], type=str)
-@lightbulb.command("exchange", description="Exchange resource cards.", ephemeral=True)
+@lightbulb.command("exchange", description="Exchange resource cards.")
 @lightbulb.implements(lightbulb.SlashCommand)
 async def exchange(ctx: lightbulb.Context) -> None:
     """Exchange resource cards."""
@@ -30,7 +30,7 @@ async def exchange(ctx: lightbulb.Context) -> None:
         hasAccess = ctrl.board.postAccess(player_obj, ctx.options.exchange_type)
 
     if not hasAccess:
-        await ctx.respond(content=hikari.Embed(
+        await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=hikari.Embed(
                 title="Error!",
                 description=f"You do not have access to this port: {ctx.options.exchange_type}",
                 color=hikari.Color(0xFF0000)))
@@ -43,14 +43,13 @@ async def exchange(ctx: lightbulb.Context) -> None:
         player_obj.currentResources[ctx.options.want.lower()] += 1
         ctrl.resource_bank[ctx.options.want.lower()] -= 1
     else:
-        await ctx.respond(content=hikari.Embed(
+        await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=hikari.Embed(
             title="Error!",
             description=f"You or the bank do not have the necessary resources to use this port.",
             color=hikari.Color(0xFF0000)))
         return
 
-    await bot.bot.rest.create_message(ctx.channel_id, content=f"Player {name} exchanged {amount_to_trade} {ctx.options.give} for 1 {ctx.options.want}")
-    await ctx.respond(content="Succesfully exchanged.")
+    await ctx.respond(content=f"Player {name} exchanged {amount_to_trade} {ctx.options.give} for 1 {ctx.options.want}")
 
 
 # Extensions are hot-reloadable (can be loaded/unloaded while the bot is live)

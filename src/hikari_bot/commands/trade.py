@@ -18,7 +18,7 @@ plugin = lightbulb.Plugin("Trade", description="Offer a trade.")
 @lightbulb.option("rock_in", description="# Rock to get.", type=int, default=0, min_value=0)
 @lightbulb.option("wheat_in", description="# wheat to get.", type=int, default=0, min_value=0)
 @lightbulb.option("sheep_in", description="# Sheep to get.", type=int, default=0, min_value=0)
-@lightbulb.command("trade", description="Offer a trade.", ephemeral=True)
+@lightbulb.command("trade", description="Offer a trade.")
 @lightbulb.implements(lightbulb.SlashCommand)
 async def trade(ctx: lightbulb.Context) -> None:
     """Offer a trade.
@@ -48,12 +48,11 @@ async def trade(ctx: lightbulb.Context) -> None:
         "p2_in": player2_resources
     })
 
-    await bot.bot.rest.create_message(ctx.channel_id, content=hikari.Embed(
+    await ctx.respond(content=hikari.Embed(
                 title=f"Trade #{len(ctrl.active_trades)}!",
                 description=f"{name} wants to give: {player1_resources} for {player2_resources}",
                 color=hikari.Color(0xFFFF00)))
     
-    await ctx.respond(content="Trade offer successfully created!")
 
 # Extensions are hot-reloadable (can be loaded/unloaded while the bot is live)
 
