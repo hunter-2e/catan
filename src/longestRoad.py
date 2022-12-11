@@ -150,7 +150,7 @@ def outerLongestRoad(playerCoords, players, playerChecked):
 
     for player in players:
         if player != playerChecked:
-            for settle in player.settleSpots:
+            for settle in player.settlementSpots:
                 disruptingSettles.append(settle)
     
     for connectingRoads in playerCoords:
