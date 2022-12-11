@@ -29,7 +29,7 @@ class Controller:
         }
 
         self.dev_deck = {
-            "KnightCard":       14,
+            "Knight":       14,
             "RoadBuilding":     2,
             "YearOfPlenty":     2,
             "Monopoly":         2,
@@ -211,7 +211,7 @@ class Controller:
     def largest_army(self):
 
         for player in self.players:
-            if player.usedDevelopmentCards["KnightCard"] >= 3 and (self.player_most_knights is None or self.player_most_knights.usedDevelopmentCards["KnightCard"] < player.usedDevelopmentCards["KnightCard"]):
+            if player.usedDevelopmentCards["Knight"] >= 3 and (self.player_most_knights is None or self.player_most_knights.usedDevelopmentCards["Knight"] < player.usedDevelopmentCards["Knight"]):
                 if self.player_most_knights is not None:
                     self.player_most_knights.largestArmy = False
                     self.player_most_knights.victoryPoints -= 2

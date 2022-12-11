@@ -16,21 +16,21 @@ class Player:
         self.longestRoadLength = 0
         
         self.currentResources       = {
-            "brick":  0,
-            "wood": 0,
-            "rock":    0,
-            "wheat":  0,
-            "sheep":   0,              }
+            "brick":  5,
+            "wood": 5,
+            "rock":    5,
+            "wheat":  5,
+            "sheep":   5,              }
 
         self.unusedDevelopmentCards = {
-            "KnightCard":       1,
+            "Knight":       1,
             "RoadBuilding":     0,
             "YearOfPlenty":     0,
             "Monopoly":         0,
             "VictoryPointCard": 0,    }
 
         self.usedDevelopmentCards   = {
-            "KnightCard":       0,
+            "Knight":       0,
             "RoadBuilding":     0,
             "YearOfPlenty":     0,
             "Monopoly":         0,
@@ -74,7 +74,7 @@ class Player:
             raise ValueError("cannot modify resource")
 
     # quantity should be an integer
-    # resource should be a string, either: "KnightCard", "RoadBuilding", "YearOfPlenty", "Monopoly", or "VictoryPointCard"
+    # resource should be a string, either: "Knight", "RoadBuilding", "YearOfPlenty", "Monopoly", or "VictoryPointCard"
     def modUnusedDev(self, card, quantity):
         if self.unusedDevelopmentCards[card] + quantity >= 0: 
             self.unusedDevelopmentCards[card] += quantity
@@ -82,7 +82,7 @@ class Player:
             raise ValueError("cannot modify unused development cards")
 
     # quantity should be a positive integer
-    # resource should be a string, either: "KnightCard", "RoadBuilding", "YearOfPlenty", "Monopoly", or "VictoryPointCard"
+    # resource should be a string, either: "Knight", "RoadBuilding", "YearOfPlenty", "Monopoly", or "VictoryPointCard"
     def modUsedDev(self, card, quantity):
         if self.usedDevelopmentCards[card] + quantity >= 0 and quantity > 0: 
             self.usedDevelopmentCards[card] += quantity

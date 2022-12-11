@@ -8,7 +8,7 @@ plugin = lightbulb.Plugin("Use", description="Use a development card.")
 
 # Creates a command in the plugin
 @plugin.command
-@lightbulb.option("development_card", description="Play a development card.", choices=["Knight", "Year of Plenty", "Monopoly", "Road Builder"], required=True)
+@lightbulb.option("development_card", description="Play a development card.", choices=["Knight", "YearOfPlenty", "Monopoly", "RoadBuilding"], required=True)
 @lightbulb.command("use", description="Use a development card.", ephemeral=True)
 @lightbulb.implements(lightbulb.SlashCommand)
 async def use(ctx: lightbulb.Context) -> None:
@@ -22,7 +22,7 @@ async def use(ctx: lightbulb.Context) -> None:
         return
 
     if ctx.options.development_card == "Knight":
-        if bot.ctrl.get_player_by_name(name).unusedDevelopmentCards["KnightCard"] == 0:
+        if bot.ctrl.get_player_by_name(name).unusedDevelopmentCards["Knight"] == 0:
             await ctx.respond(content="Error: You do not have any Knight cards to play.")
             return
 

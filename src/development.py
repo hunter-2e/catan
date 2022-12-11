@@ -13,18 +13,18 @@ def buyDevCard(player, devDeck) -> str:
 
     return boughtCard
 
-def playKnightCard(ctrl, player, newLocation, playerToRob):
-    if player.unusedDevelopmentCards["KnightCard"] < 1:
+def playKnight(ctrl, player, newLocation, playerToRob):
+    if player.unusedDevelopmentCards["Knight"] < 1:
         raise Exception("You do not have a knight card to play.")
 
-    player.unusedDevelopmentCards["KnightCard"] -= 1
-    player.usedDevelopmentCards["KnightCard"] += 1
+    player.unusedDevelopmentCards["Knight"] -= 1
+    player.usedDevelopmentCards["Knight"] += 1
 
     try:
         ctrl.move_robber(newLocation, playerToRob)
     except Exception as e:
-        player.unusedDevelopmentCards["KnightCard"] += 1
-        player.usedDevelopmentCards["KnightCard"] -= 1
+        player.unusedDevelopmentCards["Knight"] += 1
+        player.usedDevelopmentCards["Knight"] -= 1
         print(e)
         raise e
 
