@@ -50,9 +50,9 @@ async def rob(ctx: lightbulb.Context) -> None:
 
     try:
         resource_stolen = bot.ctrl.move_robber(location, bot.ctrl.get_player_by_color(ctx.options.player))
-    except controller.RobberException:
-        await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=f"There are no player's with resources to steal. Succesfully moved the robber to {ctx.options.location}.")
-        await ctx.respond(content=f"{name} moved the robber to {location}.")
+    #except controller.RobberException:
+    #    await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=f"There are no player's with resources to steal. Succesfully moved the robber to {ctx.options.location}.")
+    #    await ctx.respond(content=f"{name} moved the robber to {location}.")
     except Exception as e:
         await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=hikari.Embed(
                 title="Error!",
@@ -60,8 +60,11 @@ async def rob(ctx: lightbulb.Context) -> None:
                 color=hikari.Color(0xFF0000)))
         return
 
-    await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=f"Successfully stole {resource_stolen} from {ctx.options.player}.")
-    await ctx.respond(content=f"{name} moved the robber to {location} and stole from {ctx.options.player}.")
+    if resource_stolen is None:
+        await ctx.respond(content=f"{name} moved the robber to {location} and stole nothing.")
+    else:
+        await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=f"Successfully stole {resource_stolen} from {ctx.options.player}.")
+        await ctx.respond(content=f"{name} moved the robber to {location} and stole from {ctx.options.player}.")
 
     bot.ctrl.flag.set()
 
