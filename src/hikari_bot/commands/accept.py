@@ -36,7 +36,7 @@ async def accept(ctx: lightbulb.Context) -> None:
     if player1_name != bot.ctrl.players[bot.ctrl.current_player].name and player2_name != bot.ctrl.players[bot.ctrl.current_player].name:
         await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=hikari.Embed(
                 title="Error!",
-                description=f"Player {bot.ctrl.current_player} must be involved in the trade.",
+                description=f"Player {bot.ctrl.players[bot.ctrl.current_player]} must be involved in the trade.",
                 color=hikari.Color(0xFF0000)))
 
         return
