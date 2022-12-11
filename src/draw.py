@@ -106,9 +106,21 @@ def drawBoard(board, mode):
 
         except: image = cv2.circle(image, (int(top[0]), top[1] + 95), 30, (0,0,0), -1)
 
+        if numToDraw in [6,8]:
+                dotsBelow = 5
+        elif numToDraw in [9, 5]:
+            dotsBelow = 4
+        elif numToDraw in [10, 4]:
+            dotsBelow = 3  
+        elif numToDraw in [11, 3]:
+            dotsBelow = 2
+        else: dotsBelow = 1
+
         if(numToDraw > 9):
             image = cv2.putText(image, str(numToDraw), (int(top[0] - 20), top[1] + 105), cv2.FONT_HERSHEY_DUPLEX, 1, (255,255,255), 2)
+            
         else: image = cv2.putText(image, str(numToDraw), (int(top[0] - 10), top[1] + 100), cv2.FONT_HERSHEY_DUPLEX, 1, (255,255,255), 2)
+        image = cv2.putText(image, str("." * dotsBelow), (int(top[0] - 20), top[1] + 115), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (255,255,255), 2)
 
         if mode == 'normal':
             image = cv2.polylines(image, [pts], isClosed, (0,0,0), thickness)
@@ -260,6 +272,8 @@ def determineColor(player):
         color = (255, 191, 0)
     elif(color == "White"):
         color = (255,255,255)
+    elif(color == "Purple"):
+        color = (148,0,211)
 
     return color
 
