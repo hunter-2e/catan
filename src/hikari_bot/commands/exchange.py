@@ -17,17 +17,16 @@ async def exchange(ctx: lightbulb.Context) -> None:
     """Exchange resource cards."""
 
     name = str(ctx.author).split("#")[0]
-    ctrl = bot.ctrl
-    player_obj = ctrl.get_player(name)
+    player_obj = bot.ctrl.get_player(name)
     hasAccess = None
 
     port_types = ["2for1", "3for1", "4for1"]
     amount_to_trade = port_types.index(ctx.options.exchange_type) + 2
 
     if ctx.options.exchange_type == "2for1":
-        hasAccess = ctrl.board.postAccess(player_obj, ctx.options.give)
+        hasAccess = bot.ctrl.board.postAccess(player_obj, ctx.options.give)
     else:
-        hasAccess = ctrl.board.postAccess(player_obj, ctx.options.exchange_type)
+        hasAccess = bot.ctrl.board.postAccess(player_obj, ctx.options.exchange_type)
 
     if not hasAccess:
         await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=hikari.Embed(
@@ -36,12 +35,12 @@ async def exchange(ctx: lightbulb.Context) -> None:
                 color=hikari.Color(0xFF0000)))
         return
 
-    if player_obj.currentResources[ctx.options.give.lower()] >= amount_to_trade and ctrl.resource_bank[ctx.options.want.lower()] >= 1:
+    if player_obj.currentResources[ctx.options.give.lower()] >= amount_to_trade and bot.ctrl.resource_bank[ctx.options.want.lower()] >= 1:
         player_obj.currentResources[ctx.options.give.lower()] -= amount_to_trade
-        ctrl.resource_bank[ctx.options.give.lower()] += amount_to_trade
+        bot.ctrl.resource_bank[ctx.options.give.lower()] += amount_to_trade
 
         player_obj.currentResources[ctx.options.want.lower()] += 1
-        ctrl.resource_bank[ctx.options.want.lower()] -= 1
+        bot.ctrl.resource_bank[ctx.options.want.lower()] -= 1
     else:
         await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=hikari.Embed(
             title="Error!",

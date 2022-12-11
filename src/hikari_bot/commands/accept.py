@@ -19,9 +19,7 @@ async def accept(ctx: lightbulb.Context) -> None:
     The player whose turn it is can accept any trade OR any player can accept a trade from the player whose turn it is.
     """
 
-    ctrl = bot.ctrl
-
-    active_trades = ctrl.active_trades
+    active_trades = bot.ctrl.active_trades
     player1_name = active_trades[ctx.options.trade_num - 1]["name"]
     player2_name = str(ctx.author).split("#")[0]
 
@@ -35,16 +33,16 @@ async def accept(ctx: lightbulb.Context) -> None:
         return
 
     # Player whose turn it is must be one of the player's involved in the trade
-    if player1_name != ctrl.players[ctrl.current_player].name and player2_name != ctrl.players[ctrl.current_player].name:
+    if player1_name != bot.ctrl.players[bot.ctrl.current_player].name and player2_name != bot.ctrl.players[bot.ctrl.current_player].name:
         await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=hikari.Embed(
                 title="Error!",
-                description=f"Player {ctrl.current_player} must be involved in the trade.",
+                description=f"Player {bot.ctrl.current_player} must be involved in the trade.",
                 color=hikari.Color(0xFF0000)))
 
         return
 
     # Invalid trade offer to accept
-    if ctx.options.trade_num > len(ctrl.active_trades):
+    if ctx.options.trade_num > len(bot.ctrl.active_trades):
         await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=hikari.Embed(
                 title="Error!",
                 description=f"Trade Offer #: {ctx.options.trade_num} is invalid.",
@@ -53,7 +51,7 @@ async def accept(ctx: lightbulb.Context) -> None:
         return
 
     try:
-        ctrl.trade(ctx.options.trade_num, ctrl.get_player(player2_name))
+        bot.ctrl.trade(ctx.options.trade_num, bot.ctrl.get_player(player2_name))
 
         await ctx.respond(content=f"Trade # {ctx.options.trade_num} from {player1_name} accepted by {player2_name}.")
     except controller.Resource:

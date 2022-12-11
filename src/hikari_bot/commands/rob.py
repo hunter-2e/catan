@@ -22,11 +22,10 @@ async def rob(ctx: lightbulb.Context) -> None:
 
     name = str(ctx.author).split("#")[0]
     location = (list(string.ascii_uppercase).index(ctx.options.location[0].upper()), float(ctx.options.location[1:]))
-    ctrl = bot.ctrl
     resource_stolen = None
 
     # Verify the player moving the robber is the current player
-    if ctrl.players[ctrl.current_player].name != name:
+    if bot.ctrl.players[bot.ctrl.current_player].name != name:
         await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=hikari.Embed(
                 title="Error!",
                 description=f"You cannot rob on someone elses turn.",
@@ -35,7 +34,7 @@ async def rob(ctx: lightbulb.Context) -> None:
         return
 
     # Verify the player rolled a 7
-    if ctrl.cur_dice != 7:
+    if bot.ctrl.cur_dice != 7:
         await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=hikari.Embed(
                 title="Error!",
                 description=f"You cannot rob unless you rolled a 7.",
@@ -44,7 +43,7 @@ async def rob(ctx: lightbulb.Context) -> None:
         return
 
     # Verify the robber has not been moved yet this turn
-    if ctrl.has_robber_moved:
+    if bot.ctrl.has_robber_moved:
         await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=hikari.Embed(
                 title="Error!",
                 description=f"You can only move the robber once per turn.",
@@ -53,7 +52,7 @@ async def rob(ctx: lightbulb.Context) -> None:
         return
 
     try:
-        resource_stolen = ctrl.move_robber(location, ctx.options.player)
+        resource_stolen = bot.ctrl.move_robber(location, ctx.options.player)
     except controller.RobberException:
         await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=f"There are no player's with resources to steal. Succesfully moved the robber to {ctx.options.location}.")
         await ctx.respond(content=f"{name} moved the robber to {location}.")
@@ -68,7 +67,7 @@ async def rob(ctx: lightbulb.Context) -> None:
     await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=f"Successfully stole {resource_stolen} from {ctx.options.player}.")
     await ctx.respond(content=f"{name} moved the robber to {location} and stole from {ctx.options.player}.")
 
-    ctrl.flag.set()
+    bot.ctrl.flag.set()
 
 
 # Extensions are hot-reloadable (can be loaded/unloaded while the bot is live)

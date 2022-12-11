@@ -17,7 +17,6 @@ async def join(ctx: lightbulb.Context) -> None:
     Called via the discord command '/join <color>'.
     """
 
-    ctrl = bot.ctrl
     name = str(ctx.author).split("#")[0]
 
     # Verify the game has not started yet
@@ -26,7 +25,7 @@ async def join(ctx: lightbulb.Context) -> None:
         return
 
     # Verify the player has not already joined
-    for player in ctrl.players:
+    for player in bot.ctrl.players:
         if player.name == name:
             await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=hikari.Embed(
                 title="Error!",
@@ -34,10 +33,10 @@ async def join(ctx: lightbulb.Context) -> None:
                 color=hikari.Color(0xFF0000)))
             return
 
-    if len(ctrl.players) < 4:
-        ctrl.add_player(name, ctx.options.color)
+    if len(bot.ctrl.players) < 4:
+        bot.ctrl.add_player(name, ctx.options.color)
         await ctx.respond(content=f"{name} has joined the game as {ctx.options.color}.")
-    elif len(ctrl.players) == 4:
+    elif len(bot.ctrl.players) == 4:
         await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=f"Cannot use /join. There are already 4 players.")
 
 

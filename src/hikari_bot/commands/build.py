@@ -23,7 +23,6 @@ async def build(ctx: lightbulb.Context) -> None:
     Called via the discord command '/build <building> <location>'.
     """
 
-    ctrl = bot.ctrl
     name = str(ctx.author).split("#")[0]
 
     location_1 = None
@@ -31,7 +30,7 @@ async def build(ctx: lightbulb.Context) -> None:
 
     # must be in the game to build
     try:
-        ctrl.get_player(name)
+        bot.ctrl.get_player(name)
     except Exception:
         await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=hikari.Embed(
                 title="Error!",
@@ -40,7 +39,7 @@ async def build(ctx: lightbulb.Context) -> None:
         return
 
     # must be your turn to move
-    if ctrl.players[ctrl.current_player].name != name:
+    if bot.ctrl.players[bot.ctrl.current_player].name != name:
         await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=hikari.Embed(
                 title="Error!",
                 description=f"You cannot build on someone elses turn.",
@@ -68,7 +67,7 @@ async def build(ctx: lightbulb.Context) -> None:
         location_2 = (list(string.ascii_uppercase).index(ctx.options.location_2[0].upper()), int(ctx.options.location_2[1:]))
 
     try:
-        bought_card = ctrl.build(str(ctx.author).split("#")[0], ctx.options.building, location_1, location_2)
+        bought_card = bot.ctrl.build(str(ctx.author).split("#")[0], ctx.options.building, location_1, location_2)
 
         await ctx.respond(content=f"{name} built a {ctx.options.building}.")
         if bought_card is not None:

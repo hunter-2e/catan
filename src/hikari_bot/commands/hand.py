@@ -17,9 +17,8 @@ async def hand(ctx: lightbulb.Context) -> None:
     Called via the discord command '/hand'.
     """
 
-    ctrl = bot.ctrl
     name = str(ctx.author).split("#")[0]
-    player = ctrl.get_player(name)
+    player = bot.ctrl.get_player(name)
 
     response = hikari.Embed(
         title="Hand:",

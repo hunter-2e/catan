@@ -17,7 +17,6 @@ plugin = lightbulb.Plugin("Discard", description="Discard resource cards.")
 @lightbulb.implements(lightbulb.SlashCommand)
 async def discard(ctx: lightbulb.Context) -> None:
     name = str(ctx.author).split("#")[0]
-    ctrl = bot.ctrl
 
     cards_to_dict = {
         "brick": int(ctx.options.brick),
@@ -29,10 +28,10 @@ async def discard(ctx: lightbulb.Context) -> None:
     total = sum(cards_to_dict.values())
     
     # prevent player from discarding incorrect # of cards
-    if total != ctrl.get_player(name).cardsToDiscard:
+    if total != bot.ctrl.get_player(name).cardsToDiscard:
         await ctx.respond(content=hikari.Embed(
                 title="Error!",
-                description=f"You need to discard {ctrl.get_player(name).cardsToDiscard} cards.",
+                description=f"You need to discard {bot.ctrl.get_player(name).cardsToDiscard} cards.",
                 color=hikari.Color(0xFF0000)))
 
         return
@@ -47,7 +46,7 @@ async def discard(ctx: lightbulb.Context) -> None:
 
             return
 
-        if ctrl.get_player(name).currentResources[card] < val:
+        if bot.ctrl.get_player(name).currentResources[card] < val:
             await ctx.respond(content=hikari.Embed(
                 title="Error!",
                 description=f"You do not have {val} {card} cards to discard.",
@@ -56,21 +55,21 @@ async def discard(ctx: lightbulb.Context) -> None:
             return
 
     for card, val in cards_to_dict.items():
-        ctrl.resource_bank[card] += val
-        ctrl.get_player(name).currentResources[card] -= val
+        bot.ctrl.resource_bank[card] += val
+        bot.ctrl.get_player(name).currentResources[card] -= val
 
-    ctrl.get_player(name).cardsToDiscard = 0
+    bot.ctrl.get_player(name).cardsToDiscard = 0
 
     await ctx.respond(content=f"Successfully discarded {total} cards.")
 
     all_discarded = True
-    for player in ctrl.players:
+    for player in bot.ctrl.players:
         if player.cardsToDiscard > 0:
             all_discarded = False
             break
 
     if all_discarded:
-        ctrl.flag.set()
+        bot.ctrl.flag.set()
 
 # Extensions are hot-reloadable (can be loaded/unloaded while the bot is live)
 

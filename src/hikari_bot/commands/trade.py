@@ -30,7 +30,6 @@ async def trade(ctx: lightbulb.Context) -> None:
     #TODO: Delete trade messages from channel at end of each turn??
 
     name = str(ctx.author).split("#")[0]
-    ctrl = bot.ctrl
 
     player1_resources = {}
     player2_resources = {}
@@ -42,14 +41,14 @@ async def trade(ctx: lightbulb.Context) -> None:
         if "in" in key:
             player2_resources[key.split("_")[0]] = value 
 
-    ctrl.active_trades.append({
+    bot.ctrl.active_trades.append({
         "name": name, 
         "p1_out": player1_resources, 
         "p2_in": player2_resources
     })
 
     await ctx.respond(content=hikari.Embed(
-                title=f"Trade #{len(ctrl.active_trades)}!",
+                title=f"Trade #{len(bot.ctrl.active_trades)}!",
                 description=f"{name} wants to give: {player1_resources} for {player2_resources}",
                 color=hikari.Color(0xFFFF00)))
     
