@@ -171,8 +171,6 @@ class Controller:
                         atleast_1 = True
                         break
             if atleast_1: break
-        if not atleast_1:
-            raise RobberException
         
         player_to_rob = self.get_player_by_name(player_to_rob)
         self.board.moveRobber(new_location)
@@ -223,8 +221,6 @@ class Controller:
 
 
     def longest_road(self):
-        
-
         for player in self.players:
             curPlayerLongestRoad = longestRoad.outerLongestRoad(player.roadsPlaced, self.players, player)
             if curPlayerLongestRoad >= 5 and (self.player_longest_road is None or self.player_longest_road_length < curPlayerLongestRoad):
@@ -244,7 +240,6 @@ class Controller:
             return
 
 
-
     def roll_dice(self) -> int:
         """Rolls 2 dice randomly."""
 
@@ -261,8 +256,10 @@ class Controller:
 
     def get_player_by_color(self, color: str) -> player.Player:
         """Returns the player object given a color OR raises an error if none found."""
-
+        print(self.players)
         for p in self.players:
+            print("p.color: " + p.color)
+            print("color: " + color)
             if p.color == color:
                 return p
 

@@ -23,7 +23,7 @@ class Player:
             "sheep":   0,              }
 
         self.unusedDevelopmentCards = {
-            "KnightCard":       0,
+            "KnightCard":       1,
             "RoadBuilding":     0,
             "YearOfPlenty":     0,
             "Monopoly":         0,
