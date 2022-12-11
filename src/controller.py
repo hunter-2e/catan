@@ -171,12 +171,13 @@ class Controller:
                         atleast_1 = True
                         break
             if atleast_1: break
-        if not atleast_1:
-            raise RobberException
         
         player_to_rob = self.get_player_by_name(player_to_rob)
         self.board.moveRobber(new_location)
         stolenCard = None
+
+        if not atleast_1:
+            return
 
         for tile in self.board.settleOnTile:
             if '(' + str(self.board.robberLocation[0]) + ',' + str(self.board.robberLocation[1]) + ')' in tile:

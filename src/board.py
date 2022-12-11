@@ -396,8 +396,9 @@ class Board:
                 newLocation = (1, int((newLocation[1]/2) - 1))
             else: newLocation = (3, int((newLocation[1]/2) - 1))
 
-        else:
+        elif newLocation[0] == 5.5:
             newLocation = (2, int((newLocation[1] - 1)/2))
+        else: return False
 
         self.robberLocation = newLocation
         image = np.array(Image.open("images/test.png"))
