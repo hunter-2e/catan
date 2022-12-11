@@ -364,13 +364,14 @@ class Board:
 
                 if('rock' in material):
                     player.currentResources['rock'] += toBeGiven
-                elif('brick' in material):
+                if('brick' in material):
                     player.currentResources['brick'] += toBeGiven
-                elif('wheat' in material):
+                if('wheat' in material):
                     player.currentResources['wheat'] += toBeGiven
-                elif('tree' in material):
+                if('tree' in material):
                     player.currentResources['wood'] += toBeGiven
-                else: player.currentResources['sheep'] += toBeGiven
+                if('sheep' in material):
+                    player.currentResources['sheep'] += toBeGiven
                
     #postType one of ["Wheat", "Rock", "Brick", "Wood", "Sheep", "3for1", "4for1"]
     def postAccess(self, player, postType):
