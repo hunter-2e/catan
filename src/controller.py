@@ -43,7 +43,7 @@ class Controller:
         self.flag = None
         self.cur_dice = None
         self.has_robber_moved = False
-        self.cur_phase = 0      # 0 = first half of initial build cycle, 1 = 2nd half, 2 = main game
+        self.cur_phase = 0      # 0 = first half of initial build cycle, 1 = 2nd half, 2 = main game, 3 = discarding
         self.victory_points_to_win = 10
 
     def trade(self, trade_num: int, player2: Union[player.Player, str]) -> None:
@@ -345,8 +345,10 @@ async def run(ctrl: Controller, flag: asyncio.Event, drawing_mode: str) -> None:
                 await bot.send_image_or_message(None, f"Players with over 7 cards: {*players_over_7,}")     # "*" used to unpack the list
                 await bot.send_image_or_message(None, "Use /discard <cards> to get rid of half of your cards.")
 
+                ctrl.cur_phase = 3
                 await ctrl.flag.wait()
                 ctrl.flag.clear()
+                ctrl.cur_phase = 2
 
             # Prompt player for new robber location, wait for response
             await bot.send_image_or_message(None, "Use /rob <location> <player> to move the robber and steal from someone.")

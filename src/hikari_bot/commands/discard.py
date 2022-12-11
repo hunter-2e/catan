@@ -27,6 +27,14 @@ async def discard(ctx: lightbulb.Context) -> None:
     }
     total = sum(cards_to_dict.values())
     
+    # must be in the discard phase to use /discard
+    if bot.ctrl.cur_phase != 3:
+        await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=hikari.Embed(
+                title="Error!",
+                description=f"You cannot discard cards right now.",
+                color=hikari.Color(0xFF0000)))
+        return
+
     # prevent player from discarding incorrect # of cards
     if total != bot.ctrl.get_player(name).cardsToDiscard:
         await ctx.respond(content=hikari.Embed(
