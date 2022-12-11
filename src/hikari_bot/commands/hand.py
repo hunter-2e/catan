@@ -18,7 +18,7 @@ async def hand(ctx: lightbulb.Context) -> None:
     """
 
     name = str(ctx.author).split("#")[0]
-    player = bot.ctrl.get_player(name)
+    player = bot.ctrl.get_player_by_name(name)
 
     response = hikari.Embed(
         title="Hand:",

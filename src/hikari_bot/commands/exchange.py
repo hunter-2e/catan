@@ -17,7 +17,7 @@ async def exchange(ctx: lightbulb.Context) -> None:
     """Exchange resource cards."""
 
     name = str(ctx.author).split("#")[0]
-    player_obj = bot.ctrl.get_player(name)
+    player_obj = bot.ctrl.get_player_by_name(name)
     hasAccess = None
 
     port_types = ["2for1", "3for1", "4for1"]

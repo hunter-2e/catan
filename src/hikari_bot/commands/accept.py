@@ -29,7 +29,6 @@ async def accept(ctx: lightbulb.Context) -> None:
                 title="Error!",
                 description=f"You cannot accept your own trade.",
                 color=hikari.Color(0xFF0000)))
-
         return
 
     # Player whose turn it is must be one of the player's involved in the trade
@@ -38,7 +37,6 @@ async def accept(ctx: lightbulb.Context) -> None:
                 title="Error!",
                 description=f"Player {bot.ctrl.players[bot.ctrl.current_player]} must be involved in the trade.",
                 color=hikari.Color(0xFF0000)))
-
         return
 
     # Invalid trade offer to accept
@@ -47,11 +45,10 @@ async def accept(ctx: lightbulb.Context) -> None:
                 title="Error!",
                 description=f"Trade Offer #: {ctx.options.trade_num} is invalid.",
                 color=hikari.Color(0xFF0000)))
-
         return
 
     try:
-        bot.ctrl.trade(ctx.options.trade_num, bot.ctrl.get_player(player2_name))
+        bot.ctrl.trade(ctx.options.trade_num, bot.ctrl.get_player_by_name(player2_name))
 
         await ctx.respond(content=f"Trade # {ctx.options.trade_num} from {player1_name} accepted by {player2_name}.")
     except controller.Resource:

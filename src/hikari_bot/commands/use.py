@@ -18,7 +18,7 @@ async def use(ctx: lightbulb.Context) -> None:
     name = str(ctx.author).split("#")[0]
 
     if ctx.options.development_card == "Knight":
-        if bot.ctrl.get_player(name).unusedDevelopmentCards["KnightCard"] == 0:
+        if bot.ctrl.get_player_by_name(name).unusedDevelopmentCards["KnightCard"] == 0:
             await ctx.respond(content="Error: You do not have any Knight cards to play.")
             return
 
@@ -26,21 +26,21 @@ async def use(ctx: lightbulb.Context) -> None:
         await modal.send(ctx.interaction)
         
     elif ctx.options.development_card == "Year of Plenty":
-        if bot.ctrl.get_player(name).unusedDevelopmentCards["YearOfPlenty"] == 0:
+        if bot.ctrl.get_player_by_name(name).unusedDevelopmentCards["YearOfPlenty"] == 0:
             await ctx.respond(content="Error: You do not have any Year Of Plenty cards to play.")
             return
 
         modal = modals.YOPModal(bot.ctrl, title="Use Year Of Plenty Card")
         await modal.send(ctx.interaction)
     elif ctx.options.development_card == "Monopoly":
-        if bot.ctrl.get_player(name).unusedDevelopmentCards["Monopoly"] == 0:
+        if bot.ctrl.get_player_by_name(name).unusedDevelopmentCards["Monopoly"] == 0:
             await ctx.respond(content="Error: You do not have any Monopoly cards to play.")
             return
 
         modal = modals.MonopolyModal(bot.ctrl, title="Use Monopoly Card")
         await modal.send(ctx.interaction)
     else:
-        if bot.ctrl.get_player(name).unusedDevelopmentCards["RoadBuilding"] == 0:
+        if bot.ctrl.get_player_by_name(name).unusedDevelopmentCards["RoadBuilding"] == 0:
             await ctx.respond(content="Error: You do not have any Road Building cards to play.")
             return
 

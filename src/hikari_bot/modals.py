@@ -28,7 +28,7 @@ class KnightModal(miru.Modal):
         location = (list(string.ascii_uppercase).index(ctx.get_value_by_id('location')[0].upper()), float(ctx.get_value_by_id('location')[1:]))
 
         try:
-            development.playKnightCard(self.ctrl, self.ctrl.get_player(name_activator), location, name_robbed)
+            development.playKnightCard(self.ctrl, self.ctrl.get_player_by_name(name_activator), location, name_robbed)
             await ctx.respond(f"{name_activator} moved the robber to {ctx.get_value_by_id('location')} and stole from {name_robbed} with a Knight card.")
         except Exception as e:
             print(traceback.print_exc())
@@ -54,7 +54,7 @@ class YOPModal(miru.Modal):
         name = str(ctx.author).split("#")[0].strip()
 
         try:
-            development.playYearOfPlenty(self.ctrl, self.ctrl.get_player(name), ctx.get_value_by_id('resource1'), ctx.get_value_by_id('resource2'))
+            development.playYearOfPlenty(self.ctrl, self.ctrl.get_player_by_name(name), ctx.get_value_by_id('resource1'), ctx.get_value_by_id('resource2'))
             await ctx.respond(f"{str(ctx.author).split('#')[0]} recieved {ctx.get_value_by_id('resource1')} and {ctx.get_value_by_id('resource2')} from a Year of Plenty card.")
         except Exception as e:
             print(traceback.print_exc())
@@ -79,7 +79,7 @@ class MonopolyModal(miru.Modal):
         name = str(ctx.author).split("#")[0].strip()
 
         try:
-            development.playMonopoly(self.ctrl, self.ctrl.get_player(name), ctx.get_value_by_id('resource'))
+            development.playMonopoly(self.ctrl, self.ctrl.get_player_by_name(name), ctx.get_value_by_id('resource'))
             await ctx.respond(f"{str(ctx.author).split('#')[0]} stole all {ctx.get_value_by_id('resource')} with a Monopoly card.")
         except Exception as e:
             print(traceback.print_exc())
@@ -115,7 +115,7 @@ class RoadBuildingModal(miru.Modal):
         road2 = (loc_2_1, loc_2_2)
 
         try:
-            development.playRoadBuilding(self.ctrl, self.ctrl.get_player(name), road1, road2)
+            development.playRoadBuilding(self.ctrl, self.ctrl.get_player_by_name(name), road1, road2)
             await ctx.respond(f"{str(ctx.author).split('#')[0]} built a road between {ctx.get_value_by_id('road1location1')} and {ctx.get_value_by_id('road1location2')} and a road between {ctx.get_value_by_id('road2location1')} and {ctx.get_value_by_id('road2location2')} with a Road Builder card.")
         except Exception as e:
             print(traceback.print_exc())

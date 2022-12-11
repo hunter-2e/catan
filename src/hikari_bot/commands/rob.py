@@ -11,7 +11,7 @@ plugin = lightbulb.Plugin("Rob", description="Move the robber and steal from som
 # Creates a command in the plugin
 @plugin.command
 @lightbulb.option("location", description="The location to move the robber.", required=True)
-@lightbulb.option("player", description="The player to steal from.", required=True)
+@lightbulb.option("player", description="The player to steal from.", choices=["Blue", "White", "Orange", "Red", "Purple"], required=True)
 @lightbulb.command("rob", description="Move the robber and steal from someone.")
 @lightbulb.implements(lightbulb.SlashCommand)
 async def rob(ctx: lightbulb.Context) -> None:
@@ -30,7 +30,6 @@ async def rob(ctx: lightbulb.Context) -> None:
                 title="Error!",
                 description=f"You cannot rob on someone elses turn.",
                 color=hikari.Color(0xFF0000)))
-
         return
 
     # Verify the player rolled a 7
@@ -39,7 +38,6 @@ async def rob(ctx: lightbulb.Context) -> None:
                 title="Error!",
                 description=f"You cannot rob unless you rolled a 7.",
                 color=hikari.Color(0xFF0000)))
-
         return
 
     # Verify the robber has not been moved yet this turn
@@ -48,11 +46,10 @@ async def rob(ctx: lightbulb.Context) -> None:
                 title="Error!",
                 description=f"You can only move the robber once per turn.",
                 color=hikari.Color(0xFF0000)))
-
         return
 
     try:
-        resource_stolen = bot.ctrl.move_robber(location, ctx.options.player)
+        resource_stolen = bot.ctrl.move_robber(location, bot.ctrl.get_player_by_color(ctx.options.player))
     except controller.RobberException:
         await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=f"There are no player's with resources to steal. Succesfully moved the robber to {ctx.options.location}.")
         await ctx.respond(content=f"{name} moved the robber to {location}.")
@@ -61,7 +58,6 @@ async def rob(ctx: lightbulb.Context) -> None:
                 title="Error!",
                 description=e,
                 color=hikari.Color(0xFF0000)))
-
         return
 
     await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=f"Successfully stole {resource_stolen} from {ctx.options.player}.")

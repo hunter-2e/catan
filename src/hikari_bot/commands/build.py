@@ -30,7 +30,7 @@ async def build(ctx: lightbulb.Context) -> None:
 
     # must be in the game to build
     try:
-        bot.ctrl.get_player(name)
+        bot.ctrl.get_player_by_name(name)
     except Exception:
         await ctx.respond(flags=hikari.MessageFlag.EPHEMERAL, content=hikari.Embed(
                 title="Error!",

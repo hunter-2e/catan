@@ -57,7 +57,7 @@ class Controller:
         # Special case: trading to the bank with a harbor
         # TODO: add this
 
-        player1 = self.get_player(self.active_trades[trade_num - 1]["name"])
+        player1 = self.get_player_by_name(self.active_trades[trade_num - 1]["name"])
         player1_resources = self.active_trades[trade_num - 1]["p1_out"]
         player2_resources = self.active_trades[trade_num - 1]["p2_in"]
 
@@ -97,7 +97,7 @@ class Controller:
             Resource Exception: If a player does not have a resource necessary to complete the trade.
         """
         
-        player_obj = self.get_player(player)
+        player_obj = self.get_player_by_name(player)
 
         if building == "Road":
             if (len(player_obj.settlementSpots) > 0) and (self.cur_phase == 0 and len(player_obj.roadsPlaced) == 0) or (self.cur_phase == 1 and len(player_obj.roadsPlaced) == 1):
@@ -174,7 +174,7 @@ class Controller:
         if not atleast_1:
             raise RobberException
         
-        player_to_rob = self.get_player(player_to_rob)
+        player_to_rob = self.get_player_by_name(player_to_rob)
         self.board.moveRobber(new_location)
         stolenCard = None
 
@@ -250,11 +250,20 @@ class Controller:
 
         return random.randint(1, 6) + random.randint(1, 6)
 
-    def get_player(self, name: str) -> player.Player:
+    def get_player_by_name(self, name: str) -> player.Player:
         """Returns the player object given a name OR raises an error if none found."""
 
         for p in self.players:
             if p.name == name:
+                return p
+
+        raise Exception("Player not found!")
+
+    def get_player_by_color(self, color: str) -> player.Player:
+        """Returns the player object given a color OR raises an error if none found."""
+
+        for p in self.players:
+            if p.color == color:
                 return p
 
         raise Exception("Player not found!")

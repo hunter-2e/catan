@@ -36,10 +36,10 @@ async def discard(ctx: lightbulb.Context) -> None:
         return
 
     # prevent player from discarding incorrect # of cards
-    if total != bot.ctrl.get_player(name).cardsToDiscard:
+    if total != bot.ctrl.get_player_by_name(name).cardsToDiscard:
         await ctx.respond(content=hikari.Embed(
                 title="Error!",
-                description=f"You need to discard {bot.ctrl.get_player(name).cardsToDiscard} cards.",
+                description=f"You need to discard {bot.ctrl.get_player_by_name(name).cardsToDiscard} cards.",
                 color=hikari.Color(0xFF0000)))
 
         return
@@ -54,7 +54,7 @@ async def discard(ctx: lightbulb.Context) -> None:
 
             return
 
-        if bot.ctrl.get_player(name).currentResources[card] < val:
+        if bot.ctrl.get_player_by_name(name).currentResources[card] < val:
             await ctx.respond(content=hikari.Embed(
                 title="Error!",
                 description=f"You do not have {val} {card} cards to discard.",
@@ -64,9 +64,9 @@ async def discard(ctx: lightbulb.Context) -> None:
 
     for card, val in cards_to_dict.items():
         bot.ctrl.resource_bank[card] += val
-        bot.ctrl.get_player(name).currentResources[card] -= val
+        bot.ctrl.get_player_by_name(name).currentResources[card] -= val
 
-    bot.ctrl.get_player(name).cardsToDiscard = 0
+    bot.ctrl.get_player_by_name(name).cardsToDiscard = 0
 
     await ctx.respond(content=f"Successfully discarded {total} cards.")
 
