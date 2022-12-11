@@ -44,7 +44,7 @@ class Controller:
         self.cur_dice = None
         self.has_robber_moved = False
         self.cur_phase = 0      # 0 = first half of initial build cycle, 1 = 2nd half, 2 = main game
-        self.victory_points_to_win = 5
+        self.victory_points_to_win = 10
 
     def trade(self, trade_num: int, player2: Union[player.Player, str]) -> None:
         """Handles a trade.
@@ -161,6 +161,18 @@ class Controller:
 
     def move_robber(self, new_location: tuple, player_to_rob: str) -> str:
         """Moves the robber."""
+
+        # verify there is at least 1 player that can be stolen from
+        atleast_1 = False
+        for player in self.players:
+            if player.name != player_to_rob:
+                for num in player.currentResources.values():
+                    if num > 0:
+                        atleast_1 = True
+                        break
+            if atleast_1: break
+        if not atleast_1:
+            raise RobberException
         
         player_to_rob = self.get_player(player_to_rob)
         self.board.moveRobber(new_location)
@@ -329,17 +341,17 @@ async def run(ctrl: Controller, flag: asyncio.Event, drawing_mode: str) -> None:
                     players_over_7.append(player.name)
                     player.cardsToDiscard = sum // 2
 
-            await bot.send_image_or_message(None, f"Players with over 7 cards: {str(players_over_7)}")
-            await bot.send_image_or_message(None, "Use /discard <cards> to get rid of half of your cards.\nExample: /discard sheep sheep rock wood")
+            if len(players_over_7) > 0:
+                await bot.send_image_or_message(None, f"Players with over 7 cards: {*players_over_7,}")     # "*" used to unpack the list
+                await bot.send_image_or_message(None, "Use /discard <cards> to get rid of half of your cards.\nExample: /discard sheep sheep rock wood")
 
-            await ctrl.flag.wait()
-            ctrl.flag.clear()
+                await ctrl.flag.wait()
+                ctrl.flag.clear()
 
             # Prompt player for new robber location, wait for response
             await bot.send_image_or_message(None, "Use /rob <location> <player> to move the robber and steal from someone.")
 
             await ctrl.flag.wait()
-
             ctrl.flag.clear()
             ctrl.has_robber_moved = True
         else:
@@ -371,4 +383,8 @@ async def game_over(winner: player.Player) -> None:
 
 class Resource(Exception):
     """Custom exception representing when a player does not have a resource."""
+    pass
+
+class RobberException(Exception):
+    """Custom exception representing when no players have any resources that can be stolen."""
     pass

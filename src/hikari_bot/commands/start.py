@@ -28,16 +28,16 @@ async def start(ctx: lightbulb.Context) -> None:
         return
 
     # TODO: TEMP TESTING
-    for p in ctrl.players:
-            p.modCurrResource("wood", 4)
-            p.modCurrResource("brick", 4)
-            p.modCurrResource("wheat", 4)
-            p.modCurrResource("sheep", 4)
-            p.modCurrResource("rock", 4)
-            p.unusedDevelopmentCards["KnightCard"] += 2
-            p.unusedDevelopmentCards["Monopoly"] += 1
-            p.unusedDevelopmentCards["YearOfPlenty"] += 1
-            p.unusedDevelopmentCards["RoadBuilding"] += 1
+    # for p in ctrl.players:
+    #         p.modCurrResource("wood", 4)
+    #         p.modCurrResource("brick", 4)
+    #         p.modCurrResource("wheat", 4)
+    #         p.modCurrResource("sheep", 4)
+    #         p.modCurrResource("rock", 4)
+    #         p.unusedDevelopmentCards["KnightCard"] += 2
+    #         p.unusedDevelopmentCards["Monopoly"] += 1
+    #         p.unusedDevelopmentCards["YearOfPlenty"] += 1
+    #         p.unusedDevelopmentCards["RoadBuilding"] += 1
 
     await ctx.respond(content=f"Game starting.")
     bot.started = True

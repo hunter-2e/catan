@@ -54,6 +54,9 @@ async def rob(ctx: lightbulb.Context) -> None:
 
     try:
         resource_stolen = ctrl.move_robber(location, ctx.options.player)
+    except controller.RobberException:
+        await ctx.respond(content=f"There are no player's with resources to steal. Succesfully moved the robber to {ctx.options.location}.")
+        await bot.bot.rest.create_message(ctx.channel_id, content=f"{name} moved the robber to {location}.")
     except Exception as e:
         await ctx.respond(content=hikari.Embed(
                 title="Error!",
