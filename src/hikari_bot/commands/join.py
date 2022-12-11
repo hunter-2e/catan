@@ -9,7 +9,7 @@ plugin = lightbulb.Plugin("Join", description="Join the game.")
 
 # Creates a command in the plugin
 @plugin.command
-@lightbulb.option("color", description="Color.", choices=["Blue", "White", "Orange", "Red"], required=True)
+@lightbulb.option("color", description="Color.", choices=["Blue", "White", "Orange", "Red", "Purple"], required=True)
 @lightbulb.command("join", description="Join the game")
 @lightbulb.implements(lightbulb.SlashCommand)
 async def join(ctx: lightbulb.Context) -> None:
