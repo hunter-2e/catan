@@ -8,11 +8,11 @@ plugin = lightbulb.Plugin("Discard", description="Discard resource cards.")
 
 # Creates a command in the plugin
 @plugin.command
-@lightbulb.option("brick", description="Brick cards to discard", required=True, default=0, type=int)
-@lightbulb.option("wood", description="Wood cards to discard", required=True, default=0, type=int)
-@lightbulb.option("rock", description="Rock cards to discard", required=True, default=0, type=int)
-@lightbulb.option("wheat", description="Wheat cards to discard", required=True, default=0, type=int)
-@lightbulb.option("sheep", description="Sheep cards to discard", required=True, default=0, type=int)
+@lightbulb.option("brick", description="Brick cards to discard", default=0, type=int)
+@lightbulb.option("wood", description="Wood cards to discard", default=0, type=int)
+@lightbulb.option("rock", description="Rock cards to discard", default=0, type=int)
+@lightbulb.option("wheat", description="Wheat cards to discard", default=0, type=int)
+@lightbulb.option("sheep", description="Sheep cards to discard", default=0, type=int)
 @lightbulb.command("discard", description="Discard resource cards.", ephemeral=True)
 @lightbulb.implements(lightbulb.SlashCommand)
 async def discard(ctx: lightbulb.Context) -> None:
