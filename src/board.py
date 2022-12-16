@@ -66,11 +66,24 @@ class Board:
                         [None for x in range(3)]]
         
         self.tilesAvailable = {
-            'rockTile': 3,
-            'brickTile': 3,
-            'sheepTile': 4,
-            'treeTile': 4,
-            'wheatTile': 4,
+            'rockTile': 1,
+            'rockTile1': 1,
+            'rockTile2': 1,
+            'brickTile': 1,
+            'brickTile1': 1,
+            'brickTile2': 1,
+            'sheepTile': 1,
+            'sheepTile1': 1,
+            'sheepTile2': 1,
+            'sheepTile3': 1,
+            'treeTile': 1,
+            'treeTile1': 1,
+            'treeTile2': 1,
+            'treeTile3': 1,
+            'wheatTile': 1,
+            'wheatTile1': 1,
+            'wheatTile2': 1,
+            'wheatTile3': 1,
             'robberTile': 1
         }
 
