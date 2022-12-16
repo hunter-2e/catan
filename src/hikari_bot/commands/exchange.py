@@ -8,9 +8,9 @@ plugin = lightbulb.Plugin("Exchange", description="Exchange resource cards.")
 
 # Creates a command in the plugin
 @plugin.command
-@lightbulb.option("want", description="card wanted", choices=["Brick", "Wood", "Rock", "Wheat", "Sheep"], type=str)
-@lightbulb.option("give", description="cards to give", choices=["Brick", "Wood", "Rock", "Wheat", "Sheep"], type=str)
-@lightbulb.option("exchange_type", description="exchange_type", choices=["2for1", "3for1", "4for1"], type=str)
+@lightbulb.option("want", description="card wanted", choices=["Brick", "Wood", "Rock", "Wheat", "Sheep"], type=str, required=True)
+@lightbulb.option("give", description="cards to give", choices=["Brick", "Wood", "Rock", "Wheat", "Sheep"], type=str, required=True)
+@lightbulb.option("exchange_type", description="exchange_type", choices=["2for1", "3for1", "4for1"], type=str, required=True)
 @lightbulb.command("exchange", description="Exchange resource cards.")
 @lightbulb.implements(lightbulb.SlashCommand)
 async def exchange(ctx: lightbulb.Context) -> None:

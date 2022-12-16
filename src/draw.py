@@ -444,7 +444,7 @@ def drawHand(player):
         fullHand = cv2.putText(emptyHand, str(num), (x, y), cv2.FONT_HERSHEY_DUPLEX, 1, (0,0,0), 2)
 
     for dev in player.unusedDevelopmentCards:
-        if dev == 'KnightCard':
+        if dev == 'Knight':
             x,y = 380, 278
         elif dev == 'YearOfPlenty':
             x,y = 301, 260

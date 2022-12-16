@@ -28,7 +28,7 @@ class KnightModal(miru.Modal):
         location = (list(string.ascii_uppercase).index(ctx.get_value_by_id('location')[0].upper()), float(ctx.get_value_by_id('location')[1:]))
 
         try:
-            development.playKnightCard(self.ctrl, self.ctrl.get_player_by_name(name_activator), location, self.ctrl.get_player_by_color(color_robbed).name)
+            development.playKnight(self.ctrl, self.ctrl.get_player_by_name(name_activator), location, color_robbed)
             await ctx.respond(f"{name_activator} moved the robber to {ctx.get_value_by_id('location')} and stole from {color_robbed} with a Knight card.")
         except Exception as e:
             print(traceback.print_exc())

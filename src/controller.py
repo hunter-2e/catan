@@ -29,7 +29,7 @@ class Controller:
         }
 
         self.dev_deck = {
-            "KnightCard":       14,
+            "Knight":       14,
             "RoadBuilding":     2,
             "YearOfPlenty":     2,
             "Monopoly":         2,
@@ -38,6 +38,7 @@ class Controller:
 
         self.board = None
         self.active_trades = []
+        self.purchased_devs = []    # resets every turn
         self.players = []
         self.current_player = 0     # Index in self.players of the player whose turn it is
         self.flag = None
@@ -149,6 +150,7 @@ class Controller:
                 raise Resource(f"Player: {player_obj.name} does not have the necessary resources.")
 
             bought_card = development.buyDevCard(player_obj, self.dev_deck)
+            self.purchased_devs.append(bought_card)
 
             if bought_card == "VictoryPointCard":
                 development.playVictoryPointCard(player_obj)
@@ -172,7 +174,7 @@ class Controller:
                         break
             if atleast_1: break
         
-        player_to_rob = self.get_player_by_name(player_to_rob)
+        player_to_rob = self.get_player_by_color(player_to_rob)
         self.board.moveRobber(new_location)
         stolenCard = None
 
@@ -209,7 +211,7 @@ class Controller:
     def largest_army(self):
 
         for player in self.players:
-            if player.usedDevelopmentCards["KnightCard"] >= 3 and (self.player_most_knights is None or self.player_most_knights.usedDevelopmentCards["KnightCard"] < player.usedDevelopmentCards["KnightCard"]):
+            if player.usedDevelopmentCards["Knight"] >= 3 and (self.player_most_knights is None or self.player_most_knights.usedDevelopmentCards["Knight"] < player.usedDevelopmentCards["Knight"]):
                 if self.player_most_knights is not None:
                     self.player_most_knights.largestArmy = False
                     self.player_most_knights.victoryPoints -= 2
@@ -224,8 +226,6 @@ class Controller:
 
 
     def longest_road(self):
-        
-
         for player in self.players:
             curPlayerLongestRoad = longestRoad.outerLongestRoad(player.roadsPlaced, self.players, player)
             if curPlayerLongestRoad >= 5 and (self.player_longest_road is None or self.player_longest_road_length < curPlayerLongestRoad):
@@ -243,7 +243,6 @@ class Controller:
 
         if self.player_longest_road is None:
             return
-
 
 
     def roll_dice(self) -> int:
@@ -326,7 +325,8 @@ async def run(ctrl: Controller, flag: asyncio.Event, drawing_mode: str) -> None:
     while winner is None:
         ctrl.has_robber_moved = False
         ctrl.flag.clear()
-        ctrl.active_trades = []     # emptied at start of each turn
+        ctrl.active_trades.clear()     # emptied at start of each turn
+        ctrl.purchased_devs.clear()     # emptied at start of each turn
 
         ctrl.cur_dice = ctrl.roll_dice()
         message = hikari.Embed(title=f"{ctrl.players[ctrl.current_player].name}'s turn",
