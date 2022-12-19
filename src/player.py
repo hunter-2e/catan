@@ -16,11 +16,11 @@ class Player:
         self.longestRoadLength = 0
         
         self.currentResources       = {
-            "brick":  0,
-            "wood": 0,
-            "rock":    0,
-            "wheat":  0,
-            "sheep":   0,              }
+            "brick":  10,
+            "wood": 10,
+            "rock":    10,
+            "wheat":  10,
+            "sheep":   10,              }
 
         self.unusedDevelopmentCards = {
             "Knight":       0,

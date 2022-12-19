@@ -64,15 +64,6 @@ class Board:
                         [None for x in range(5)],
                         [None for x in range(4)],
                         [None for x in range(3)]]
-        
-        self.tilesAvailable = {
-            'rockTile': 3,
-            'brickTile': 3,
-            'sheepTile': 4,
-            'treeTile': 4,
-            'wheatTile': 4,
-            'robberTile': 1
-        }
 
         self.numbersAvailable = {
             10: 2,
@@ -89,13 +80,18 @@ class Board:
         }
         
         #Populating tileSpots randomly with available material types and a number
+        tilesLeft = []
+
+        for key in self.tilesAvailable:
+            for timesAppeared in range(self.tilesAvailable[key]):
+                tilesLeft.append(key)
 
         xTile = 0
         zPoints = 0
         for row in self.tileSpots:
             yTile = 0
             for tile in range(len(row)):
-                 chosenTile = random.choice([tilesLeft for tilesLeft in self.tilesAvailable.keys() if self.tilesAvailable[tilesLeft] > 0])
+                 chosenTile = random.choice(tilesLeft)
                  
                  if chosenTile == 'robberTile':
                     chosenNum = 7
@@ -114,7 +110,7 @@ class Board:
                  row[tile] = chosenTile
                  self.settleOnTile[self.tileSpots[xTile][yTile] + '(' + str(xTile) + ',' + str(yTile) + ')'] = self.associatedPoints[zPoints]
 
-                 self.tilesAvailable[chosenTile] -= 1
+                 tilesLeft.remove(chosenTile)
                  self.numbersAvailable[chosenNum] -= 1
                  
                  yTile += 1
@@ -265,6 +261,7 @@ class Board:
         #Check if spot to be placed is on that players road unless they haven't taken initial turns
         if self.setSettleCalls > len(players) * 2:
             if spot not in relevantSpots:
+                print(4)
                 return False
 
 
@@ -283,6 +280,7 @@ class Board:
             if self.getSettlement((spot[0] + 1, spot[1])) == None and self.getSettlement((spot[0] - 1, spot[1])) == None and self.getSettlement((spot[0] - 1, spot[1] -1)) == None:
                 self.setSettleCalls += 1
                 return True
+        print(5)
         return False
 
 
@@ -299,15 +297,18 @@ class Board:
             spot = (spot[0], int(spot[1]/2))
 
         if self.isSpotValid(spot) == False or (self.getSettlement((spot[0], spot[1])) != None and settType == 1):
+            print(1)
             return False
         
         if self.validSettlement(spot, player, controller) == False:
+            print(2)
             return False
 
         if(settType == 1):
             #Check if player already has settlement there and return False if they do
             for players in controller:
                 if spot in players.settlementSpots or players.citySpots:
+                    print(3)
                     return False
 
             player.settlementQuantity -= 1
