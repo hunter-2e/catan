@@ -295,6 +295,8 @@ async def run(ctrl: Controller, flag: asyncio.Event, drawing_mode: str) -> None:
 
     ctrl.flag = flag
 
+    random.shuffle(ctrl.players)
+
     # Handle initial settlement and road placements
     for i, player in enumerate(ctrl.players):
         ctrl.current_player = i
@@ -321,6 +323,8 @@ async def run(ctrl: Controller, flag: asyncio.Event, drawing_mode: str) -> None:
 
     ctrl.players.reverse()
     ctrl.cur_phase = 2
+
+    random.shuffle(ctrl.players)
 
     while winner is None:
         ctrl.has_robber_moved = False
